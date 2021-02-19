@@ -33,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
+        Log.d("OnCreate()", "Successfully ran Activity OnCreate()");
     }
 
     @Override
@@ -61,35 +62,35 @@ public class MainActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         Toast.makeText(getApplicationContext(), "Activity OnStart() ran", Toast.LENGTH_LONG).show();
-        Log.d("OnStart()", "Successfully ran OnStart()");
+        Log.d("OnStart()", "Successfully ran Activity OnStart()");
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         Toast.makeText(getApplicationContext(), "Activity OnPause() ran", Toast.LENGTH_LONG).show();
-        Log.d("OnPause()", "Successfully ran OnPause()");
+        Log.d("OnPause()", "Successfully ran Activity OnPause()");
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         Toast.makeText(getApplicationContext(), "Activity OnResume() ran", Toast.LENGTH_LONG).show();
-        Log.d("OnResume()", "Successfully ran OnResume()");
+        Log.d("OnResume()", "Successfully ran Activity OnResume()");
     }
 
     @Override
     protected void onStop() {
         super.onStop();
         Toast.makeText(getApplicationContext(), "Activity OnStop() ran", Toast.LENGTH_LONG).show();
-        Log.d("OnStop()", "Successfully ran OnStop()");
+        Log.d("OnStop()", "Successfully ran Activity OnStop()");
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         Toast.makeText(getApplicationContext(), "Activity OnDestroy() ran", Toast.LENGTH_LONG).show();
-        Log.d("OnDestroy()", "Successfully ran OnDestroy()");
+        Log.d("OnDestroy()", "Successfully ran Activity OnDestroy()");
     }
 
 }
