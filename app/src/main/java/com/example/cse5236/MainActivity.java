@@ -64,4 +64,18 @@ public class MainActivity extends AppCompatActivity {
         Log.d("OnStart()", "Successfully ran OnStart()");
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Toast.makeText(getApplicationContext(), "OnPause() ran", Toast.LENGTH_LONG).show();
+        Log.d("OnPause()", "Successfully ran OnPause()");
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Toast.makeText(getApplicationContext(), "OnResume() ran", Toast.LENGTH_LONG).show();
+        Log.d("OnResume()", "Successfully ran OnResume()");
+    }
+
 }
