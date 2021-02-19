@@ -60,35 +60,35 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        Toast.makeText(getApplicationContext(), "OnStart() ran", Toast.LENGTH_LONG).show();
+        Toast.makeText(getApplicationContext(), "Activity OnStart() ran", Toast.LENGTH_LONG).show();
         Log.d("OnStart()", "Successfully ran OnStart()");
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        Toast.makeText(getApplicationContext(), "OnPause() ran", Toast.LENGTH_LONG).show();
+        Toast.makeText(getApplicationContext(), "Activity OnPause() ran", Toast.LENGTH_LONG).show();
         Log.d("OnPause()", "Successfully ran OnPause()");
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        Toast.makeText(getApplicationContext(), "OnResume() ran", Toast.LENGTH_LONG).show();
+        Toast.makeText(getApplicationContext(), "Activity OnResume() ran", Toast.LENGTH_LONG).show();
         Log.d("OnResume()", "Successfully ran OnResume()");
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        Toast.makeText(getApplicationContext(), "OnStop() ran", Toast.LENGTH_LONG).show();
+        Toast.makeText(getApplicationContext(), "Activity OnStop() ran", Toast.LENGTH_LONG).show();
         Log.d("OnStop()", "Successfully ran OnStop()");
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        Toast.makeText(getApplicationContext(), "OnDestroy() ran", Toast.LENGTH_LONG).show();
+        Toast.makeText(getApplicationContext(), "Activity OnDestroy() ran", Toast.LENGTH_LONG).show();
         Log.d("OnDestroy()", "Successfully ran OnDestroy()");
     }
 
