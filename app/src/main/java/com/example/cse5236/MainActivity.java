@@ -14,6 +14,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import android.util.Log;
+
 public class MainActivity extends AppCompatActivity {
 
     @Override
@@ -59,6 +61,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         Toast.makeText(getApplicationContext(), "OnStart() ran", Toast.LENGTH_LONG).show();
+        Log.d("OnStart()", "Successfully ran OnStart()");
     }
 
 }
