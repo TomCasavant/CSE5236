@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">SuperApp5Million</string>
+    <string name="app_name">Grouptivity</string>
     <string name="action_settings">Settings</string>
     <!-- Strings used for the tab navigation -->
     <string name="group_tab_label">Groups</string>
