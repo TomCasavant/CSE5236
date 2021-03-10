@@ -7,7 +7,7 @@ android {
     buildToolsVersion "30.0.3"
 
     defaultConfig {
-        applicationId "com.example.cse5236"
+        applicationId "com.group9.grouptivity"
         minSdkVersion 16
         targetSdkVersion 30
         versionCode 1

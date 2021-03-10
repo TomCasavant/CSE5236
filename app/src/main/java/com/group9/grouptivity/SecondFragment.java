@@ -1,4 +1,4 @@
-package com.example.cse5236;
+package com.group9.grouptivity;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;

@@ -1,4 +1,4 @@
-package com.example.cse5236;
+package com.group9.grouptivity;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -10,8 +10,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
-
-import com.google.android.material.tabs.TabLayout;
 
 public class FirstFragment extends Fragment {
 
