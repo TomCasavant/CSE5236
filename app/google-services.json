@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "862349122228",
+    "project_id": "grouptivity-297fc",
+    "storage_bucket": "grouptivity-297fc.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:862349122228:android:fd2662f15b667284d955e1",
+        "android_client_info": {
+          "package_name": "com.group9.grouptivity"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "862349122228-grr7ska8h1ntddhg486c64tlsh90u6nn.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDfa2Wp9tiEyAKgo3ZyX14Y0G2XzjEQpnY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "862349122228-grr7ska8h1ntddhg486c64tlsh90u6nn.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
