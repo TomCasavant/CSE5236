@@ -37,10 +37,10 @@ public class GroupsFragment extends Fragment {
                 AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                 // Set up the input
                 final EditText input = new EditText(getContext());
-                // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
                 input.setInputType(InputType.TYPE_CLASS_TEXT);
                 builder.setView(input);
                 // Set up the buttons
+                builder.setTitle("Enter Group Name:");
                 builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -59,7 +59,7 @@ public class GroupsFragment extends Fragment {
         return view;
     }
     public void createGroup(String group_name){
-        // Send group to database
+        // Send new roup to database
         Log.d("Create Group: ", group_name);
     }
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
