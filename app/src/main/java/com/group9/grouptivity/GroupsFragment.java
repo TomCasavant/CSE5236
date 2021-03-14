@@ -15,6 +15,7 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.group9.grouptivity.firebase.GroupMessage;
 
 public class GroupsFragment extends Fragment {
 
@@ -61,7 +62,7 @@ public class GroupsFragment extends Fragment {
         // Send new group to database
         mDatabase = FirebaseDatabase.getInstance().getReference();
         String id = mDatabase.child("groupMessages").push().getKey();
-        mDatabase.child("groupMessages").child(id).setValue(new Group(group_name));
+        mDatabase.child("groupMessages").child(id).setValue(new GroupMessage(group_name));
 
         Toast.makeText(getActivity(), group_name, Toast.LENGTH_LONG).show();
         Log.d("Create Group: ", group_name);
