@@ -13,4 +13,10 @@
 
     <string name="groups_text">This is the Groups Fragment</string>
     <string name="activites_text">This is the Activities Fragment</string>
+
+    <!-- Strings used for create group dialog -->
+    <string name="create_group_title">Create Group</string>
+    <string name="temp_group_text">Enter group name here</string>
+    <string name="ok_button">OK</string>
+    <string name="cancel_button">Cancel</string>
 </resources>
