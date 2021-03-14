@@ -1,20 +1,19 @@
 package com.group9.grouptivity;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
+import android.app.Dialog;
 import android.os.Bundle;
-import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
+
 
 public class GroupsFragment extends Fragment {
 
@@ -30,48 +29,43 @@ public class GroupsFragment extends Fragment {
 
 
         createGroupButton = (Button) view.findViewById(R.id.create_group);
-        createGroupButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(getActivity(), "Create Group!", Toast.LENGTH_LONG).show();
-                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                // Set up the input
-                final EditText input = new EditText(getContext());
-                input.setInputType(InputType.TYPE_CLASS_TEXT);
-                builder.setView(input);
-                // Set up the buttons
-                builder.setTitle("Enter Group Name:");
-                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        createGroup(input.getText().toString());
-                    }
-                });
-                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.cancel();
-                    }
-                });
-
-                builder.show();
-            }});
+        createGroupButton.setOnClickListener((View v) -> {
+            Toast.makeText(getActivity(), "Create Group!", Toast.LENGTH_LONG).show();
+            createGroupDialog(); // When the create group button is clicked, display an input button
+        });
         return view;
     }
+
+    /* Creates a dialog box and displays it to the user to get new group name */
+    public void createGroupDialog(){
+        final Dialog dialog = new Dialog(getContext());
+        dialog.setContentView(R.layout.create_group_dialog); // Assign to xml dialog layout
+        TextView text = (TextView) dialog.findViewById(R.id.new_group_name);
+        Button okButton = (Button) dialog.findViewById(R.id.dialogButtonOK);
+        Button cancelButton = (Button) dialog.findViewById(R.id.dialogButtonCancel);
+        okButton.setOnClickListener((View v) -> {
+            createGroup(text.getText().toString()); // Create new group
+            dialog.dismiss();
+        });
+        cancelButton.setOnClickListener((View v) ->
+            dialog.dismiss()
+        );
+
+        dialog.show();
+    }
+    /* Creates a group and sends the data to the firebase database */
     public void createGroup(String group_name){
-        // Send new roup to database
+        // Send new group to database
+        Toast.makeText(getActivity(), group_name, Toast.LENGTH_LONG).show();
         Log.d("Create Group: ", group_name);
     }
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        view.findViewById(R.id.groups_fragment_activities_button).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                NavHostFragment.findNavController(GroupsFragment.this)
-                        .navigate(R.id.action_FirstFragment_to_SecondFragment);
-            }
-        });
+        view.findViewById(R.id.groups_fragment_activities_button).setOnClickListener((View v) ->
+            NavHostFragment.findNavController(GroupsFragment.this)
+                    .navigate(R.id.action_FirstFragment_to_SecondFragment)
+        );
     }
 
     @Override
