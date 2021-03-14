@@ -1,2 +1,2 @@
 include ':app'
-rootProject.name = "CSE 5236"
+rootProject.name = "grouptivity"
