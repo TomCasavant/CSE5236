@@ -1,4 +1,4 @@
-package com.group9.grouptivity;
+package com.group9.grouptivity.ui;
 
 import android.app.Dialog;
 import android.os.Bundle;
@@ -13,16 +13,20 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.group9.grouptivity.firebase.FirebaseRTDBHelper;
-import com.group9.grouptivity.firebase.models.GroupMessage;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
-public class GroupsFragment extends Fragment {
+import com.google.firebase.database.DatabaseReference;
+import com.group9.grouptivity.GroupMessageAdapter;
+import com.group9.grouptivity.R;
+import com.group9.grouptivity.firebase.FirebaseRTDBHelper;
+
+public class GroupsFragment extends Fragment implements GroupMessageAdapter.ItemClickListener {
 
     private View view;
     private Button createGroupButton;
     private DatabaseReference mDatabase;
+    private GroupMessageAdapter groupMessageAdapter;
 
 
     @Override
@@ -38,7 +42,22 @@ public class GroupsFragment extends Fragment {
             Toast.makeText(getActivity(), getString(R.string.create_group_title), Toast.LENGTH_LONG).show();
             createGroupDialog(); // When the create group button is clicked, display an input button
         });
+
+        buildGroupMessageRecyclerView(view);
+
         return view;
+    }
+
+    public void buildGroupMessageRecyclerView(View view){
+        /*RecyclerView recyclerView = view.findViewById(R.id.group_message_recyclerview);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        groupMessageAdapter = new GroupMessageAdapter();
+        groupMessageAdapter.setClickListener(this);
+        recyclerView.setAdapter(groupMessageAdapter);*/
+    }
+
+    public void onItemClick (View view, int position) {
+        Toast.makeText(getContext(),"You clicked "+ groupMessageAdapter.getItem(position).getName(), Toast.LENGTH_LONG);
     }
 
     /** Creates a dialog box and displays it to the user to get new group name */

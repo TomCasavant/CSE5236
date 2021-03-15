@@ -6,7 +6,7 @@
     app:startDestination="@id/FirstFragment">
     <fragment
         android:id="@+id/FirstFragment"
-        android:name="com.group9.grouptivity.GroupsFragment"
+        android:name="com.group9.grouptivity.ui.GroupsFragment"
         android:label="@string/first_fragment_label"
         tools:layout="@layout/groups_fragment">
 
@@ -16,7 +16,7 @@
     </fragment>
     <fragment
         android:id="@+id/SecondFragment"
-        android:name="com.group9.grouptivity.SecondFragment"
+        android:name="com.group9.grouptivity.ui.SecondFragment"
         android:label="@string/second_fragment_label"
         tools:layout="@layout/fragment_second">
 
