@@ -8,6 +8,8 @@ public class ActivityPollMessage extends Message {
     private List<String> mYesVotesUsernameList; //May want to change these lists to UserAccounts
     private List<String> mNoVotesUsernameList;
 
+    public ActivityPollMessage() {} //Empty constructor needed for Firebase
+
     public ActivityPollMessage(GroupMessage groupMessage, String sender, long timeStamp, GroupActivity groupActivity) {
         super(groupMessage, sender, timeStamp);
         this.mGroupActivity = groupActivity;

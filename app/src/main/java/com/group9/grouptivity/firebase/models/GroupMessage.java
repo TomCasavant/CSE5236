@@ -1,6 +1,7 @@
 package com.group9.grouptivity.firebase.models;
 
 
+import java.security.acl.Group;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,6 +9,8 @@ public class GroupMessage {
     public String id;
     private String mName;
     private List<GroupMessageMember> mGroupMessageMemberList;
+
+    public GroupMessage () {} //Empty constructor needed for Firebase
 
     public GroupMessage(String name) {
         this.mName = name;
@@ -27,5 +30,9 @@ public class GroupMessage {
     /** Returns the list of members in this GroupMessage. */
     public List<GroupMessageMember> getGroupMessageMemberList() {
         return this.mGroupMessageMemberList;
+    }
+
+    public void addMember(GroupMessageMember groupMessageMember) {
+
     }
 }

@@ -5,6 +5,8 @@ public class Message {
     private String mSenderUsername;
     private long mTimeStamp; //Might want to change this to a Date
 
+    public Message() {} //Empty constructor needed for Firebase
+
     public Message(GroupMessage groupMessage, String senderUserName, long timeStamp) {
         this.mGroupMessage = groupMessage;
         this.mSenderUsername = senderUserName;

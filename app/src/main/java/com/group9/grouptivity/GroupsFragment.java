@@ -15,6 +15,7 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.group9.grouptivity.firebase.FirebaseRTDBHelper;
 import com.group9.grouptivity.firebase.models.GroupMessage;
 
 public class GroupsFragment extends Fragment {
@@ -58,14 +59,11 @@ public class GroupsFragment extends Fragment {
         dialog.show();
     }
     /** Creates a group and sends the data to the firebase database */
-    public void createGroup(String group_name){
+    public void createGroup(String groupName){
         // Send new group to database
-        mDatabase = FirebaseDatabase.getInstance().getReference();
-        String id = mDatabase.child(getString(R.string.firebase_groupMessages)).push().getKey();
-        mDatabase.child(getString(R.string.firebase_groupMessages)).child(id).setValue(new GroupMessage(group_name));
-
-        Toast.makeText(getActivity(), group_name, Toast.LENGTH_LONG).show();
-        Log.d("Create Group: ", group_name);
+        FirebaseRTDBHelper.getInstance().addGroupMessage(groupName);
+        Toast.makeText(getActivity(), groupName, Toast.LENGTH_LONG).show();
+        Log.d("Create Group: ", groupName);
     }
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);

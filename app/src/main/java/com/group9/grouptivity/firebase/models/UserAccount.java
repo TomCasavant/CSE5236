@@ -10,6 +10,8 @@ public class UserAccount {
     private List<String> mGroupMessageNameList;
     private List<GroupMessageInvite> mGroupMessageInviteList;
 
+    public UserAccount() {} //Empty constructor needed for Firebase
+
     public UserAccount(String username, String password, String emailAddress) {
         this.mUsername = username;
         this.mPassword = password;
