@@ -1,4 +1,4 @@
-package com.group9.grouptivity.firebase;
+package com.group9.grouptivity.firebase.models;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,8 +11,8 @@ public class ActivityPollMessage extends Message {
     public ActivityPollMessage(GroupMessage groupMessage, String sender, long timeStamp, GroupActivity groupActivity) {
         super(groupMessage, sender, timeStamp);
         this.mGroupActivity = groupActivity;
-        this.mYesVotesUsernameList = new ArrayList<String>();
-        this.mNoVotesUsernameList = new ArrayList<String>();
+        this.mYesVotesUsernameList = new ArrayList<>();
+        this.mNoVotesUsernameList = new ArrayList<>();
     }
 
     public ActivityPollMessage(GroupMessage groupMessage, String sender, long timeStamp, GroupActivity groupActivity, List<String> yesVotesUsernameList, List<String> noVotesUsernameList) {

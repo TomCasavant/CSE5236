@@ -15,7 +15,7 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.group9.grouptivity.firebase.GroupMessage;
+import com.group9.grouptivity.firebase.models.GroupMessage;
 
 public class GroupsFragment extends Fragment {
 
