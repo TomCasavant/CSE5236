@@ -19,6 +19,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.group9.grouptivity.R;
 import com.group9.grouptivity.firebase.models.GroupMessage;
 import com.group9.grouptivity.firebase.models.GroupMessageMember;
+import com.group9.grouptivity.firebase.models.UserAccount;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,10 +29,15 @@ public class FirebaseRTDBHelper {
     private static FirebaseRTDBHelper instance = new FirebaseRTDBHelper();
     private FirebaseAuth mAuth;
     private DatabaseReference mDatabase;
+    public UserAccount currentUser;
 
     /* Strings used for RTDB I/O. */
     private static final String GROUP_MESSAGES_STR = "groupMessages";
     private static final String USER_ACCOUNTS_STR = "userAccounts";
+    private static final String GROUP_NAME_STR = "name";
+    private static final String GROUP_USERS_STR = "users";
+    private static final String MUTED_STR = "isMuted";
+    private static final String EMAIL_STR = "emailAddress";
 
     //private constructor for singleton
     private FirebaseRTDBHelper() {
@@ -55,7 +61,12 @@ public class FirebaseRTDBHelper {
     /** Adds a Group Message with the given name to the realtime firebase database. */
     public void addGroupMessage(GroupMessage groupMessage) {
         String id = mDatabase.child(GROUP_MESSAGES_STR).push().getKey();
-        mDatabase.child(GROUP_MESSAGES_STR).child(id).setValue(groupMessage);
+        DatabaseReference newGroup = mDatabase.child(GROUP_MESSAGES_STR).child(id);
+        newGroup.setValue(groupMessage);
+        DatabaseReference user = newGroup.child(GROUP_USERS_STR).child(mAuth.getCurrentUser().getUid());
+        user.child(EMAIL_STR).setValue(mAuth.getCurrentUser().getEmail());
+        user.child(MUTED_STR).setValue(false);
+        mDatabase.child(USER_ACCOUNTS_STR).child(mAuth.getCurrentUser().getUid()).child(GROUP_MESSAGES_STR).child(id).child(GROUP_NAME_STR).setValue(groupMessage.getName());
     }
 
     //TODO finish this jauwnt
@@ -78,6 +89,14 @@ public class FirebaseRTDBHelper {
         return groupMessageList;
     }
 
+    /* Checks if the user is logged in */
+    public boolean isLoggedIn(){  return mAuth.getCurrentUser() != null;  }
+
+    /** Adds a New User with the given username to the realtime firebase database. */
+    public void addNewUser(UserAccount user, String uid) {
+        mDatabase.child(USER_ACCOUNTS_STR).child(uid).setValue(user);
+    }
+
     /* Function to login an existing user given the username and password */
     public void login(String username, String password, Activity activity){
         mAuth.signInWithEmailAndPassword(username, password)
@@ -85,9 +104,9 @@ public class FirebaseRTDBHelper {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
+                            FirebaseUser user = mAuth.getCurrentUser();
                             // Sign in success, update UI with the signed-in user's information
                             Log.d("FirebaseAuth:", "signInWithEmail:success");
-                            FirebaseUser user = mAuth.getCurrentUser();
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w("FirebaseAuth:", "signInWithEmail:failure", task.getException());
@@ -107,6 +126,7 @@ public class FirebaseRTDBHelper {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d("FirebaseAuth:", "createUserWithEmail:success");
                             FirebaseUser user = mAuth.getCurrentUser();
+                            addNewUser(new UserAccount(username), user.getUid());
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w("FirebaseAuth", "createUserWithEmail:failure", task.getException());
