@@ -12,9 +12,7 @@ public class UserAccount {
 
     public UserAccount() {} //Empty constructor needed for Firebase
 
-    public UserAccount(String username, String password, String emailAddress) {
-        this.mUsername = username;
-        this.mPassword = password;
+    public UserAccount(String emailAddress) {
         this.mEmailAddress = emailAddress;
         this.mGroupMessageNameList = new ArrayList<>();
         this.mGroupMessageInviteList = new ArrayList<>();
