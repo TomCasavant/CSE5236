@@ -12,13 +12,17 @@
     <string name="activities_button">Activities</string>
 
     <string name="groups_text">This is the Groups Fragment</string>
-    <string name="activites_text">This is the Activities Fragment</string>
+    <string name="activities_text">This is the Activities Fragment</string>
 
     <!-- Strings used for create group dialog -->
-    <string name="create_group_title">Create Group</string>
     <string name="temp_group_text">Enter group name here</string>
     <string name="ok_button">OK</string>
     <string name="cancel_button">Cancel</string>
+
+    <!--Strings used in groups_fragment layout -->
+    <string name="create_group_title">Create Group</string>
+    <string name="view_invites_button">View Invites</string>
+
 
     <!-- Strings used for login page -->
     <string name="login_title">Login</string>
@@ -26,4 +30,8 @@
     <string name="password">Enter password here</string>
     <string name="login_button">Login</string>
     <string name="create_account_button">Create Account</string>
+
+    <!-- Strings used for Firebase Realtime DB I/O -->
+    <string name="firebase_groupMessages">groupMessages</string>
+
 </resources>

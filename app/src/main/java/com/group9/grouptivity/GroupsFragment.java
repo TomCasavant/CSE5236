@@ -19,8 +19,8 @@ import com.group9.grouptivity.firebase.models.GroupMessage;
 
 public class GroupsFragment extends Fragment {
 
-    View view;
-    Button createGroupButton;
+    private View view;
+    private Button createGroupButton;
     private DatabaseReference mDatabase;
 
 
@@ -34,13 +34,13 @@ public class GroupsFragment extends Fragment {
 
         createGroupButton = (Button) view.findViewById(R.id.create_group);
         createGroupButton.setOnClickListener((View v) -> {
-            Toast.makeText(getActivity(), "Create Group!", Toast.LENGTH_LONG).show();
+            Toast.makeText(getActivity(), getString(R.string.create_group_title), Toast.LENGTH_LONG).show();
             createGroupDialog(); // When the create group button is clicked, display an input button
         });
         return view;
     }
 
-    /* Creates a dialog box and displays it to the user to get new group name */
+    /** Creates a dialog box and displays it to the user to get new group name */
     public void createGroupDialog(){
         final Dialog dialog = new Dialog(getContext());
         dialog.setContentView(R.layout.create_group_dialog); // Assign to xml dialog layout
@@ -57,12 +57,12 @@ public class GroupsFragment extends Fragment {
 
         dialog.show();
     }
-    /* Creates a group and sends the data to the firebase database */
+    /** Creates a group and sends the data to the firebase database */
     public void createGroup(String group_name){
         // Send new group to database
         mDatabase = FirebaseDatabase.getInstance().getReference();
-        String id = mDatabase.child("groupMessages").push().getKey();
-        mDatabase.child("groupMessages").child(id).setValue(new GroupMessage(group_name));
+        String id = mDatabase.child(getString(R.string.firebase_groupMessages)).push().getKey();
+        mDatabase.child(getString(R.string.firebase_groupMessages)).child(id).setValue(new GroupMessage(group_name));
 
         Toast.makeText(getActivity(), group_name, Toast.LENGTH_LONG).show();
         Log.d("Create Group: ", group_name);

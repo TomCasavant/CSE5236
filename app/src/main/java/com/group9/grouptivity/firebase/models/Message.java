@@ -2,8 +2,8 @@ package com.group9.grouptivity.firebase.models;
 
 public class Message {
     private GroupMessage mGroupMessage;
-    private String mSenderUsername; //Might want to change this to a string of just their username
-    private long mTimeStamp;
+    private String mSenderUsername;
+    private long mTimeStamp; //Might want to change this to a Date
 
     public Message(GroupMessage groupMessage, String senderUserName, long timeStamp) {
         this.mGroupMessage = groupMessage;

@@ -6,28 +6,30 @@
     android:layout_height="match_parent"
     tools:context=".GroupsFragment">
 
+
     <Button
         android:id="@+id/create_group"
         android:layout_width="175dp"
         android:layout_height="49dp"
         android:layout_marginStart="233dp"
         android:layout_marginLeft="233dp"
-        android:layout_marginTop="59dp"
+        android:layout_marginTop="40dp"
         android:layout_marginEnd="32dp"
         android:layout_marginRight="32dp"
-        android:text="Create Group"
+        android:layout_marginBottom="1dp"
+        android:text="@string/create_group_title"
         app:layout_constraintBottom_toTopOf="@+id/view_invites"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.413"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
+        app:layout_constraintTop_toBottomOf="@+id/groups_fragment_activities_button" />
 
     <TextView
         android:id="@+id/textview_first"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="160dp"
-        android:text="Groups:"
+        android:text="@string/groups_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.044"
         app:layout_constraintStart_toStartOf="parent"
@@ -58,15 +60,14 @@
         android:layout_height="49dp"
         android:layout_marginStart="233dp"
         android:layout_marginLeft="233dp"
-        android:layout_marginTop="107dp"
+        android:layout_marginTop="1dp"
         android:layout_marginEnd="30dp"
         android:layout_marginRight="30dp"
         android:layout_marginBottom="575dp"
-        android:text="View Invites"
+        android:text="@string/view_invites_button"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.481"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintTop_toBottomOf="@+id/create_group" />
 </androidx.constraintlayout.widget.ConstraintLayout>

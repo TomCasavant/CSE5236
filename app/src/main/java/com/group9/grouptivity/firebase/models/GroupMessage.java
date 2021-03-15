@@ -1,6 +1,7 @@
 package com.group9.grouptivity.firebase.models;
 
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class GroupMessage {
@@ -10,6 +11,7 @@ public class GroupMessage {
 
     public GroupMessage(String name) {
         this.mName = name;
+        this.mGroupMessageMemberList = new ArrayList<>();
     }
 
     public GroupMessage(String name, List<GroupMessageMember> groupMessageMemberList){
