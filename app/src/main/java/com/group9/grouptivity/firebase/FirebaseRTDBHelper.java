@@ -1,11 +1,18 @@
 package com.group9.grouptivity.firebase;
 
+import android.app.Activity;
+import android.app.Application;
+import android.content.Context;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -15,9 +22,11 @@ import com.group9.grouptivity.firebase.models.GroupMessageMember;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Executor;
 
 public class FirebaseRTDBHelper {
     private static FirebaseRTDBHelper instance = new FirebaseRTDBHelper();
+    private FirebaseAuth mAuth;
     private DatabaseReference mDatabase;
 
     /* Strings used for RTDB I/O. */
@@ -26,12 +35,12 @@ public class FirebaseRTDBHelper {
 
     //private constructor for singleton
     private FirebaseRTDBHelper() {
+        mAuth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance().getReference();
+
     }
 
-    public static FirebaseRTDBHelper getInstance() {
-        return instance;
-    }
+    public static FirebaseRTDBHelper getInstance() { return instance; }
 
     /** Adds a Group Message with the given name to the realtime firebase database. */
     public void addGroupMessage(String groupName) {
@@ -67,6 +76,44 @@ public class FirebaseRTDBHelper {
             }
         });
         return groupMessageList;
+    }
+
+    /* Function to login an existing user given the username and password */
+    public void login(String username, String password, Activity activity){
+        mAuth.signInWithEmailAndPassword(username, password)
+                .addOnCompleteListener(activity, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            // Sign in success, update UI with the signed-in user's information
+                            Log.d("FirebaseAuth:", "signInWithEmail:success");
+                            FirebaseUser user = mAuth.getCurrentUser();
+                        } else {
+                            // If sign in fails, display a message to the user.
+                            Log.w("FirebaseAuth:", "signInWithEmail:failure", task.getException());
+                        }
+
+                    }
+                });
+    }
+
+    /* Function to create the account of a user given a username and password */
+    public void createAccount(String username, String password, Activity activity){
+        mAuth.createUserWithEmailAndPassword(username, password)
+                .addOnCompleteListener(activity, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            // Sign in success, update UI with the signed-in user's information
+                            Log.d("FirebaseAuth:", "createUserWithEmail:success");
+                            FirebaseUser user = mAuth.getCurrentUser();
+                        } else {
+                            // If sign in fails, display a message to the user.
+                            Log.w("FirebaseAuth", "createUserWithEmail:failure", task.getException());
+                        }
+                    }
+                });
+
     }
 
 }

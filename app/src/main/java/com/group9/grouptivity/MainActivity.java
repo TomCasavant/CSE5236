@@ -10,6 +10,7 @@ import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.group9.grouptivity.firebase.FirebaseRTDBHelper;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -27,12 +28,9 @@ import android.util.Log;
 
 public class MainActivity extends AppCompatActivity {
 
-    private FirebaseAuth mAuth;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mAuth = FirebaseAuth.getInstance();
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -53,9 +51,6 @@ public class MainActivity extends AppCompatActivity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-        Toast.makeText(getApplicationContext(), String.valueOf(id), Toast.LENGTH_LONG).show();
-        Toast.makeText(getApplicationContext(), "a: " + String.valueOf(R.id.login_button), Toast.LENGTH_LONG).show();
-        //noinspection SimplifiableIfStatement
         switch(id){
             case R.id.action_settings:
                 return true;
@@ -114,57 +109,15 @@ public class MainActivity extends AppCompatActivity {
         Button loginButton = (Button) dialog.findViewById(R.id.loginButton);
         Button createAccountButton = (Button) dialog.findViewById(R.id.createAccountButton);
         loginButton.setOnClickListener((View v) -> {
-            login(username.getText().toString(), password.getText().toString());
+            FirebaseRTDBHelper.getInstance().login(username.getText().toString(), password.getText().toString(), this);
             dialog.dismiss();
         });
         createAccountButton.setOnClickListener((View v) -> {
-            createAccount(username.getText().toString(), password.getText().toString());
+            FirebaseRTDBHelper.getInstance().createAccount(username.getText().toString(), password.getText().toString(), this);
             dialog.dismiss();
         });
 
         dialog.show();
-    }
-
-    /* Function to login an existing user given the username and password */
-    public void login(String username, String password){
-        mAuth.signInWithEmailAndPassword(username, password)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-                            Log.d("FirebaseAuth:", "signInWithEmail:success");
-                            FirebaseUser user = mAuth.getCurrentUser();
-                        } else {
-                            // If sign in fails, display a message to the user.
-                            Log.w("FirebaseAuth:", "signInWithEmail:failure", task.getException());
-                            Toast.makeText(getApplicationContext(), "Authentication failed.",
-                                    Toast.LENGTH_SHORT).show();
-                        }
-
-                    }
-                });
-    }
-
-    /* Function to create the account of a user given a username and password */
-    public void createAccount(String username, String password){
-        mAuth.createUserWithEmailAndPassword(username, password)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-                            Log.d("FirebaseAuth:", "createUserWithEmail:success");
-                            FirebaseUser user = mAuth.getCurrentUser();
-                        } else {
-                            // If sign in fails, display a message to the user.
-                            Log.w("FirebaseAuth", "createUserWithEmail:failure", task.getException());
-                            Toast.makeText(getApplicationContext(), "Authentication failed.",
-                                    Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
-
     }
 
 }
