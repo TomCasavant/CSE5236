@@ -1,4 +1,4 @@
-package com.group9.grouptivity.firebase;
+package com.group9.grouptivity.firebase.models;
 
 public class Message {
     private GroupMessage mGroupMessage;

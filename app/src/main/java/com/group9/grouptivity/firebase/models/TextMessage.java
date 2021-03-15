@@ -1,4 +1,4 @@
-package com.group9.grouptivity.firebase;
+package com.group9.grouptivity.firebase.models;
 
 public class TextMessage extends Message {
     private String mMessage;

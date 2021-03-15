@@ -1,4 +1,4 @@
-package com.group9.grouptivity.firebase;
+package com.group9.grouptivity.firebase.models;
 
 public class GroupActivity {
     private String mActivityType; //Maybe use an enum?

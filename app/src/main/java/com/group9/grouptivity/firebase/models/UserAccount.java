@@ -1,6 +1,4 @@
-package com.group9.grouptivity.firebase;
-
-import com.group9.grouptivity.firebase.GroupMessage;
+package com.group9.grouptivity.firebase.models;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,23 +7,23 @@ public class UserAccount {
     private String mUsername;
     private String mPassword;
     private String mEmailAddress;
-    private List<GroupMessage> mGroupMessages;
-    private List<GroupMessage> mInvites;
+    private List<String> mGroupMessageNameList;
+    private List<GroupMessageInvite> mGroupMessageInviteList;
 
     public UserAccount(String username, String password, String emailAddress) {
         this.mUsername = username;
         this.mPassword = password;
         this.mEmailAddress = emailAddress;
-        this.mGroupMessages = new ArrayList<>();
-        this.mInvites = new ArrayList<>();
+        this.mGroupMessageNameList = new ArrayList<>();
+        this.mGroupMessageInviteList = new ArrayList<>();
     }
 
-    public UserAccount(String username, String password, String emailAddress, List<GroupMessage> groupMessages, List<GroupMessage> invites) {
+    public UserAccount(String username, String password, String emailAddress, List<String> groupMessages, List<GroupMessageInvite> invites) {
         this.mUsername = username;
         this.mPassword = password;
         this.mEmailAddress = emailAddress;
-        this.mGroupMessages = groupMessages;
-        this.mInvites = invites;
+        this.mGroupMessageNameList = groupMessages;
+        this.mGroupMessageInviteList = invites;
     }
 
 
@@ -56,12 +54,12 @@ public class UserAccount {
     }
 
     /** Returns the list of group messages that the user account is currently a member of. */
-    public List<GroupMessage> getGroupMessageList(){
-        return this.mGroupMessages;
+    public List<String> getGroupMessageNameList(){
+        return this.mGroupMessageNameList;
     }
 
     /** Returns the list of pending group message invites the user account currently has. */
-    public List<GroupMessage> getInvitesList(){
-        return this.mInvites;
+    public List<GroupMessageInvite> getGroupMessageInvitesList(){
+        return this.mGroupMessageInviteList;
     }
 }
