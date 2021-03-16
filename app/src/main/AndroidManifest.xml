@@ -10,7 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.CSE5236">
         <activity
-            android:name="com.group9.grouptivity.MainActivity"
+            android:name="com.group9.grouptivity.ui.MainActivity"
             android:label="@string/app_name"
             android:theme="@style/Theme.CSE5236.NoActionBar">
             <intent-filter>

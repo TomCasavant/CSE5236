@@ -20,6 +20,7 @@ import com.group9.grouptivity.R;
 import com.group9.grouptivity.firebase.models.GroupMessage;
 import com.group9.grouptivity.firebase.models.GroupMessageMember;
 import com.group9.grouptivity.firebase.models.UserAccount;
+import com.group9.grouptivity.ui.GroupsFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -60,36 +61,49 @@ public class FirebaseRTDBHelper {
 
     /** Adds a Group Message with the given name to the realtime firebase database. */
     public void addGroupMessage(GroupMessage groupMessage) {
-        String id = mDatabase.child(GROUP_MESSAGES_STR).push().getKey();
-        DatabaseReference newGroup = mDatabase.child(GROUP_MESSAGES_STR).child(id);
-        newGroup.setValue(groupMessage);
-        DatabaseReference user = newGroup.child(GROUP_USERS_STR).child(mAuth.getCurrentUser().getUid());
-        user.child(EMAIL_STR).setValue(mAuth.getCurrentUser().getEmail());
-        user.child(MUTED_STR).setValue(false);
-        mDatabase.child(USER_ACCOUNTS_STR).child(mAuth.getCurrentUser().getUid()).child(GROUP_MESSAGES_STR).child(id).child(GROUP_NAME_STR).setValue(groupMessage.getName());
+        if (mAuth.getCurrentUser() != null) {
+            String id = mDatabase.child(GROUP_MESSAGES_STR).push().getKey();
+            DatabaseReference newGroup = mDatabase.child(GROUP_MESSAGES_STR).child(id);
+            newGroup.setValue(groupMessage);
+            DatabaseReference user = newGroup.child(GROUP_USERS_STR).child(mAuth.getCurrentUser().getUid());
+            user.child(EMAIL_STR).setValue(mAuth.getCurrentUser().getEmail());
+            user.child(MUTED_STR).setValue(false);
+            mDatabase.child(USER_ACCOUNTS_STR).child(mAuth.getCurrentUser().getUid()).child(GROUP_MESSAGES_STR).child(id).child(GROUP_NAME_STR).setValue(groupMessage.getName());
+        } else {
+            Log.e("FirebaseRTDBHelper","Unable to retrieve user. Is one logged in?");
+        }
     }
 
-    //TODO finish this jauwnt
-    /** Returns a list group messages of which the UserAccount with given username is a part. */
-    public List<GroupMessage> getGroupMessages(String username) {
+    /** Returns a list group messages of which the current user is a part. */
+    public List<GroupMessage> getGroupMessages(FirebaseRTDBHelper.DataRetrievalListener dr) {
         List<GroupMessage> groupMessageList = new ArrayList<>();
-        mDatabase.child(USER_ACCOUNTS_STR).child(username).child(GROUP_MESSAGES_STR).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DataSnapshot> task) {
-                if (!task.isSuccessful()){
-                    Log.e("firebase","Error getting data", task.getException());
+        if (mAuth.getCurrentUser() != null) {
+            String id = mDatabase.child(GROUP_MESSAGES_STR).push().getKey();
+            mDatabase.child(USER_ACCOUNTS_STR).child(mAuth.getCurrentUser().getUid()).child(GROUP_MESSAGES_STR).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DataSnapshot> task) {
+                    if (!task.isSuccessful()){
+                        Log.e("firebase","Error getting data", task.getException());
 
-                } else { //task is successful
-                    for (DataSnapshot child : task.getResult().getChildren()) {
-                        child.getKey();
+                    } else { //task is successful
+                        for (DataSnapshot groupMessage : task.getResult().getChildren()) {
+                            String groupMessageName = (String) groupMessage.child(GROUP_NAME_STR).getValue();
+                            groupMessageList.add(new GroupMessage(groupMessageName));
+                        }
                     }
+                    dr.onDataRetrieval();
                 }
-            }
-        });
+            });
+        } else {
+            Log.e("FirebaseRTDBHelper","Unable to retrieve user. Is one logged in?");
+        }
+
+
+
         return groupMessageList;
     }
 
-    /* Checks if the user is logged in */
+    /** Checks if the user is logged in */
     public boolean isLoggedIn(){  return mAuth.getCurrentUser() != null;  }
 
     /** Adds a New User with the given username to the realtime firebase database. */
@@ -97,7 +111,7 @@ public class FirebaseRTDBHelper {
         mDatabase.child(USER_ACCOUNTS_STR).child(uid).setValue(user);
     }
 
-    /* Function to login an existing user given the username and password */
+    /** Function to login an existing user given the username and password */
     public void login(String username, String password, Activity activity){
         mAuth.signInWithEmailAndPassword(username, password)
                 .addOnCompleteListener(activity, new OnCompleteListener<AuthResult>() {
@@ -116,7 +130,7 @@ public class FirebaseRTDBHelper {
                 });
     }
 
-    /* Function to create the account of a user given a username and password */
+    /** Function to create the account of a user given a username and password */
     public void createAccount(String username, String password, Activity activity){
         mAuth.createUserWithEmailAndPassword(username, password)
                 .addOnCompleteListener(activity, new OnCompleteListener<AuthResult>() {
@@ -134,6 +148,10 @@ public class FirebaseRTDBHelper {
                     }
                 });
 
+    }
+
+    public interface DataRetrievalListener {
+        public void onDataRetrieval();
     }
 
 }

@@ -1,30 +1,32 @@
-package com.group9.grouptivity;
+package com.group9.grouptivity.firebase.models;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.group9.grouptivity.firebase.models.GroupMessage;
+import com.group9.grouptivity.R;
 
 import java.util.List;
 
 public class GroupMessageAdapter extends RecyclerView.Adapter<GroupMessageAdapter.GroupMessageViewHolder> {
     private List<GroupMessage> mGroupMessageList;
     private ItemClickListener mItemClickListener;
+    private LayoutInflater mInflater;
 
-    public GroupMessageAdapter(List<GroupMessage> groupMessageList) {
+    public GroupMessageAdapter(Context context, List<GroupMessage> groupMessageList) {
         this.mGroupMessageList = groupMessageList;
+        this.mInflater = LayoutInflater.from(context);
     }
 
     @NonNull
     @Override
     public GroupMessageViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.groups_recyclerview_row, parent, false);
+        View view = mInflater.inflate(R.layout.groups_recyclerview_row, parent, false);
 
         return new GroupMessageViewHolder(view);
     }

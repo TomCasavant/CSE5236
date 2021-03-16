@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GroupMessage {
-    public String id;
+    private String mId;
     private String mName;
     private List<GroupMessageMember> mGroupMessageMemberList;
 
@@ -33,6 +33,6 @@ public class GroupMessage {
     }
 
     public void addMember(GroupMessageMember groupMessageMember) {
-
+        mGroupMessageMemberList.add(groupMessageMember);
     }
 }
