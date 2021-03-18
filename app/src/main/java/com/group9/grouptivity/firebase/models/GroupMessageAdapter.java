@@ -44,7 +44,7 @@ public class GroupMessageAdapter extends RecyclerView.Adapter<GroupMessageAdapte
     }
 
     public class GroupMessageViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        TextView groupMessageTextView; //not sure ab access modifier here
+        private TextView groupMessageTextView; //not sure ab access modifier here
 
         public GroupMessageViewHolder(@NonNull View itemView) {
             super(itemView);

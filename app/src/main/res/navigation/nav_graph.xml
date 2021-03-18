@@ -3,18 +3,18 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/FirstFragment">
+    app:startDestination="@id/GroupsFragment">
     <fragment
-        android:id="@+id/FirstFragment"
+        android:id="@+id/GroupsFragment"
         android:name="com.group9.grouptivity.ui.GroupsFragment"
-        android:label="@string/first_fragment_label"
+        android:label="@string/groups_fragment_label"
         tools:layout="@layout/groups_fragment">
 
         <action
-            android:id="@+id/action_FirstFragment_to_SecondFragment"
+            android:id="@+id/action_GroupsFragment_to_SecondFragment"
             app:destination="@id/SecondFragment" />
         <action
-            android:id="@+id/action_FirstFragment_to_GroupInvitesFragment"
+            android:id="@+id/action_GroupsFragment_to_GroupInvitesFragment"
             app:destination="@id/GroupInvitesFragment" />
     </fragment>
     <fragment
@@ -25,7 +25,7 @@
 
         <action
             android:id="@+id/action_SecondFragment_to_FirstFragment"
-            app:destination="@id/FirstFragment" />
+            app:destination="@id/GroupsFragment" />
     </fragment>
     <fragment
         android:id="@+id/loginFragment"
@@ -43,7 +43,7 @@
         android:label="@string/group_invites_fragment_label"
         tools:layout="@layout/group_invites_fragment" >
         <action
-            android:id="@+id/action_GroupInvitesFragment_to_FirstFragment"
-            app:destination="@id/FirstFragment" />
+            android:id="@+id/action_GroupInvitesFragment_to_GroupsFragment"
+            app:destination="@id/GroupsFragment" />
     </fragment>
 </navigation>

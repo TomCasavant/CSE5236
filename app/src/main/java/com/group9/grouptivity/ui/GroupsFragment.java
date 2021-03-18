@@ -17,7 +17,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.group9.grouptivity.firebase.DataRetrievalListener;
-import com.group9.grouptivity.firebase.ItemClickListener;
 import com.group9.grouptivity.firebase.models.GroupMessageAdapter;
 import com.group9.grouptivity.R;
 import com.group9.grouptivity.firebase.FirebaseRTDBHelper;
@@ -26,6 +25,7 @@ public class GroupsFragment extends Fragment {
 
     private View view;
     private Button createGroupButton;
+    private Button viewInvitesButton;
     private GroupMessageAdapter groupMessageAdapter;
 
 
@@ -42,6 +42,8 @@ public class GroupsFragment extends Fragment {
             Toast.makeText(getActivity(), getString(R.string.create_group_title), Toast.LENGTH_LONG).show();
             createGroupDialog(); // When the create group button is clicked, display an input button
         });
+
+
 
         buildGroupMessageRecyclerView(view);
 
@@ -93,8 +95,13 @@ public class GroupsFragment extends Fragment {
 
         view.findViewById(R.id.groups_fragment_activities_button).setOnClickListener((View v) ->
             NavHostFragment.findNavController(GroupsFragment.this)
-                    .navigate(R.id.action_FirstFragment_to_SecondFragment)
+                    .navigate(R.id.action_GroupsFragment_to_SecondFragment)
         );
+
+        viewInvitesButton = view.findViewById(R.id.groups_view_invites_button);
+        viewInvitesButton.setOnClickListener((View v) ->{
+            NavHostFragment.findNavController(GroupsFragment.this).navigate(R.id.action_GroupsFragment_to_GroupInvitesFragment);
+        });
     }
 
     @Override

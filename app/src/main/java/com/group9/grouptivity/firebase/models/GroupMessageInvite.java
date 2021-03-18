@@ -1,6 +1,7 @@
 package com.group9.grouptivity.firebase.models;
 
 public class GroupMessageInvite {
+    private String mGroupMessageId;
     private String mGroupMessageName;
     private String mSenderUsername;
 
@@ -20,5 +21,8 @@ public class GroupMessageInvite {
     public String getSenderUsername() {
         return this.mSenderUsername;
     }
+
+    /** Returns the id of the group message associated with this group message. */
+    public String getGroupMessageId() {return this.mGroupMessageId;}
 
 }
