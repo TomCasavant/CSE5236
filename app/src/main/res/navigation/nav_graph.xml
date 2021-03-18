@@ -13,6 +13,9 @@
         <action
             android:id="@+id/action_FirstFragment_to_SecondFragment"
             app:destination="@id/SecondFragment" />
+        <action
+            android:id="@+id/action_FirstFragment_to_GroupInvitesFragment"
+            app:destination="@id/GroupInvitesFragment" />
     </fragment>
     <fragment
         android:id="@+id/SecondFragment"
@@ -22,6 +25,25 @@
 
         <action
             android:id="@+id/action_SecondFragment_to_FirstFragment"
+            app:destination="@id/FirstFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="com.group9.grouptivity.ui.login.LoginFragment"
+        android:label="fragment_login"
+        tools:layout="@layout/fragment_login" >
+        <action
+            android:id="@+id/action_loginFragment_to_SecondFragment"
+            app:destination="@id/SecondFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/GroupInvitesFragment"
+        android:name="com.group9.grouptivity.ui.GroupInvitesFragment"
+        android:label="@string/group_invites_fragment_label"
+        tools:layout="@layout/group_invites_fragment" >
+        <action
+            android:id="@+id/action_GroupInvitesFragment_to_FirstFragment"
             app:destination="@id/FirstFragment" />
     </fragment>
 </navigation>

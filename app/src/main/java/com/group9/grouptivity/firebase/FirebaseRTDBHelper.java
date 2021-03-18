@@ -14,8 +14,10 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.group9.grouptivity.R;
 import com.group9.grouptivity.firebase.models.GroupMessage;
 import com.group9.grouptivity.firebase.models.GroupMessageMember;
@@ -75,29 +77,34 @@ public class FirebaseRTDBHelper {
     }
 
     /** Returns a list group messages of which the current user is a part. */
-    public List<GroupMessage> getGroupMessages(FirebaseRTDBHelper.DataRetrievalListener dr) {
+    public List<GroupMessage> getGroupMessages(DataRetrievalListener dr) {
         List<GroupMessage> groupMessageList = new ArrayList<>();
         if (mAuth.getCurrentUser() != null) {
-            String id = mDatabase.child(GROUP_MESSAGES_STR).push().getKey();
-            mDatabase.child(USER_ACCOUNTS_STR).child(mAuth.getCurrentUser().getUid()).child(GROUP_MESSAGES_STR).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+            DatabaseReference userGroupMessageListRef = mDatabase.child(USER_ACCOUNTS_STR).child(mAuth.getCurrentUser().getUid()).child(GROUP_MESSAGES_STR);
+            ValueEventListener userGroupMessageListener = new ValueEventListener() {
                 @Override
-                public void onComplete(@NonNull Task<DataSnapshot> task) {
-                    if (!task.isSuccessful()){
-                        Log.e("firebase","Error getting data", task.getException());
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    groupMessageList.clear(); //Need to clear the original list to prevent duplicates
+                    for (DataSnapshot child : snapshot.getChildren()) {
+                        GroupMessage gm = child.getValue(GroupMessage.class);
+                        gm.setId(child.getKey());
+                        groupMessageList.add(gm);
 
-                    } else { //task is successful
-                        for (DataSnapshot groupMessage : task.getResult().getChildren()) {
-                            String groupMessageName = (String) groupMessage.child(GROUP_NAME_STR).getValue();
-                            groupMessageList.add(new GroupMessage(groupMessageName));
-                        }
                     }
-                    dr.onDataRetrieval();
+                    dr.onDataRetrieval(); //Notify listener
                 }
-            });
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+                    Log.e("FirebaseRTDBHelper", error.getMessage());
+                    //Toast.makeText()
+                    //need context for error to toast
+                }
+            };
+            userGroupMessageListRef.addValueEventListener(userGroupMessageListener);
         } else {
             Log.e("FirebaseRTDBHelper","Unable to retrieve user. Is one logged in?");
         }
-
 
 
         return groupMessageList;
@@ -150,8 +157,6 @@ public class FirebaseRTDBHelper {
 
     }
 
-    public interface DataRetrievalListener {
-        public void onDataRetrieval();
-    }
+
 
 }

@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">Grouptivity</string>
     <string name="action_settings">Settings</string>
+
     <!-- Strings used for the tab navigation -->
     <string name="group_tab_label">Groups</string>
     <string name="activity_tab_label">Activities</string>
@@ -8,6 +9,7 @@
     <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">First Fragment</string>
     <string name="second_fragment_label">Second Fragment</string>
+    <string name="group_invites_fragment_label">Group Invites Fragment</string>
     <string name="groups_button">Groups</string>
     <string name="activities_button">Activities</string>
 
@@ -23,6 +25,11 @@
     <string name="create_group_title">Create Group</string>
     <string name="view_invites_button">View Invites</string>
 
+    <!-- Strings used in group_invites_fragment layout -->
+    <string name="pending_invites">Pending Invites</string>
+    <string name="invite_sender">Sender: </string>
+    <string name="invite_accept">Accept</string>
+    <string name="invite_decline">Decline</string>
 
     <!-- Strings used for login page -->
     <string name="login_title">Login</string>
@@ -31,7 +38,20 @@
     <string name="login_button">Login</string>
     <string name="create_account_button">Create Account</string>
 
+    <!-- Misc -->
+    <string name="back_str">Back</string>
+
+
     <!-- Strings used for Firebase Realtime DB I/O -->
     <string name="firebase_groupMessages">groupMessages</string>
+    <!-- Strings related to login -->
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password</string>
+    <string name="action_sign_in">Sign in or register</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="welcome">"Welcome!"</string>
+    <string name="invalid_username">Not a valid username</string>
+    <string name="invalid_password">Password must be >5 characters</string>
+    <string name="login_failed">"Login failed"</string>
 
 </resources>

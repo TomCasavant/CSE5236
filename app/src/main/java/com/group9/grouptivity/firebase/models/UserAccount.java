@@ -10,7 +10,7 @@ public class UserAccount {
     private List<String> mGroupMessageNameList;
     private List<GroupMessageInvite> mGroupMessageInviteList;
 
-    public UserAccount() {} //Empty constructor needed for Firebase
+    private UserAccount() {} //Empty constructor needed for Firebase
 
     public UserAccount(String emailAddress) {
         this.mEmailAddress = emailAddress;

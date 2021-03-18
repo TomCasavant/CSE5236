@@ -5,7 +5,7 @@ public class GroupActivity {
     private double mExpectedCost;
     private String mLocation;
 
-    public GroupActivity() {} //Empty constructor needed for Firebase
+    private GroupActivity() {} //Empty constructor needed for Firebase
 
     public GroupActivity(String activityType, double expectedCost, String location) {
         this.mActivityType = activityType;

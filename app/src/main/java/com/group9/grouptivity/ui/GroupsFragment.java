@@ -16,11 +16,12 @@ import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.group9.grouptivity.firebase.DataRetrievalListener;
 import com.group9.grouptivity.firebase.models.GroupMessageAdapter;
 import com.group9.grouptivity.R;
 import com.group9.grouptivity.firebase.FirebaseRTDBHelper;
 
-public class GroupsFragment extends Fragment implements GroupMessageAdapter.ItemClickListener, FirebaseRTDBHelper.DataRetrievalListener {
+public class GroupsFragment extends Fragment implements GroupMessageAdapter.ItemClickListener, DataRetrievalListener {
 
     private View view;
     private Button createGroupButton;

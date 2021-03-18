@@ -7,31 +7,14 @@
     tools:context=".ui.GroupsFragment">
 
 
-    <Button
-        android:id="@+id/create_group"
-        android:layout_width="175dp"
-        android:layout_height="49dp"
-        android:layout_marginStart="233dp"
-        android:layout_marginLeft="233dp"
-        android:layout_marginTop="40dp"
-        android:layout_marginEnd="32dp"
-        android:layout_marginRight="32dp"
-        android:layout_marginBottom="1dp"
-        android:text="@string/create_group_title"
-        app:layout_constraintBottom_toTopOf="@+id/view_invites"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.413"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/groups_fragment_activities_button" />
-
     <TextView
-        android:id="@+id/textview_first2"
+        android:id="@+id/textview_first"
         android:layout_width="0dp"
         android:layout_height="36dp"
         android:layout_marginTop="32dp"
         android:fontFamily="sans-serif-black"
         android:gravity="center"
-        android:text="@string/groups_button"
+        android:text="@string/pending_invites"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.044"
         app:layout_constraintStart_toStartOf="parent"
@@ -60,18 +43,12 @@
         android:id="@+id/view_invites"
         android:layout_width="175dp"
         android:layout_height="49dp"
-        android:layout_marginStart="233dp"
-        android:layout_marginLeft="233dp"
-        android:layout_marginTop="1dp"
-        android:layout_marginEnd="30dp"
-        android:layout_marginRight="30dp"
-        android:layout_marginBottom="575dp"
-        android:text="@string/view_invites_button"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.481"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="16dp"
+        android:text="@string/back_str"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/create_group" />
+        app:layout_constraintTop_toBottomOf="@+id/groups_fragment_groups_button" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/group_message_recyclerview"
@@ -80,6 +57,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textview_first2" />
+        app:layout_constraintTop_toBottomOf="@id/textview_first"
+        app:layout_constraintVertical_bias="1.0" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

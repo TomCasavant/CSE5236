@@ -7,7 +7,7 @@ public class GroupMessageMember {
     private String mName;
     private boolean mIsMuted;
 
-    GroupMessageMember() {} //Empty constructor needed for Firebase
+    private GroupMessageMember() {} //Empty constructor needed for Firebase
 
     public GroupMessageMember(String name){
         this.mName = name;

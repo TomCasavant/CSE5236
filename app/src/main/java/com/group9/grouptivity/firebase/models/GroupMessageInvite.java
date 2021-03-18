@@ -4,7 +4,7 @@ public class GroupMessageInvite {
     private String mGroupMessageName;
     private String mSenderUsername;
 
-    GroupMessageInvite() {} //Empty constructor needed for Firebase
+    private GroupMessageInvite() {} //Empty constructor needed for Firebase
 
     public GroupMessageInvite(String groupMessageName, String senderUsername) {
         this.mGroupMessageName = groupMessageName;
