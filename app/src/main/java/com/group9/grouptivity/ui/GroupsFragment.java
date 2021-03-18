@@ -17,11 +17,12 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.group9.grouptivity.firebase.DataRetrievalListener;
+import com.group9.grouptivity.firebase.ItemClickListener;
 import com.group9.grouptivity.firebase.models.GroupMessageAdapter;
 import com.group9.grouptivity.R;
 import com.group9.grouptivity.firebase.FirebaseRTDBHelper;
 
-public class GroupsFragment extends Fragment implements GroupMessageAdapter.ItemClickListener, DataRetrievalListener {
+public class GroupsFragment extends Fragment {
 
     private View view;
     private Button createGroupButton;
@@ -47,22 +48,19 @@ public class GroupsFragment extends Fragment implements GroupMessageAdapter.Item
         return view;
     }
 
+    /** Builds the recycler view to display the list of Group Messages the user is a part of. */
     public void buildGroupMessageRecyclerView(View view){
         RecyclerView recyclerView = view.findViewById(R.id.group_message_recyclerview);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        groupMessageAdapter = new GroupMessageAdapter(getActivity(), FirebaseRTDBHelper.getInstance().getGroupMessages(this));
-        groupMessageAdapter.setClickListener(this);
-        recyclerView.setAdapter(groupMessageAdapter);
-    }
-
-
-
-    public void onDataRetrieval() {
-        groupMessageAdapter.notifyDataSetChanged();
-    }
-
-    public void onItemClick (View view, int position) {
-        Toast.makeText(getActivity(),"You clicked "+ groupMessageAdapter.getItem(position).getName(), Toast.LENGTH_LONG).show();
+        DataRetrievalListener dataRetrievalListener = new DataRetrievalListener() {
+            @Override
+            public void onDataRetrieval() {
+                groupMessageAdapter.notifyDataSetChanged();
+            }
+        };
+        groupMessageAdapter = new GroupMessageAdapter(getActivity(), FirebaseRTDBHelper.getInstance().getGroupMessages(dataRetrievalListener));
+        groupMessageAdapter.setClickListener((view1, position) -> Toast.makeText(getActivity(),"You clicked "+ groupMessageAdapter.getItem(position).getName(), Toast.LENGTH_LONG).show());
+                recyclerView.setAdapter(groupMessageAdapter);
     }
 
     /** Creates a dialog box and displays it to the user to get new group name */

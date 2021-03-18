@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.group9.grouptivity.R;
+import com.group9.grouptivity.firebase.ItemClickListener;
 
 import java.util.List;
 
@@ -69,9 +70,6 @@ public class GroupMessageAdapter extends RecyclerView.Adapter<GroupMessageAdapte
        this.mItemClickListener = itemClickListener;
    }
 
-   /** Parent fragment will implement this interface/method to respond to click events. */
-   public interface ItemClickListener {
-       void onItemClick(View view, int position);
-   }
+
 
 }
