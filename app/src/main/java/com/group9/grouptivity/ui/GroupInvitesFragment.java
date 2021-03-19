@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.group9.grouptivity.R;
 import com.group9.grouptivity.firebase.DataRetrievalListener;
+import com.group9.grouptivity.firebase.FirebaseRTDBHelper;
 import com.group9.grouptivity.firebase.models.GroupMessageInvite;
 import com.group9.grouptivity.firebase.models.GroupMessageInviteAdapter;
 
@@ -35,8 +36,6 @@ public class GroupInvitesFragment extends Fragment {
         //Inflate the view for this fragment
         view = inflater.inflate(R.layout.group_invites_fragment, container, false);
 
-
-
         buildGroupMessageRecyclerView(view);
 
         return view;
@@ -56,16 +55,8 @@ public class GroupInvitesFragment extends Fragment {
     public void buildGroupMessageRecyclerView(View view){
         RecyclerView recyclerView = view.findViewById(R.id.group_message_recyclerview);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        DataRetrievalListener dataRetrievalListener = new DataRetrievalListener() {
-            @Override
-            public void onDataRetrieval() {
-                groupMessageInviteAdapter.notifyDataSetChanged();
-            }
-        };
-        List<GroupMessageInvite> gmList = new ArrayList<>();
-        gmList.add(new GroupMessageInvite("Group1", "Adam"));
-        gmList.add(new GroupMessageInvite("Group2", "Beth"));
-        groupMessageInviteAdapter = new GroupMessageInviteAdapter(getActivity(), gmList);
+        DataRetrievalListener dataRetrievalListener = () -> groupMessageInviteAdapter.notifyDataSetChanged();
+        groupMessageInviteAdapter = new GroupMessageInviteAdapter(getActivity(), FirebaseRTDBHelper.getInstance().getGroupMessageInvites(dataRetrievalListener));
         recyclerView.setAdapter(groupMessageInviteAdapter);
     }
 

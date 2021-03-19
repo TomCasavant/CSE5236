@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.group9.grouptivity.R;
+import com.group9.grouptivity.firebase.FirebaseRTDBHelper;
 import com.group9.grouptivity.firebase.ItemClickListener;
 
 import org.w3c.dom.Text;
@@ -61,15 +62,13 @@ public class GroupMessageInviteAdapter extends RecyclerView.Adapter<GroupMessage
             senderUsernameTextView = itemView.findViewById(R.id.invite_sender_name_textview);
             mAcceptButton = itemView.findViewById(R.id.invite_accept_button);
             mAcceptButton.setOnClickListener((View v) -> {
-                //TODO
-                //Add the user to the GroupMessage with the given id
-                //Delete the GroupMessageInvite from Firebase
+                FirebaseRTDBHelper.getInstance().addCurrentUserToGroupMessage(mGroupMessageId, groupMessageNameTextView.getText().toString());
+                FirebaseRTDBHelper.getInstance().deleteGroupMessageInvite(mGroupMessageId);
             });
 
-            mDeclineButton = itemView.findViewById(R.id.invite_accept_button);
+            mDeclineButton = itemView.findViewById(R.id.invite_decline_button);
             mDeclineButton.setOnClickListener((View v) -> {
-                //TODO
-                //Delete the GroupMessageInvite from Firebase
+                FirebaseRTDBHelper.getInstance().deleteGroupMessageInvite(mGroupMessageId);
             });
         }
 

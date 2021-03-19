@@ -17,12 +17,25 @@ public class GroupMessageInvite {
         return this.mGroupMessageName;
     }
 
+    /** Sets the group message name associated with this invitation. */
+    public void setGroupMessageName(String groupMessageName){
+        this.mGroupMessageName = groupMessageName;
+    }
+
     /** Returns the username of the sender of this invitation. */
     public String getSenderUsername() {
         return this.mSenderUsername;
     }
 
+    /** Sets the username of the sender of this invitation. */
+    public void setSenderUsername(String senderUsername) {
+        this.mSenderUsername = senderUsername;
+    }
+
     /** Returns the id of the group message associated with this group message. */
     public String getGroupMessageId() {return this.mGroupMessageId;}
+
+    /** Sets the id of the group message associated with this group message. */
+    public void setGroupMessageId(String id) {this.mGroupMessageId = id;}
 
 }
