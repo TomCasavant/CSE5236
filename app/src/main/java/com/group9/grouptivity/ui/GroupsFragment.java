@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -39,10 +40,14 @@ public class GroupsFragment extends Fragment {
 
         createGroupButton = (Button) view.findViewById(R.id.create_group);
         createGroupButton.setOnClickListener((View v) -> {
-            Toast.makeText(getActivity(), getString(R.string.create_group_title), Toast.LENGTH_LONG).show();
             createGroupDialog(); // When the create group button is clicked, display an input button
         });
 
+
+
+
+
+        buildGroupMessageRecyclerView(view);
 
         return view;
     }
@@ -58,8 +63,7 @@ public class GroupsFragment extends Fragment {
             }
         };
         groupMessageAdapter = new GroupMessageAdapter(getActivity(), FirebaseRTDBHelper.getInstance().getGroupMessages(dataRetrievalListener));
-        groupMessageAdapter.setClickListener((view1, position) -> NavHostFragment.findNavController(GroupsFragment.this)
-                        .navigate(R.id.action_GroupsFragment_to_GroupMessageFragment));
+        groupMessageAdapter.setClickListener((view1, position) -> Toast.makeText(getActivity(),"You clicked "+ groupMessageAdapter.getItem(position).getName(), Toast.LENGTH_LONG).show());
                 recyclerView.setAdapter(groupMessageAdapter);
     }
 
@@ -84,7 +88,7 @@ public class GroupsFragment extends Fragment {
     public void createGroup(String groupName){
         // Send new group to database
         FirebaseRTDBHelper.getInstance().addGroupMessage(groupName);
-        Toast.makeText(getActivity(), groupName, Toast.LENGTH_LONG).show();
+        Toast.makeText(getActivity(), groupName + " created!", Toast.LENGTH_LONG).show();
         Log.d("Create Group: ", groupName);
     }
 
@@ -95,9 +99,14 @@ public class GroupsFragment extends Fragment {
             NavHostFragment.findNavController(GroupsFragment.this)
                     .navigate(R.id.action_GroupsFragment_to_SecondFragment)
         );
-
-
-        buildGroupMessageRecyclerView(view);
+        view.getRootView().findViewById(R.id.loginButton).setOnClickListener((View v) -> {
+            if (!FirebaseRTDBHelper.getInstance().isLoggedIn()){
+                NavHostFragment.findNavController(GroupsFragment.this)
+                        .navigate(R.id.loginFragment);
+            } else {
+                FirebaseRTDBHelper.getInstance().logout();
+            }
+        });
 
         viewInvitesButton = view.findViewById(R.id.groups_view_invites_button);
         viewInvitesButton.setOnClickListener((View v) ->{
@@ -108,36 +117,30 @@ public class GroupsFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        Toast.makeText(getContext(), "OnStart() ran in Fragment", Toast.LENGTH_LONG).show();
         Log.d("OnStart()", "Successfully ran OnStart() in Fragment");
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        Toast.makeText(getContext(), "OnPause() ran in Fragment", Toast.LENGTH_LONG).show();
         Log.d("OnPause()", "Successfully ran OnPause()");
     }
 
     @Override
     public void onResume() {
         super.onResume();
-
-        Toast.makeText(getContext(), "OnResume() ran in Fragment", Toast.LENGTH_LONG).show();
         Log.d("OnResume()", "Successfully ran OnResume() in Fragment");
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        Toast.makeText(getContext(), "OnStop() ran in Fragment", Toast.LENGTH_LONG).show();
         Log.d("OnStop()", "Successfully ran OnStop() in Fragment");
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Toast.makeText(getContext(), "OnDestroy() ran in Fragment", Toast.LENGTH_LONG).show();
         Log.d("OnDestroy()", "Successfully ran OnDestroy() in Fragment");
     }
 

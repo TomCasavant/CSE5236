@@ -3,11 +3,17 @@ package com.group9.grouptivity.ui;
 import android.app.Dialog;
 import android.os.Bundle;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.group9.grouptivity.R;
 import com.group9.grouptivity.firebase.FirebaseRTDBHelper;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
 
 import android.view.View;
 
@@ -26,8 +32,26 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
+        if (FirebaseRTDBHelper.getInstance().isLoggedIn()){
+            ((Button)toolbar.findViewById(R.id.loginButton)).setText("Logout");
+        } else {
+            ((Button)toolbar.findViewById(R.id.loginButton)).setText("Login");
+        }
+        FirebaseAuth.AuthStateListener mAuthListener = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth){
+                FirebaseUser user = firebaseAuth.getCurrentUser();
+                if (user != null){
+                    // User is logged in, update accordingly
+                    ((Button)toolbar.findViewById(R.id.loginButton)).setText("Logout");
+                } else {
+                    // User is not logged in update accordingly
+                    ((Button)toolbar.findViewById(R.id.loginButton)).setText("Login");
+                }
+            }
+        };
+        FirebaseRTDBHelper.getInstance().createListener(mAuthListener);
         setSupportActionBar(toolbar);
-
         Log.d("OnCreate()", "Successfully ran Activity OnCreate()");
     }
 
@@ -47,9 +71,6 @@ public class MainActivity extends AppCompatActivity {
         switch(id){
             case R.id.action_settings:
                 return true;
-            case R.id.login_button:
-                createLoginDialog();
-                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -58,39 +79,35 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        Toast.makeText(getApplicationContext(), "Activity OnStart() ran", Toast.LENGTH_LONG).show();
         Log.d("OnStart()", "Successfully ran Activity OnStart()");
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        Toast.makeText(getApplicationContext(), "Activity OnPause() ran", Toast.LENGTH_LONG).show();
         Log.d("OnPause()", "Successfully ran Activity OnPause()");
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        Toast.makeText(getApplicationContext(), "Activity OnResume() ran", Toast.LENGTH_LONG).show();
         Log.d("OnResume()", "Successfully ran Activity OnResume()");
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        Toast.makeText(getApplicationContext(), "Activity OnStop() ran", Toast.LENGTH_LONG).show();
         Log.d("OnStop()", "Successfully ran Activity OnStop()");
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        Toast.makeText(getApplicationContext(), "Activity OnDestroy() ran", Toast.LENGTH_LONG).show();
         Log.d("OnDestroy()", "Successfully ran Activity OnDestroy()");
     }
 
-    /* Creates a dialog box and displays it to the user to allow them to sign in */
+    /*
+    /* Creates a dialog box and displays it to the user to allow them to sign in
     public void createLoginDialog(){
         final Dialog dialog = new Dialog(MainActivity.this);
         dialog.setContentView(R.layout.login_page); // Assign to xml dialog layout
@@ -112,5 +129,5 @@ public class MainActivity extends AppCompatActivity {
 
         dialog.show();
     }
-
+   */
 }

@@ -9,6 +9,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuth.AuthStateListener;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -47,7 +48,7 @@ public class FirebaseRTDBHelper {
     private FirebaseRTDBHelper() {
         mAuth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance().getReference();
-        if (mAuth != null) {
+        if (mAuth.getCurrentUser() != null) {
             mCurrentUserRef = mDatabase.child(USER_ACCOUNTS_STR).child(mAuth.getCurrentUser().getUid());
         }
     }
@@ -253,7 +254,15 @@ public class FirebaseRTDBHelper {
                         }
                     }
                 });
+    }
 
+    public void logout(){
+        //TODO RESET Current User
+        mAuth.signOut();
+    }
+
+    public void createListener(AuthStateListener listener){
+        mAuth.addAuthStateListener(listener);
     }
 
 
