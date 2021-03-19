@@ -16,8 +16,12 @@ public abstract class AbstractClickableViewHolder extends RecyclerView.ViewHolde
 
     @Override
     public void onClick(View view) {
+        if (mItemClickListener != null) {
             mItemClickListener.onItemClick(view, getAdapterPosition());
+        }
     }
+
+
 
     /** Allows click events to be caught. */
     public void setClickListener(ItemClickListener itemClickListener) {

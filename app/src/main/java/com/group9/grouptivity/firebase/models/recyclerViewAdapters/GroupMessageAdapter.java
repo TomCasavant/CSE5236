@@ -27,14 +27,19 @@ public class GroupMessageAdapter extends RecyclerView.Adapter<GroupMessageViewHo
         this.mInflater = LayoutInflater.from(context);
     }
 
+    public GroupMessageAdapter(Context context, List<GroupMessage> groupMessageList, ItemClickListener itemClickListener) {
+        this.mGroupMessageList = groupMessageList;
+        this.mInflater = LayoutInflater.from(context);
+        this.mItemClickListener = itemClickListener;
+    }
+
     @NonNull
     @Override
     public GroupMessageViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = mInflater.inflate(R.layout.groups_recyclerview_row, parent, false);
         GroupMessageViewHolder viewHolder = new GroupMessageViewHolder(view);
-        if (mItemClickListener != null) {
-            viewHolder.setClickListener(mItemClickListener);
-        }
+        viewHolder.setClickListener(mItemClickListener);
+
         return viewHolder;
     }
 
@@ -62,12 +67,5 @@ public class GroupMessageAdapter extends RecyclerView.Adapter<GroupMessageViewHo
    public GroupMessage getItem(int position) {
         return mGroupMessageList.get(position);
    }
-
-   /** Allows click events to be caught. */
-   public void setClickListener(ItemClickListener itemClickListener) {
-       this.mItemClickListener = itemClickListener;
-   }
-
-
 
 }

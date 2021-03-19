@@ -33,6 +33,12 @@ public class MessageAdapter extends RecyclerView.Adapter<AbstractMessageViewHold
         this.mInflater = LayoutInflater.from(context);
     }
 
+    public MessageAdapter(Context context, List<AbstractMessage> messageList, ItemClickListener itemClickListener) {
+        this.mMessageList = messageList;
+        this.mInflater = LayoutInflater.from(context);
+        this.mItemClickListener = itemClickListener;
+    }
+
     @NonNull
     @Override
     public AbstractMessageViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -52,10 +58,7 @@ public class MessageAdapter extends RecyclerView.Adapter<AbstractMessageViewHold
                 break;
         }
 
-        if(mItemClickListener != null) {
-            messageViewHolder.setClickListener(mItemClickListener);
-        }
-
+        messageViewHolder.setClickListener(mItemClickListener);
         return  messageViewHolder;
     }
 
@@ -78,14 +81,5 @@ public class MessageAdapter extends RecyclerView.Adapter<AbstractMessageViewHold
    public AbstractMessage getItem(int position) {
         return mMessageList.get(position);
    }
-
-   /** Allows click events to be caught. */
-   public void setClickListener(ItemClickListener itemClickListener) {
-    this.mItemClickListener = itemClickListener;
-   }
-
-
-
-
 
 }

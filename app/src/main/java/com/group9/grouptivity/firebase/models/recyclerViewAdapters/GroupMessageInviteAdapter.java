@@ -29,15 +29,18 @@ public class GroupMessageInviteAdapter extends RecyclerView.Adapter<GroupMessage
         this.mInflater = LayoutInflater.from(context);
     }
 
+    public GroupMessageInviteAdapter(Context context, List<GroupMessageInvite> groupMessageInviteList, ItemClickListener itemClickListener) {
+        this.mGroupMessageInviteList = groupMessageInviteList;
+        this.mInflater = LayoutInflater.from(context);
+        this.mItemClickListener = itemClickListener;
+    }
+
     @NonNull
     @Override
     public GroupMessageInviteViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = mInflater.inflate(R.layout.groups_invites_recyclerview_row, parent, false);
         GroupMessageInviteViewHolder viewHolder = new GroupMessageInviteViewHolder(view);
-
-        if(mItemClickListener != null) {
-            viewHolder.setClickListener(mItemClickListener);
-        }
+        viewHolder.setClickListener(mItemClickListener);
 
         return viewHolder;
     }
@@ -61,10 +64,5 @@ public class GroupMessageInviteAdapter extends RecyclerView.Adapter<GroupMessage
    public GroupMessageInvite getItem(int position) {
         return mGroupMessageInviteList.get(position);
    }
-
-    /** Allows click events to be caught. */
-    public void setClickListener(ItemClickListener itemClickListener) {
-        this.mItemClickListener = itemClickListener;
-    }
 
 }
