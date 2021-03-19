@@ -41,7 +41,7 @@ public class FirebaseRTDBHelper {
     private static final String MUTED_STR = "isMuted";
     private static final String EMAIL_STR = "emailAddress";
     private static final String INVITES_STR = "invites";
-    private static final String INVITE_SENDER_STR = "senderUsername";
+    private static final String INVITE_SENDER_STR = "sender";
     private static final String INVITE_GROUP_MESSAGE_STR = "groupMessageName";
 
     //private constructor for singleton

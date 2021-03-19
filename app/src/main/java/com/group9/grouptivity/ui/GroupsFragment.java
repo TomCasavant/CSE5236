@@ -13,15 +13,13 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.group9.grouptivity.firebase.DataRetrievalListener;
 import com.group9.grouptivity.firebase.ItemClickListener;
-import com.group9.grouptivity.firebase.models.GroupMessage;
-import com.group9.grouptivity.firebase.models.GroupMessageAdapter;
+import com.group9.grouptivity.firebase.models.recyclerViewAdapters.GroupMessageAdapter;
 import com.group9.grouptivity.R;
 import com.group9.grouptivity.firebase.FirebaseRTDBHelper;
 import com.group9.grouptivity.ui.models.GroupMessageViewModel;

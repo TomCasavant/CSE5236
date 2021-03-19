@@ -1,17 +1,30 @@
 package com.group9.grouptivity.firebase.models;
 
-public class Message extends KeyedDataModel {
+import com.group9.grouptivity.firebase.models.recyclerViewAdapters.MessageAdapter;
+import com.group9.grouptivity.firebase.models.recyclerViewAdapters.viewHolders.AbstractMessageViewHolder;
+
+public abstract class AbstractMessage extends KeyedDataModel {
+
+    public enum Type {
+        TEXT, ACTIVITY_POLL
+    }
+
     private KeyedDataModel mGroupMessageKey; //Maybe just change to string?
     private String mSenderUsername;
     private long mTimeStamp; //Might want to change this to a Date
 
-    protected Message() {} //Empty constructor needed for Firebase
+    protected AbstractMessage() {} //Empty constructor needed for Firebase
 
-    public Message(String groupMessageKey, String senderUserName, long timeStamp) {
+    protected AbstractMessage(String groupMessageKey, String senderUserName, long timeStamp) {
         this.mGroupMessageKey = new KeyedDataModel(groupMessageKey);
         this.mSenderUsername = senderUserName;
         this.mTimeStamp = timeStamp;
     }
+
+    /** Returns the type associated with this message. */
+    public abstract Type getType();
+
+    public abstract void bindMessage(AbstractMessageViewHolder holder);
 
     /** Returns the group message key associated with this message. */
     public String getGroupMessageKey() {
@@ -42,4 +55,5 @@ public class Message extends KeyedDataModel {
     public void setTimeStamp(long timeStamp) {
         this.mTimeStamp = timeStamp;
     }
+
 }

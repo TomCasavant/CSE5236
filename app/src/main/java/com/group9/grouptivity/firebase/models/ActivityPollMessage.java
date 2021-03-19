@@ -1,14 +1,28 @@
 package com.group9.grouptivity.firebase.models;
 
+import com.group9.grouptivity.firebase.models.recyclerViewAdapters.MessageAdapter;
+import com.group9.grouptivity.firebase.models.recyclerViewAdapters.viewHolders.AbstractMessageViewHolder;
+import com.group9.grouptivity.firebase.models.recyclerViewAdapters.viewHolders.ActivityPollMessageViewHolder;
+
 import java.util.ArrayList;
 import java.util.List;
 
-public class ActivityPollMessage extends Message {
+public class ActivityPollMessage extends AbstractMessage {
     private GroupActivity mGroupActivity;
     private List<String> mYesVotesUsernameList; //May want to change these lists to UserAccounts
     private List<String> mNoVotesUsernameList;
 
     private ActivityPollMessage() {} //Empty constructor needed for Firebase
+
+    @Override
+    public Type getType() {
+        return Type.ACTIVITY_POLL;
+    }
+
+    @Override
+    public void bindMessage(AbstractMessageViewHolder holder) {
+        ((ActivityPollMessageViewHolder) holder).bindMessage(this);
+    }
 
     public ActivityPollMessage(String groupMessageKey, String sender, long timeStamp, GroupActivity groupActivity) {
         super(groupMessageKey, sender, timeStamp);

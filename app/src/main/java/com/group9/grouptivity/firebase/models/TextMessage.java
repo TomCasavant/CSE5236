@@ -1,9 +1,23 @@
 package com.group9.grouptivity.firebase.models;
 
-public class TextMessage extends Message {
+import com.group9.grouptivity.firebase.models.recyclerViewAdapters.MessageAdapter;
+import com.group9.grouptivity.firebase.models.recyclerViewAdapters.viewHolders.AbstractMessageViewHolder;
+import com.group9.grouptivity.firebase.models.recyclerViewAdapters.viewHolders.TextMessageViewHolder;
+
+public class TextMessage extends AbstractMessage {
     private String mMessage;
 
     private TextMessage() { } //Empty constructor needed for Firebase
+
+    @Override
+    public Type getType() {
+        return Type.TEXT;
+    }
+
+    @Override
+    public void bindMessage(AbstractMessageViewHolder holder) {
+        ((TextMessageViewHolder) holder).bindMessage(this);
+    }
 
     public TextMessage(String groupMessageKey, String sender, long timeStamp, String messageText) {
         super(groupMessageKey, sender, timeStamp);

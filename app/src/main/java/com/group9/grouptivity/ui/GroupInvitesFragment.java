@@ -16,11 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.group9.grouptivity.R;
 import com.group9.grouptivity.firebase.DataRetrievalListener;
 import com.group9.grouptivity.firebase.FirebaseRTDBHelper;
-import com.group9.grouptivity.firebase.models.GroupMessageInvite;
-import com.group9.grouptivity.firebase.models.GroupMessageInviteAdapter;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.group9.grouptivity.firebase.models.recyclerViewAdapters.GroupMessageInviteAdapter;
 
 //TODO this class
 public class GroupInvitesFragment extends Fragment {
