@@ -16,6 +16,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.group9.grouptivity.firebase.models.GroupMessage;
+import com.group9.grouptivity.firebase.models.GroupMessageInvite;
 import com.group9.grouptivity.firebase.models.GroupMessageMember;
 import com.group9.grouptivity.firebase.models.UserAccount;
 
@@ -39,6 +40,8 @@ public class FirebaseRTDBHelper {
     private static final String MUTED_STR = "isMuted";
     private static final String EMAIL_STR = "emailAddress";
     private static final String INVITES_STR = "invites";
+    private static final String INVITE_SENDER_STR = "senderUsername";
+    private static final String INVITE_GROUP_MESSAGE_STR = "groupMessageName";
 
     //private constructor for singleton
     private FirebaseRTDBHelper() {
@@ -63,20 +66,18 @@ public class FirebaseRTDBHelper {
 
     /** Adds a Group Message with the given name to the realtime firebase database. */
     public void addGroupMessage(GroupMessage groupMessage) {
-        if (mCurrentUserRef != null) {
+        if (mAuth.getCurrentUser() != null) {
             String id = mDatabase.child(GROUP_MESSAGES_STR).push().getKey();
             DatabaseReference newGroup = mDatabase.child(GROUP_MESSAGES_STR).child(id);
             newGroup.setValue(groupMessage);
-            mCurrentUserRef.child(EMAIL_STR).setValue(mAuth.getCurrentUser().getEmail());
-            mCurrentUserRef.child(MUTED_STR).setValue(false);
-            mCurrentUserRef.child(GROUP_MESSAGES_STR).child(id).child(GROUP_NAME_STR).setValue(groupMessage.getName());
+            addCurrentUserToGroupMessage(id, groupMessage.getName());
         } else {
             Log.e(LOG_TAG,"Unable to retrieve user. Is one logged in?");
         }
     }
 
     /** Returns a list group messages of which the current user is a part. */
-    public List<GroupMessage> getGroupMessages(DataRetrievalListener dr) {
+    public List<GroupMessage> getGroupMessages(DataRetrievalListener dataRetrievalListener) {
         List<GroupMessage> groupMessageList = new ArrayList<>();
         if (mCurrentUserRef != null) {
             DatabaseReference userGroupMessageListRef = mCurrentUserRef.child(GROUP_MESSAGES_STR);
@@ -90,30 +91,85 @@ public class FirebaseRTDBHelper {
                         groupMessageList.add(gm);
 
                     }
-                    dr.onDataRetrieval(); //Notify listener
+                    dataRetrievalListener.onDataRetrieval(); //Notify listener
                 }
 
                 @Override
                 public void onCancelled(@NonNull DatabaseError error) {
-                    Log.e("FirebaseRTDBHelper", error.getMessage());
+                    Log.e(LOG_TAG, error.getMessage());
                     //Toast.makeText()
                     //need context for error to toast
                 }
             };
             userGroupMessageListRef.addValueEventListener(userGroupMessageListener);
         } else {
-            Log.e(LOG_TAG,"Unable to retrieve user. Is one logged in?");
+            Log.e(LOG_TAG,"Unable to retrieve current user. Is one logged in?");
         }
 
 
         return groupMessageList;
     }
 
+    /** Adds the current user to the Group Message with the given id and name. */
+    public void addCurrentUserToGroupMessage(String groupMessageId, String groupMessageName) {
+        if (mCurrentUserRef != null) {
+            DatabaseReference groupMessageRef = mDatabase.child(GROUP_MESSAGES_STR).child(groupMessageId);
+            if (groupMessageRef != null){
+                DatabaseReference user = groupMessageRef.child(GROUP_USERS_STR).child(mAuth.getCurrentUser().getUid());
+                user.child(EMAIL_STR).setValue(mAuth.getCurrentUser().getEmail());
+                user.child(MUTED_STR).setValue(false);
+                mCurrentUserRef.child(GROUP_MESSAGES_STR).child(groupMessageId).child(GROUP_NAME_STR).setValue(groupMessageName);
+            } else {
+                Log.e(LOG_TAG, "Unable to retrieve Group Message with the given id.");
+            }
+        } else {
+            Log.e(LOG_TAG,"Unable to retrieve current user. Is one logged in?");
+        }
+    }
+
+    /** Gets GroupMessageInvites for the current user. */
+    public List<GroupMessageInvite> getGroupMessageInvites(DataRetrievalListener dataRetrievalListener) {
+        List<GroupMessageInvite> groupMessageInviteList = new ArrayList<>();
+        if (mCurrentUserRef != null) {
+            DatabaseReference userGroupMessageInvitesListRef = mCurrentUserRef.child(INVITES_STR);
+            ValueEventListener userGroupMessageInvitesListener = new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    groupMessageInviteList.clear(); //Need to clear the original list to prevent duplicates
+                    for (DataSnapshot child : snapshot.getChildren()) {
+                        GroupMessageInvite gmInv = child.getValue(GroupMessageInvite.class);
+                        gmInv.setGroupMessageId(child.getKey());
+                        groupMessageInviteList.add(gmInv);
+
+                    }
+                    dataRetrievalListener.onDataRetrieval(); //Notify listener
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+                    Log.e(LOG_TAG, error.getMessage());
+                    //Toast.makeText()
+                    //need context for error to toast
+                }
+            };
+            userGroupMessageInvitesListRef.addValueEventListener(userGroupMessageInvitesListener);
+        } else {
+            Log.e(LOG_TAG,"Unable to retrieve current user. Is one logged in?");
+        }
+
+
+        return groupMessageInviteList;
+    }
+
     /** Deletes the groupMessageInvite with the given id associated with the current user if it exists. */
     public void deleteGroupMessageInvite(String groupMessageInviteId) {
         if (mCurrentUserRef != null) {
-            DatabaseReference userGroupMessageListRef = mCurrentUserRef.child(GROUP_MESSAGES_STR);
-
+            DatabaseReference gmInviteRef = mCurrentUserRef.child(INVITES_STR).child(groupMessageInviteId);
+            if (gmInviteRef != null){
+                gmInviteRef.removeValue();
+            } else {
+                Log.e(LOG_TAG, "Could not fetch a groupMessageInvite with the given id.");
+            }
         } else {
             Log.e(LOG_TAG,"Unable to retrieve user. Is one logged in?");
         }
