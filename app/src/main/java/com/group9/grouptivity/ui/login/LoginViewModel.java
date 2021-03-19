@@ -4,12 +4,14 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import android.app.Activity;
 import android.util.Patterns;
 
 import com.group9.grouptivity.data.LoginRepository;
 import com.group9.grouptivity.data.Result;
 import com.group9.grouptivity.data.model.LoggedInUser;
 import com.group9.grouptivity.R;
+import com.group9.grouptivity.firebase.FirebaseRTDBHelper;
 
 public class LoginViewModel extends ViewModel {
 
@@ -29,13 +31,11 @@ public class LoginViewModel extends ViewModel {
         return loginResult;
     }
 
-    public void login(String username, String password) {
+    public void login(String username, String password, Activity activity) {
         // can be launched in a separate asynchronous job
-        Result<LoggedInUser> result = loginRepository.login(username, password);
-
-        if (result instanceof Result.Success) {
-            LoggedInUser data = ((Result.Success<LoggedInUser>) result).getData();
-            loginResult.setValue(new LoginResult(new LoggedInUserView(data.getDisplayName())));
+        FirebaseRTDBHelper.getInstance().login(username, password, activity);
+        if (FirebaseRTDBHelper.getInstance().isLoggedIn()) {
+            loginResult.setValue(new LoginResult(new LoggedInUserView("test")));
         } else {
             loginResult.setValue(new LoginResult(R.string.login_failed));
         }

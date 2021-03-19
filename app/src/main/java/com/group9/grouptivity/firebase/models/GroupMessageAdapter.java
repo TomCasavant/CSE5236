@@ -1,6 +1,7 @@
 package com.group9.grouptivity.firebase.models;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,6 +37,13 @@ public class GroupMessageAdapter extends RecyclerView.Adapter<GroupMessageAdapte
     public void onBindViewHolder(@NonNull GroupMessageViewHolder holder, int position) {
         String groupName = mGroupMessageList.get(position).getName();
         holder.groupMessageTextView.setText(groupName);
+
+        // Alternate background colors on list
+        if (position % 2 == 0){
+            holder.itemView.setBackgroundColor(Color.parseColor("#FF0000"));
+        } else {
+            holder.itemView.setBackgroundColor(Color.parseColor("#0000FF"));
+        }
     }
 
     @Override
