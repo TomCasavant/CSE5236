@@ -10,15 +10,15 @@ public class ActivityPollMessage extends Message {
 
     private ActivityPollMessage() {} //Empty constructor needed for Firebase
 
-    public ActivityPollMessage(GroupMessage groupMessage, String sender, long timeStamp, GroupActivity groupActivity) {
-        super(groupMessage, sender, timeStamp);
+    public ActivityPollMessage(String groupMessageKey, String sender, long timeStamp, GroupActivity groupActivity) {
+        super(groupMessageKey, sender, timeStamp);
         this.mGroupActivity = groupActivity;
         this.mYesVotesUsernameList = new ArrayList<>();
         this.mNoVotesUsernameList = new ArrayList<>();
     }
 
-    public ActivityPollMessage(GroupMessage groupMessage, String sender, long timeStamp, GroupActivity groupActivity, List<String> yesVotesUsernameList, List<String> noVotesUsernameList) {
-        super(groupMessage, sender, timeStamp);
+    public ActivityPollMessage(String groupMessageKey, String sender, long timeStamp, GroupActivity groupActivity, List<String> yesVotesUsernameList, List<String> noVotesUsernameList) {
+        super(groupMessageKey, sender, timeStamp);
         this.mGroupActivity = groupActivity;
         this.mYesVotesUsernameList = yesVotesUsernameList;
         this.mNoVotesUsernameList = noVotesUsernameList;

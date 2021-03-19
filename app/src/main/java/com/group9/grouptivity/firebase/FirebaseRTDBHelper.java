@@ -61,11 +61,6 @@ public class FirebaseRTDBHelper {
     }
 
     /** Adds a Group Message with the given name to the realtime firebase database. */
-    public void addGroupMessage(String groupName, List<GroupMessageMember> groupMessageMemberList) {
-        addGroupMessage(new GroupMessage(groupName, groupMessageMemberList));
-    }
-
-    /** Adds a Group Message with the given name to the realtime firebase database. */
     public void addGroupMessage(GroupMessage groupMessage) {
         if (mAuth.getCurrentUser() != null) {
             String id = mDatabase.child(GROUP_MESSAGES_STR).push().getKey();
@@ -88,7 +83,6 @@ public class FirebaseRTDBHelper {
                     groupMessageList.clear(); //Need to clear the original list to prevent duplicates
                     for (DataSnapshot child : snapshot.getChildren()) {
                         GroupMessage gm = child.getValue(GroupMessage.class);
-                        gm.setId(child.getKey());
                         groupMessageList.add(gm);
 
                     }

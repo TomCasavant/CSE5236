@@ -5,8 +5,8 @@ public class TextMessage extends Message {
 
     private TextMessage() { } //Empty constructor needed for Firebase
 
-    public TextMessage(GroupMessage groupMessage, String sender, long timeStamp, String messageText) {
-        super(groupMessage, sender, timeStamp);
+    public TextMessage(String groupMessageKey, String sender, long timeStamp, String messageText) {
+        super(groupMessageKey, sender, timeStamp);
         this.mMessage = messageText;
     }
 
@@ -14,5 +14,11 @@ public class TextMessage extends Message {
     public String getMessage() {
         return this.mMessage;
     }
+
+    /** Sets the message text associated with this text message. */
+    public void setMessage(String message) {
+        this.mMessage = message;
+    }
+
 
 }
