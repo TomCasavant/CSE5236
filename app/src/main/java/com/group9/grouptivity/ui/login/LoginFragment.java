@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 
 import android.os.Bundle;
@@ -143,8 +144,11 @@ public class LoginFragment extends Fragment {
         if (getContext() != null && getContext().getApplicationContext() != null) {
             Toast.makeText(getContext().getApplicationContext(), welcome, Toast.LENGTH_LONG).show();
         }
-        NavHostFragment.findNavController(LoginFragment.this)
-                .navigate(R.id.action_loginFragment_to_GroupsFragment);
+        NavController navController = NavHostFragment.findNavController(LoginFragment.this);
+        if (navController.getCurrentDestination().getId() == R.id.loginFragment) {
+            navController.navigate(R.id.action_loginFragment_to_GroupsFragment);
+        }
+
     }
 
     private void showLoginFailed(@StringRes Integer errorString) {

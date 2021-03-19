@@ -3,9 +3,12 @@ package com.group9.grouptivity.ui;
 import android.app.Dialog;
 import android.os.Bundle;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.group9.grouptivity.R;
 import com.group9.grouptivity.firebase.FirebaseRTDBHelper;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.FragmentTransaction;
@@ -34,6 +37,20 @@ public class MainActivity extends AppCompatActivity {
         } else {
             ((Button)toolbar.findViewById(R.id.loginButton)).setText("Login");
         }
+        FirebaseAuth.AuthStateListener mAuthListener = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth){
+                FirebaseUser user = firebaseAuth.getCurrentUser();
+                if (user != null){
+                    // User is logged in, update accordingly
+                    ((Button)toolbar.findViewById(R.id.loginButton)).setText("Logout");
+                } else {
+                    // User is not logged in update accordingly
+                    ((Button)toolbar.findViewById(R.id.loginButton)).setText("Login");
+                }
+            }
+        };
+        FirebaseRTDBHelper.getInstance().createListener(mAuthListener);
         setSupportActionBar(toolbar);
         Log.d("OnCreate()", "Successfully ran Activity OnCreate()");
     }
