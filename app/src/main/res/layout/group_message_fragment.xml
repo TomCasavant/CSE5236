@@ -7,14 +7,29 @@
     tools:context=".ui.GroupsFragment">
 
 
-    <TextView
+    <EditText
+        android:id="@+id/message_edittext"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/group_message_recyclerview"
+        android:layout_marginBottom="8dp"
+        android:hint="@string/new_message_hint_text"
+        android:importantForAutofill="no"
+        android:inputType="text"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/message_send_button"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:layout_constraintBottom_toBottomOf="parent" />
+
+    <EditText
         android:id="@+id/group_message_banner"
         android:layout_width="0dp"
-        android:layout_height="36dp"
-        android:layout_marginTop="32dp"
+        android:layout_height="wrap_content"
         android:fontFamily="sans-serif-black"
         android:gravity="center"
-        android:text="@string/pending_invites"
+        android:hint="@string/type_group_name"
+        android:importantForAutofill="no"
+        android:inputType="text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.044"
         app:layout_constraintStart_toStartOf="parent"
@@ -54,10 +69,19 @@
         android:id="@+id/group_message_recyclerview"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/message_edittext"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/group_message_banner"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintVertical_bias="0.0" />
+
+    <Button
+        android:id="@+id/message_send_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/send_button_text"
+        app:layout_constraintBaseline_toBaselineOf="@id/message_edittext"
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

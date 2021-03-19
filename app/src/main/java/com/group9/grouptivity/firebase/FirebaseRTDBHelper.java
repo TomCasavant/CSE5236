@@ -114,7 +114,7 @@ public class FirebaseRTDBHelper {
     public void addCurrentUserToGroupMessage(String groupMessageId, String groupMessageName) {
         if (mCurrentUserRef != null) {
             DatabaseReference groupMessageRef = mDatabase.child(GROUP_MESSAGES_STR).child(groupMessageId);
-            if (groupMessageRef != null){
+            if (groupMessageRef != null) {
                 DatabaseReference user = groupMessageRef.child(GROUP_USERS_STR).child(mAuth.getCurrentUser().getUid());
                 user.child(EMAIL_STR).setValue(mAuth.getCurrentUser().getEmail());
                 user.child(MUTED_STR).setValue(false);
@@ -126,6 +126,40 @@ public class FirebaseRTDBHelper {
             Log.e(LOG_TAG,"Unable to retrieve current user. Is one logged in?");
         }
     }
+
+    /** Changes a the Group Message with the given id to the given name. If no such Group Message exists, nothing occurs. */
+    public void changeGroupMessageName(String groupMessageId, String newGroupMessageName) {
+
+        DatabaseReference groupMessageRef = mDatabase.child(GROUP_MESSAGES_STR).child(groupMessageId);
+
+        if (groupMessageRef != null) {
+            ValueEventListener groupMessageListener = new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    String groupMessageId = (String) snapshot.getKey();
+                    String groupMessageName = (String) snapshot.child(GROUP_NAME_STR).getValue();
+                    for (DataSnapshot child : snapshot.child(GROUP_USERS_STR).getChildren()) {
+                        DatabaseReference userRef = mDatabase.child(USER_ACCOUNTS_STR).child(child.getKey());
+                        userRef.child(GROUP_MESSAGES_STR).child(groupMessageId).child(GROUP_NAME_STR).setValue(groupMessageName);
+                        //TODO also update invite names
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+                    Log.e(LOG_TAG, error.getMessage());
+                    //Toast.makeText()
+                    //need context for error to toast
+                }
+            };
+
+            groupMessageRef.addValueEventListener(groupMessageListener);
+            groupMessageRef.child(GROUP_NAME_STR).setValue(newGroupMessageName);
+        } else {
+            Log.e(LOG_TAG, "Unable to retrieve Group Message with the given id.");
+        }
+    }
+
 
     /** Gets GroupMessageInvites for the current user. */
     public List<GroupMessageInvite> getGroupMessageInvites(DataRetrievalListener dataRetrievalListener) {

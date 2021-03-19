@@ -16,6 +16,9 @@
         <action
             android:id="@+id/action_GroupsFragment_to_GroupInvitesFragment"
             app:destination="@id/GroupInvitesFragment" />
+        <action
+            android:id="@+id/action_GroupsFragment_to_GroupMessageFragment"
+            app:destination="@id/GroupMessageFragment" />
     </fragment>
     <fragment
         android:id="@+id/SecondFragment"
@@ -44,6 +47,16 @@
         tools:layout="@layout/group_invites_fragment" >
         <action
             android:id="@+id/action_GroupInvitesFragment_to_GroupsFragment"
+            app:destination="@id/GroupsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/GroupMessageFragment"
+        android:name="com.group9.grouptivity.ui.GroupMessageFragment"
+        android:label="Group Message Fragment"
+        tools:layout="@layout/group_message_fragment">
+
+        <action
+            android:id="@+id/action_GroupMessageFragment_to_GroupsFragment"
             app:destination="@id/GroupsFragment" />
     </fragment>
 </navigation>

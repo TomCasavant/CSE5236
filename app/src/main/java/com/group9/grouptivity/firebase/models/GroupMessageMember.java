@@ -1,8 +1,5 @@
 package com.group9.grouptivity.firebase.models;
 
-
-import java.util.List;
-
 public class GroupMessageMember {
     private String mName;
     private boolean mIsMuted;

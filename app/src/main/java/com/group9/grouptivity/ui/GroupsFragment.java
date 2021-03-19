@@ -44,9 +44,6 @@ public class GroupsFragment extends Fragment {
         });
 
 
-
-        buildGroupMessageRecyclerView(view);
-
         return view;
     }
 
@@ -61,7 +58,8 @@ public class GroupsFragment extends Fragment {
             }
         };
         groupMessageAdapter = new GroupMessageAdapter(getActivity(), FirebaseRTDBHelper.getInstance().getGroupMessages(dataRetrievalListener));
-        groupMessageAdapter.setClickListener((view1, position) -> Toast.makeText(getActivity(),"You clicked "+ groupMessageAdapter.getItem(position).getName(), Toast.LENGTH_LONG).show());
+        groupMessageAdapter.setClickListener((view1, position) -> NavHostFragment.findNavController(GroupsFragment.this)
+                        .navigate(R.id.action_GroupsFragment_to_GroupMessageFragment));
                 recyclerView.setAdapter(groupMessageAdapter);
     }
 
@@ -97,6 +95,9 @@ public class GroupsFragment extends Fragment {
             NavHostFragment.findNavController(GroupsFragment.this)
                     .navigate(R.id.action_GroupsFragment_to_SecondFragment)
         );
+
+
+        buildGroupMessageRecyclerView(view);
 
         viewInvitesButton = view.findViewById(R.id.groups_view_invites_button);
         viewInvitesButton.setOnClickListener((View v) ->{
