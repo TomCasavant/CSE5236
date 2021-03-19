@@ -12,15 +12,19 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.group9.grouptivity.firebase.DataRetrievalListener;
+import com.group9.grouptivity.firebase.ItemClickListener;
+import com.group9.grouptivity.firebase.models.GroupMessage;
 import com.group9.grouptivity.firebase.models.GroupMessageAdapter;
 import com.group9.grouptivity.R;
 import com.group9.grouptivity.firebase.FirebaseRTDBHelper;
+import com.group9.grouptivity.ui.models.GroupMessageViewModel;
 
 public class GroupsFragment extends Fragment {
 
@@ -43,7 +47,6 @@ public class GroupsFragment extends Fragment {
             createGroupDialog(); // When the create group button is clicked, display an input button
         });
 
-        buildGroupMessageRecyclerView(view);
 
         return view;
     }
@@ -59,7 +62,15 @@ public class GroupsFragment extends Fragment {
             }
         };
         groupMessageAdapter = new GroupMessageAdapter(getActivity(), FirebaseRTDBHelper.getInstance().getGroupMessages(dataRetrievalListener));
-        groupMessageAdapter.setClickListener((view1, position) -> Toast.makeText(getActivity(),"You clicked "+ groupMessageAdapter.getItem(position).getName(), Toast.LENGTH_LONG).show());
+        GroupMessageViewModel gmViewModel = new ViewModelProvider(requireActivity()).get(GroupMessageViewModel.class);
+        groupMessageAdapter.setClickListener(new ItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                //Store the groupMessage clicked on for retrieval by the GroupMessageFragment
+                gmViewModel.setGroupMessage(groupMessageAdapter.getItem(position));
+                NavHostFragment.findNavController(GroupsFragment.this).navigate(R.id.action_GroupsFragment_to_GroupMessageFragment);
+            }
+        });
                 recyclerView.setAdapter(groupMessageAdapter);
     }
 
@@ -116,6 +127,9 @@ public class GroupsFragment extends Fragment {
         viewInvitesButton.setOnClickListener((View v) ->{
             NavHostFragment.findNavController(GroupsFragment.this).navigate(R.id.action_GroupsFragment_to_GroupInvitesFragment);
         });
+
+        //Need to build the recycler view onViewCreated to create ViewModel and reference NavHost
+        buildGroupMessageRecyclerView(view);
     }
 
     @Override
