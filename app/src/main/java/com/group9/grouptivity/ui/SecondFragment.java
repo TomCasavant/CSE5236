@@ -23,6 +23,23 @@ public class SecondFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_second, container, false);
     }
 
+    private void updateCurrentLoginInfo(View view){
+        // Checks if user is logged in, if not send user to login page
+        view.getRootView().findViewById(R.id.loginButton).setOnClickListener((View v) -> {
+            if (!FirebaseRTDBHelper.getInstance().isLoggedIn()){
+                NavHostFragment.findNavController(SecondFragment.this)
+                        .navigate(R.id.loginFragment);
+            } else {
+                FirebaseRTDBHelper.getInstance().logout();
+                NavHostFragment.findNavController(SecondFragment.this)
+                        .navigate(R.id.loginFragment);
+            }
+        });
+        if (!FirebaseRTDBHelper.getInstance().isLoggedIn()){
+            NavHostFragment.findNavController(SecondFragment.this)
+                    .navigate(R.id.loginFragment);
+        }
+    }
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
@@ -30,13 +47,6 @@ public class SecondFragment extends Fragment {
                 NavHostFragment.findNavController(SecondFragment.this)
                         .navigate(R.id.action_SecondFragment_to_FirstFragment)
         );
-        view.getRootView().findViewById(R.id.loginButton).setOnClickListener((View v) -> {
-            if (!FirebaseRTDBHelper.getInstance().isLoggedIn()){
-                NavHostFragment.findNavController(SecondFragment.this)
-                        .navigate(R.id.loginFragment);
-            } else {
-                FirebaseRTDBHelper.getInstance().logout();
-            }
-        });
+        updateCurrentLoginInfo(view);
     }
 }

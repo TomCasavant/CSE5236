@@ -43,10 +43,6 @@ public class GroupsFragment extends Fragment {
             createGroupDialog(); // When the create group button is clicked, display an input button
         });
 
-
-
-
-
         buildGroupMessageRecyclerView(view);
 
         return view;
@@ -91,7 +87,23 @@ public class GroupsFragment extends Fragment {
         Toast.makeText(getActivity(), groupName + " created!", Toast.LENGTH_LONG).show();
         Log.d("Create Group: ", groupName);
     }
-
+    private void updateCurrentLoginInfo(View view){
+        // Checks if user is logged in, if not send to login page
+        view.getRootView().findViewById(R.id.loginButton).setOnClickListener((View v) -> {
+            if (!FirebaseRTDBHelper.getInstance().isLoggedIn()){
+                NavHostFragment.findNavController(GroupsFragment.this)
+                        .navigate(R.id.loginFragment);
+            } else {
+                FirebaseRTDBHelper.getInstance().logout();
+                NavHostFragment.findNavController(GroupsFragment.this)
+                        .navigate(R.id.loginFragment);
+            }
+        });
+        if (!FirebaseRTDBHelper.getInstance().isLoggedIn()){
+            NavHostFragment.findNavController(GroupsFragment.this)
+                    .navigate(R.id.loginFragment);
+        }
+    }
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
@@ -99,15 +111,7 @@ public class GroupsFragment extends Fragment {
             NavHostFragment.findNavController(GroupsFragment.this)
                     .navigate(R.id.action_GroupsFragment_to_SecondFragment)
         );
-        view.getRootView().findViewById(R.id.loginButton).setOnClickListener((View v) -> {
-            if (!FirebaseRTDBHelper.getInstance().isLoggedIn()){
-                NavHostFragment.findNavController(GroupsFragment.this)
-                        .navigate(R.id.loginFragment);
-            } else {
-                FirebaseRTDBHelper.getInstance().logout();
-            }
-        });
-
+        updateCurrentLoginInfo(view);
         viewInvitesButton = view.findViewById(R.id.groups_view_invites_button);
         viewInvitesButton.setOnClickListener((View v) ->{
             NavHostFragment.findNavController(GroupsFragment.this).navigate(R.id.action_GroupsFragment_to_GroupInvitesFragment);
