@@ -48,7 +48,7 @@ public class FirebaseRTDBHelper {
     private FirebaseRTDBHelper() {
         mAuth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance().getReference();
-        if (mAuth != null) {
+        if (mAuth.getCurrentUser() != null) {
             mCurrentUserRef = mDatabase.child(USER_ACCOUNTS_STR).child(mAuth.getCurrentUser().getUid());
         }
     }
