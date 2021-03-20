@@ -22,9 +22,6 @@ public class TextMessageViewHolder extends AbstractMessageViewHolder {
         this.messageBodyTextView.setText(messageBody);
     }
 
-    public void bindMessage(TextMessage textMessage) {
-        super.bindAbstractMessageData(textMessage);
-        this.messageBodyTextView.setText(textMessage.getMessage());
-    }
+
 
 }

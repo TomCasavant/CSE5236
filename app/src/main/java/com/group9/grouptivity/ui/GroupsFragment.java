@@ -30,6 +30,7 @@ public class GroupsFragment extends Fragment {
     private Button createGroupButton;
     private Button viewInvitesButton;
     private GroupMessageAdapter groupMessageAdapter;
+    private GroupMessageViewModel mViewModel;
 
 
     @Override
@@ -59,16 +60,17 @@ public class GroupsFragment extends Fragment {
                 groupMessageAdapter.notifyDataSetChanged();
             }
         };
-        groupMessageAdapter = new GroupMessageAdapter(getActivity(), FirebaseRTDBHelper.getInstance().getGroupMessages(dataRetrievalListener));
-        GroupMessageViewModel gmViewModel = new ViewModelProvider(requireActivity()).get(GroupMessageViewModel.class);
-        groupMessageAdapter.setClickListener(new ItemClickListener() {
+        ItemClickListener itemClickListener = new ItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
                 //Store the groupMessage clicked on for retrieval by the GroupMessageFragment
-                gmViewModel.setGroupMessage(groupMessageAdapter.getItem(position));
+                mViewModel.setGroupMessage(groupMessageAdapter.getItem(position));
                 NavHostFragment.findNavController(GroupsFragment.this).navigate(R.id.action_GroupsFragment_to_GroupMessageFragment);
             }
-        });
+        };
+
+        groupMessageAdapter = new GroupMessageAdapter(getActivity(), FirebaseRTDBHelper.getInstance().getGroupMessages(dataRetrievalListener), itemClickListener);
+        this.mViewModel = new ViewModelProvider(requireActivity()).get(GroupMessageViewModel.class);
                 recyclerView.setAdapter(groupMessageAdapter);
     }
 
