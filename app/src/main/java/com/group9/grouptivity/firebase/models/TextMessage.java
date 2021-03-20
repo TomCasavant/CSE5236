@@ -9,16 +9,6 @@ public class TextMessage extends AbstractMessage {
 
     private TextMessage() { } //Empty constructor needed for Firebase
 
-    @Override
-    public Type getType() {
-        return Type.TEXT;
-    }
-
-    @Override
-    public void bindMessage(AbstractMessageViewHolder holder) {
-        ((TextMessageViewHolder) holder).bindMessage(this);
-    }
-
     public TextMessage(String groupMessageKey, String sender, long timeStamp, String messageText) {
         super(groupMessageKey, sender, timeStamp);
         this.mMessage = messageText;
@@ -34,5 +24,13 @@ public class TextMessage extends AbstractMessage {
         this.mMessage = message;
     }
 
+    @Override
+    public Type getType() {
+        return Type.TEXT;
+    }
 
+    @Override
+    public void bindMessage(AbstractMessageViewHolder holder) {
+        ((TextMessageViewHolder) holder).bindMessage(this);
+    }
 }

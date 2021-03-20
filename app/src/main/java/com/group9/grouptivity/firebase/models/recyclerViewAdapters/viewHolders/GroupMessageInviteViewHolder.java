@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.group9.grouptivity.R;
 import com.group9.grouptivity.firebase.FirebaseRTDBHelper;
 import com.group9.grouptivity.firebase.ItemClickListener;
+import com.group9.grouptivity.firebase.models.GroupMessageInvite;
 
 public class GroupMessageInviteViewHolder extends AbstractClickableViewHolder {
     private String mGroupMessageId;
@@ -38,7 +39,7 @@ public class GroupMessageInviteViewHolder extends AbstractClickableViewHolder {
 
     /** Sets the id of the associated groupMessage. */
     public void setGroupMessageId(String groupMessageId) {
-        this.mGroupMessageId = mGroupMessageId;
+        this.mGroupMessageId = groupMessageId;
     }
 
     /** Sets the text of the sender username. */
@@ -49,6 +50,13 @@ public class GroupMessageInviteViewHolder extends AbstractClickableViewHolder {
     /** Sets the text of the Group Message Name. */
     public void setGroupMessageNameText(String groupMessageName) {
         this.groupMessageNameTextView.setText(groupMessageName);
+    }
+
+    /** Binds a given groupMessageInvite to the viewholder. */
+    public void bindGroupMessageInvite (GroupMessageInvite groupMessageInvite) {
+        this.mGroupMessageId = groupMessageInvite.getGroupMessageId();
+        this.senderUsernameTextView.setText(groupMessageInvite.getSenderUsername());
+        this.groupMessageNameTextView.setText(groupMessageInvite.getGroupMessageName());
     }
 
 }

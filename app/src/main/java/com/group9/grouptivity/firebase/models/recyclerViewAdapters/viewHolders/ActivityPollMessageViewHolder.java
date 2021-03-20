@@ -17,6 +17,7 @@ public class ActivityPollMessageViewHolder extends AbstractMessageViewHolder {
         itemView.setOnClickListener(this);
     }
 
+    /** Binds an activityPollMessage to the viewholder. */
     public void bindMessage(ActivityPollMessage activityPollMessage) {
         super.bindAbstractMessageData(activityPollMessage);
     }

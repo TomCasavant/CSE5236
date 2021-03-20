@@ -47,10 +47,7 @@ public class GroupMessageInviteAdapter extends RecyclerView.Adapter<GroupMessage
 
     @Override
     public void onBindViewHolder(@NonNull GroupMessageInviteViewHolder holder, int position) {
-        GroupMessageInvite gmInv = mGroupMessageInviteList.get(position);
-        holder.setGroupMessageId(gmInv.getGroupMessageId());
-        holder.setGroupMessageNameText(gmInv.getGroupMessageName());
-        holder.setSenderUsernameText(gmInv.getSenderUsername());
+        holder.bindGroupMessageInvite(mGroupMessageInviteList.get(position));
     }
 
     @Override

@@ -33,11 +33,12 @@ public abstract class AbstractMessageViewHolder extends AbstractClickableViewHol
         timestampTextView.setText(Calendar.getInstance().toString());
     }
 
-
+    /** Binds an abstract message to the viewholder. */
     public void bindMessage(AbstractMessage message) {
         message.bindMessage(this);
     }
 
+    /** Binds the data part of all abstract messages. */
     protected void bindAbstractMessageData(AbstractMessage message) {
         this.senderUsernameTextView.setText(message.getSender());
         Calendar.getInstance().setTimeInMillis(message.getTimeStamp() * SECONDS_TO_MILLISECONDS);

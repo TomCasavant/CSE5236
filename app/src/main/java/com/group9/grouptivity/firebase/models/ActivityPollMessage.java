@@ -14,16 +14,6 @@ public class ActivityPollMessage extends AbstractMessage {
 
     private ActivityPollMessage() {} //Empty constructor needed for Firebase
 
-    @Override
-    public Type getType() {
-        return Type.ACTIVITY_POLL;
-    }
-
-    @Override
-    public void bindMessage(AbstractMessageViewHolder holder) {
-        ((ActivityPollMessageViewHolder) holder).bindMessage(this);
-    }
-
     public ActivityPollMessage(String groupMessageKey, String sender, long timeStamp, GroupActivity groupActivity) {
         super(groupMessageKey, sender, timeStamp);
         this.mGroupActivity = groupActivity;
@@ -62,5 +52,15 @@ public class ActivityPollMessage extends AbstractMessage {
     /** Returns the number of users who have voted NO on this activity poll. */
     public int noVotesCount() {
         return this.mNoVotesUsernameList.size();
+    }
+
+    @Override
+    public Type getType() {
+        return Type.ACTIVITY_POLL;
+    }
+
+    @Override
+    public void bindMessage(AbstractMessageViewHolder holder) {
+        ((ActivityPollMessageViewHolder) holder).bindMessage(this);
     }
 }

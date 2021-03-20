@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.group9.grouptivity.R;
 import com.group9.grouptivity.firebase.ItemClickListener;
+import com.group9.grouptivity.firebase.models.GroupMessage;
 
 public class GroupMessageViewHolder extends AbstractClickableViewHolder {
     private TextView groupMessageTextView;
@@ -18,10 +19,13 @@ public class GroupMessageViewHolder extends AbstractClickableViewHolder {
         itemView.setOnClickListener(this);
     }
 
-
-
     /** Sets the name of the Group Message. */
     public void setGroupMessageName(String groupMessageName) {
         this.groupMessageTextView.setText(groupMessageName);
+    }
+
+    /** Binds a GroupMessage to the viewholder. */
+    public void bindGroupMessage(GroupMessage groupMessage) {
+        this.groupMessageTextView.setText(groupMessage.getName());
     }
 }
