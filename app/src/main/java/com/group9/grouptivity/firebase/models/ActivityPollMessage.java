@@ -1,5 +1,6 @@
 package com.group9.grouptivity.firebase.models;
 
+import com.group9.grouptivity.firebase.FirebaseRTDBHelper;
 import com.group9.grouptivity.firebase.models.recyclerViewAdapters.MessageAdapter;
 import com.group9.grouptivity.firebase.models.recyclerViewAdapters.viewHolders.AbstractMessageViewHolder;
 import com.group9.grouptivity.firebase.models.recyclerViewAdapters.viewHolders.ActivityPollMessageViewHolder;
@@ -55,12 +56,17 @@ public class ActivityPollMessage extends AbstractMessage {
     }
 
     @Override
-    public Type getType() {
+    public Type retrieveType() {
         return Type.ACTIVITY_POLL;
     }
 
     @Override
     public void bindMessage(AbstractMessageViewHolder holder) {
         ((ActivityPollMessageViewHolder) holder).bindMessage(this);
+    }
+
+    @Override
+    public void addMessageToRTDB() {
+        FirebaseRTDBHelper.getInstance().addMessage(this);
     }
 }

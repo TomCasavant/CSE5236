@@ -2,7 +2,6 @@ package com.group9.grouptivity.ui;
 
 import android.os.Bundle;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,15 +20,14 @@ import com.group9.grouptivity.R;
 import com.group9.grouptivity.firebase.DataRetrievalListener;
 import com.group9.grouptivity.firebase.FirebaseRTDBHelper;
 import com.group9.grouptivity.firebase.models.GroupMessage;
-import com.group9.grouptivity.firebase.models.recyclerViewAdapters.GroupMessageInviteAdapter;
 import com.group9.grouptivity.firebase.models.recyclerViewAdapters.MessageAdapter;
 import com.group9.grouptivity.ui.models.GroupMessageViewModel;
-
-import java.security.acl.Group;
 
 public class GroupMessageFragment extends Fragment {
     private View view;
     private Button backButton;
+    private Button sendButton;
+    private EditText messageEditText;
     private GroupMessage mGroupMessage;
     private TextView groupMessageNameTextView;
     private MessageAdapter messageAdapter;
@@ -57,6 +55,18 @@ public class GroupMessageFragment extends Fragment {
             NavHostFragment.findNavController(GroupMessageFragment.this)
                     .navigate(R.id.action_GroupMessageFragment_to_GroupsFragment);
         });
+
+        messageEditText = view.findViewById(R.id.message_edittext);
+
+        sendButton = view.findViewById(R.id.message_send_button);
+        sendButton.setOnClickListener((View v) -> {
+            String messageBody = messageEditText.getText().toString();
+            if (!messageBody.isEmpty()) {
+                messageEditText.setText("");
+                FirebaseRTDBHelper.getInstance().addTextMessage(messageBody, this.mGroupMessage.retrieveKey());
+            }
+        });
+
         buildGroupMessageInviteRecyclerView(view);
     }
 
@@ -65,7 +75,7 @@ public class GroupMessageFragment extends Fragment {
         RecyclerView recyclerView = view.findViewById(R.id.message_recyclerview);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         DataRetrievalListener dataRetrievalListener = () -> messageAdapter.notifyDataSetChanged();
-        messageAdapter = new MessageAdapter(getActivity(), FirebaseRTDBHelper.getInstance().getMessages(mGroupMessage.getKey(), dataRetrievalListener));
+        messageAdapter = new MessageAdapter(getActivity(), FirebaseRTDBHelper.getInstance().getMessages(mGroupMessage.retrieveKey(), dataRetrievalListener));
         recyclerView.setAdapter(messageAdapter);
     }
 

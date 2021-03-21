@@ -1,12 +1,9 @@
 package com.group9.grouptivity.firebase.models.recyclerViewAdapters;
 
 import android.content.Context;
-import android.graphics.Color;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -14,9 +11,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.group9.grouptivity.R;
 import com.group9.grouptivity.firebase.ItemClickListener;
 import com.group9.grouptivity.firebase.models.AbstractMessage;
-import com.group9.grouptivity.firebase.models.ActivityPollMessage;
-import com.group9.grouptivity.firebase.models.GroupMessage;
-import com.group9.grouptivity.firebase.models.TextMessage;
 import com.group9.grouptivity.firebase.models.recyclerViewAdapters.viewHolders.AbstractMessageViewHolder;
 import com.group9.grouptivity.firebase.models.recyclerViewAdapters.viewHolders.ActivityPollMessageViewHolder;
 import com.group9.grouptivity.firebase.models.recyclerViewAdapters.viewHolders.TextMessageViewHolder;
@@ -74,7 +68,7 @@ public class MessageAdapter extends RecyclerView.Adapter<AbstractMessageViewHold
 
     @Override
     public int getItemViewType(int position) {
-        return this.mMessageList.get(position).getType().ordinal();
+        return this.mMessageList.get(position).retrieveType().ordinal();
     }
 
     /** Returns the group message at a given position in the RecyclerView. */

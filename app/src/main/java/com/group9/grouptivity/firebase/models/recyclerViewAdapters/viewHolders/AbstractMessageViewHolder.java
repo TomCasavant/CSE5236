@@ -13,10 +13,12 @@ import java.util.Calendar;
 public abstract class AbstractMessageViewHolder extends AbstractClickableViewHolder {
     private TextView senderUsernameTextView;
     private TextView timestampTextView;
+    private Calendar calendar;
     private static final int SECONDS_TO_MILLISECONDS = 1000;
 
     protected AbstractMessageViewHolder(@NonNull View itemView) {
         super(itemView);
+        calendar = Calendar.getInstance();
         senderUsernameTextView = itemView.findViewById(R.id.message_sender_name_textview);
         timestampTextView = itemView.findViewById(R.id.message_timestamp_textview);
         itemView.setOnClickListener(this);
@@ -29,8 +31,8 @@ public abstract class AbstractMessageViewHolder extends AbstractClickableViewHol
 
     /** Sets the timestamp text to the given seconds since Epoch. */
     public void setTimestampText(long timestampSeconds) {
-        Calendar.getInstance().setTimeInMillis(timestampSeconds * SECONDS_TO_MILLISECONDS);
-        timestampTextView.setText(Calendar.getInstance().toString());
+        calendar.setTimeInMillis(timestampSeconds * SECONDS_TO_MILLISECONDS);
+        timestampTextView.setText(calenderPrettyString(calendar));
     }
 
     /** Binds an abstract message to the viewholder. */
@@ -41,8 +43,9 @@ public abstract class AbstractMessageViewHolder extends AbstractClickableViewHol
     /** Binds the data part of all abstract messages. */
     protected void bindAbstractMessageData(AbstractMessage message) {
         this.senderUsernameTextView.setText(message.getSender());
-        Calendar.getInstance().setTimeInMillis(message.getTimeStamp() * SECONDS_TO_MILLISECONDS);
-        timestampTextView.setText(calenderPrettyString(Calendar.getInstance()));
+        calendar.setTimeInMillis(message.getTimeStamp() * SECONDS_TO_MILLISECONDS);
+        long time = calendar.getTimeInMillis();
+        timestampTextView.setText(calenderPrettyString(calendar));
     }
 
     /** Creates a pretty string of the given Calendar. */

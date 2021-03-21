@@ -1,5 +1,6 @@
 package com.group9.grouptivity.firebase.models;
 
+import com.group9.grouptivity.firebase.FirebaseRTDBHelper;
 import com.group9.grouptivity.firebase.models.recyclerViewAdapters.MessageAdapter;
 import com.group9.grouptivity.firebase.models.recyclerViewAdapters.viewHolders.AbstractMessageViewHolder;
 import com.group9.grouptivity.firebase.models.recyclerViewAdapters.viewHolders.TextMessageViewHolder;
@@ -25,12 +26,17 @@ public class TextMessage extends AbstractMessage {
     }
 
     @Override
-    public Type getType() {
+    public Type retrieveType() {
         return Type.TEXT;
     }
 
     @Override
     public void bindMessage(AbstractMessageViewHolder holder) {
         ((TextMessageViewHolder) holder).bindMessage(this);
+    }
+
+    @Override
+    public void addMessageToRTDB() {
+        FirebaseRTDBHelper.getInstance().addMessage(this);
     }
 }

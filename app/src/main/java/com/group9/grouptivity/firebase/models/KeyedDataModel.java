@@ -12,7 +12,7 @@ public class KeyedDataModel {
 
 
     /** Gets the key associated with this data model. */
-    public String getKey() {
+    public String retrieveKey() {
         return this.mKey;
     }
 

@@ -20,12 +20,11 @@ import com.group9.grouptivity.firebase.models.AbstractMessage;
 import com.group9.grouptivity.firebase.models.ActivityPollMessage;
 import com.group9.grouptivity.firebase.models.GroupMessage;
 import com.group9.grouptivity.firebase.models.GroupMessageInvite;
-import com.group9.grouptivity.firebase.models.GroupMessageMember;
 import com.group9.grouptivity.firebase.models.TextMessage;
 import com.group9.grouptivity.firebase.models.UserAccount;
 
 import java.util.ArrayList;
-import java.util.Comparator;
+import java.util.Calendar;
 import java.util.List;
 import java.util.PriorityQueue;
 
@@ -34,6 +33,7 @@ public class FirebaseRTDBHelper {
     private FirebaseAuth mAuth;
     private DatabaseReference mDatabase;
     private DatabaseReference mCurrentUserRef;
+    private UserAccount mCurrentUser;
 
     /* Tag for logging. */
     private static final String LOG_TAG = "FirebaseRTDBHelper";
@@ -49,8 +49,11 @@ public class FirebaseRTDBHelper {
     private static final String MESSAGE_STR = "messages";
     private static final String TEXT_STR = "texts";
     private static final String ACTIVITY_POLL_STR = "activityPolls";
+    private static final String USERNAME_STR = "username";
     private static final String INVITE_SENDER_STR = "sender";
     private static final String INVITE_GROUP_MESSAGE_STR = "groupMessageName";
+
+    private static final int MILLISECONDS_TO_SECONDS = 1000;
 
     //private constructor for singleton
     private FirebaseRTDBHelper() {
@@ -58,6 +61,9 @@ public class FirebaseRTDBHelper {
         mDatabase = FirebaseDatabase.getInstance().getReference();
         if (mAuth.getCurrentUser() != null) {
             mCurrentUserRef = mDatabase.child(USER_ACCOUNTS_STR).child(mAuth.getCurrentUser().getUid());
+            //TODO tweak to include display name
+            mCurrentUser = new UserAccount(mAuth.getCurrentUser().getEmail());
+            mCurrentUser.setKey(mAuth.getCurrentUser().getUid());
         }
     }
 
@@ -71,10 +77,9 @@ public class FirebaseRTDBHelper {
     /** Adds a Group Message with the given name to the realtime firebase database. */
     public void addGroupMessage(GroupMessage groupMessage) {
         if (mAuth.getCurrentUser() != null) {
-            String id = mDatabase.child(GROUP_MESSAGES_STR).push().getKey();
-            DatabaseReference newGroup = mDatabase.child(GROUP_MESSAGES_STR).child(id);
+            DatabaseReference newGroup = mDatabase.child(GROUP_MESSAGES_STR).push();
             newGroup.setValue(groupMessage);
-            addCurrentUserToGroupMessage(id, groupMessage.getName());
+            addCurrentUserToGroupMessage(newGroup.getKey(), groupMessage.getName());
 
         } else {
             Log.e(LOG_TAG,"Unable to retrieve user. Is one logged in?");
@@ -214,6 +219,30 @@ public class FirebaseRTDBHelper {
         }
     }
 
+    /** Adds a text message with the given string as a message body with the cureent user as the sender
+     *  to the database under the group message with the given with current time as the timestamp. */
+    public void addTextMessage(String messageBody, String groupMessageKey) {
+        long timestamp = Calendar.getInstance().getTimeInMillis() / MILLISECONDS_TO_SECONDS;
+        addMessage(new TextMessage(groupMessageKey, mCurrentUser.getUsername(), timestamp, messageBody));
+    }
+
+    /** Adds the given activityPollmessage to the database. */
+    public void addMessage(ActivityPollMessage activityPollMessage) {
+        //TODO
+    }
+
+    /** Adds the given textmessage to the database. */
+    public void addMessage(TextMessage textMessage) {
+        DatabaseReference gmTextRef = mDatabase.child(MESSAGE_STR).child(textMessage.retrieveGroupMessageKey()).child(TEXT_STR);
+        DatabaseReference textMessageRef = gmTextRef.push();
+        textMessageRef.setValue(textMessage);
+    }
+
+    /** Adds the given message to the Firebase database. */
+    public void addMessage(AbstractMessage message) {
+        message.addMessageToRTDB();
+    }
+
     /** Gets the messages corresponding to the given GroupMessageKey sorted in reverse order by timestamp. */
     public List<AbstractMessage> getMessages(String groupMessageKey, DataRetrievalListener dataRetrievalListener) {
         ArrayList<AbstractMessage> messagesList = new ArrayList<>();
@@ -271,11 +300,14 @@ public class FirebaseRTDBHelper {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             mCurrentUserRef = mDatabase.child(USER_ACCOUNTS_STR).child(mAuth.getCurrentUser().getUid());
+                            //TODO tweak to include display name
+                            mCurrentUser = new UserAccount(mAuth.getCurrentUser().getEmail());
+                            mCurrentUser.setKey(mAuth.getCurrentUser().getUid());
                             // Sign in success, update UI with the signed-in user's information
-                            Log.d("FirebaseAuth:", "signInWithEmail:success");
+                            Log.d(LOG_TAG, "signInWithEmail:success");
                         } else {
                             // If sign in fails, display a message to the user.
-                            Log.w("FirebaseAuth:", "signInWithEmail:failure", task.getException());
+                            Log.w(LOG_TAG, "signInWithEmail:failure", task.getException());
                         }
 
                     }
@@ -290,12 +322,12 @@ public class FirebaseRTDBHelper {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
-                            Log.d("FirebaseAuth:", "createUserWithEmail:success");
+                            Log.d(LOG_TAG, "createUserWithEmail:success");
                             FirebaseUser user = mAuth.getCurrentUser();
                             addNewUser(new UserAccount(username), user.getUid());
                         } else {
                             // If sign in fails, display a message to the user.
-                            Log.w("FirebaseAuth", "createUserWithEmail:failure", task.getException());
+                            Log.w(LOG_TAG, "createUserWithEmail:failure", task.getException());
                         }
                     }
                 });

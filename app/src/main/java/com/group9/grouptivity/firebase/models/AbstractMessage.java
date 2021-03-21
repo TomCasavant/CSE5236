@@ -1,6 +1,5 @@
 package com.group9.grouptivity.firebase.models;
 
-import com.group9.grouptivity.firebase.models.recyclerViewAdapters.MessageAdapter;
 import com.group9.grouptivity.firebase.models.recyclerViewAdapters.viewHolders.AbstractMessageViewHolder;
 
 public abstract class AbstractMessage extends KeyedDataModel implements Comparable<AbstractMessage> {
@@ -22,13 +21,17 @@ public abstract class AbstractMessage extends KeyedDataModel implements Comparab
     }
 
     /** Returns the type associated with this message. */
-    public abstract Type getType();
+    public abstract Type retrieveType();
 
+    /** Binds the mesasge to the given viewholder. */
     public abstract void bindMessage(AbstractMessageViewHolder holder);
 
+    /** Adds the message to the Firebase RTDB. */
+    public abstract void addMessageToRTDB();
+
     /** Returns the group message key associated with this message. */
-    public String getGroupMessageKey() {
-        return this.mGroupMessageKey.getKey();
+    public String retrieveGroupMessageKey() {
+        return this.mGroupMessageKey.retrieveKey();
     }
 
     /** Sets the group message key associated with this message. */
@@ -60,7 +63,7 @@ public abstract class AbstractMessage extends KeyedDataModel implements Comparab
     current version. So instead the natural ordering is reverse timestamp order. */
     @Override
     public int compareTo(AbstractMessage abstractMessage) {
-        return Long.compare(abstractMessage.mTimeStamp, this.mTimeStamp);
+        return Long.compare(this.mTimeStamp, abstractMessage.mTimeStamp);
     }
 
 }
