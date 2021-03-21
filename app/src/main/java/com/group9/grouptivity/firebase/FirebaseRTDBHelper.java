@@ -16,13 +16,18 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.group9.grouptivity.firebase.models.AbstractMessage;
+import com.group9.grouptivity.firebase.models.ActivityPollMessage;
 import com.group9.grouptivity.firebase.models.GroupMessage;
 import com.group9.grouptivity.firebase.models.GroupMessageInvite;
 import com.group9.grouptivity.firebase.models.GroupMessageMember;
+import com.group9.grouptivity.firebase.models.TextMessage;
 import com.group9.grouptivity.firebase.models.UserAccount;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.PriorityQueue;
 
 public class FirebaseRTDBHelper {
     private static FirebaseRTDBHelper instance = new FirebaseRTDBHelper();
@@ -41,6 +46,9 @@ public class FirebaseRTDBHelper {
     private static final String MUTED_STR = "isMuted";
     private static final String EMAIL_STR = "emailAddress";
     private static final String INVITES_STR = "invites";
+    private static final String MESSAGE_STR = "messages";
+    private static final String TEXT_STR = "texts";
+    private static final String ACTIVITY_POLL_STR = "activityPolls";
     private static final String INVITE_SENDER_STR = "sender";
     private static final String INVITE_GROUP_MESSAGE_STR = "groupMessageName";
 
@@ -67,6 +75,7 @@ public class FirebaseRTDBHelper {
             DatabaseReference newGroup = mDatabase.child(GROUP_MESSAGES_STR).child(id);
             newGroup.setValue(groupMessage);
             addCurrentUserToGroupMessage(id, groupMessage.getName());
+
         } else {
             Log.e(LOG_TAG,"Unable to retrieve user. Is one logged in?");
         }
@@ -83,6 +92,7 @@ public class FirebaseRTDBHelper {
                     groupMessageList.clear(); //Need to clear the original list to prevent duplicates
                     for (DataSnapshot child : snapshot.getChildren()) {
                         GroupMessage gm = child.getValue(GroupMessage.class);
+                        gm.setKey(child.getKey());
                         groupMessageList.add(gm);
 
                     }
@@ -202,6 +212,47 @@ public class FirebaseRTDBHelper {
         } else {
             Log.e(LOG_TAG,"Unable to retrieve user. Is one logged in?");
         }
+    }
+
+    /** Gets the messages corresponding to the given GroupMessageKey sorted in reverse order by timestamp. */
+    public List<AbstractMessage> getMessages(String groupMessageKey, DataRetrievalListener dataRetrievalListener) {
+        ArrayList<AbstractMessage> messagesList = new ArrayList<>();
+
+        DatabaseReference groupMessageRef = mDatabase.child(MESSAGE_STR).child(groupMessageKey);
+        if(groupMessageRef != null) {
+            ValueEventListener valueEventListener = new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    messagesList.clear(); //Need to clear the original queue to prevent duplicates
+                    PriorityQueue<AbstractMessage> sortedMessages = new PriorityQueue<>();
+                    for (DataSnapshot child : snapshot.child(TEXT_STR).getChildren()) {
+                        TextMessage textMessage = child.getValue(TextMessage.class);
+                        textMessage.setKey(child.getKey());
+                        sortedMessages.add(textMessage);
+                    }
+                    for (DataSnapshot child : snapshot.child(ACTIVITY_POLL_STR).getChildren()) {
+                        ActivityPollMessage activityPollMessage = child.getValue(ActivityPollMessage.class);
+                        activityPollMessage.setKey(child.getKey());
+                        sortedMessages.add(activityPollMessage);
+                    }
+                    messagesList.addAll(sortedMessages);
+                    dataRetrievalListener.onDataRetrieval(); //Notify listener
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+                    Log.e(LOG_TAG, error.getMessage());
+                    //Toast.makeText()
+                    //need context for error to toast
+                }
+            };
+            groupMessageRef.addValueEventListener(valueEventListener);
+        } else {
+            Log.e(LOG_TAG, "Unable to retrieve messages for Group Message with the given id.");
+        }
+
+
+        return messagesList;
     }
 
     /** Checks if the user is logged in */

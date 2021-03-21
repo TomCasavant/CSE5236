@@ -32,7 +32,7 @@ public class GroupInvitesFragment extends Fragment {
         //Inflate the view for this fragment
         view = inflater.inflate(R.layout.group_invites_fragment, container, false);
 
-        buildGroupMessageRecyclerView(view);
+        buildGroupMessageInviteRecyclerView(view);
 
         return view;
     }
@@ -47,8 +47,8 @@ public class GroupInvitesFragment extends Fragment {
         });
     }
 
-    /** Builds the recycler view to display the list of Group Messages the user is a part of. */
-    public void buildGroupMessageRecyclerView(View view){
+    /** Builds the recycler view to display the list of pending Group Message Invites the user has. */
+    public void buildGroupMessageInviteRecyclerView(View view){
         RecyclerView recyclerView = view.findViewById(R.id.group_message_recyclerview);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         DataRetrievalListener dataRetrievalListener = () -> groupMessageInviteAdapter.notifyDataSetChanged();

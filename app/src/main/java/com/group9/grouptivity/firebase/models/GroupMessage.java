@@ -23,4 +23,5 @@ public class GroupMessage extends KeyedDataModel {
         this.mName = name;
     }
 
+
 }

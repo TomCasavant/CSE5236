@@ -11,7 +11,7 @@
         android:id="@+id/message_edittext"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_below="@id/group_message_recyclerview"
+        android:layout_below="@id/message_recyclerview"
         android:layout_marginBottom="8dp"
         android:hint="@string/new_message_hint_text"
         android:importantForAutofill="no"
@@ -65,7 +65,7 @@
         app:layout_constraintTop_toBottomOf="@+id/groups_fragment_groups_button" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/group_message_recyclerview"
+        android:id="@+id/message_recyclerview"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toTopOf="@id/message_edittext"

@@ -3,7 +3,7 @@ package com.group9.grouptivity.firebase.models;
 import com.group9.grouptivity.firebase.models.recyclerViewAdapters.MessageAdapter;
 import com.group9.grouptivity.firebase.models.recyclerViewAdapters.viewHolders.AbstractMessageViewHolder;
 
-public abstract class AbstractMessage extends KeyedDataModel {
+public abstract class AbstractMessage extends KeyedDataModel implements Comparable<AbstractMessage> {
 
     public enum Type {
         TEXT, ACTIVITY_POLL
@@ -54,6 +54,13 @@ public abstract class AbstractMessage extends KeyedDataModel {
     /** Sets the timestamp that this message was sent. */
     public void setTimeStamp(long timeStamp) {
         this.mTimeStamp = timeStamp;
+    }
+
+    /* I wanted to use a comparator for this, but something about the API may not be up to the
+    current version. So instead the natural ordering is reverse timestamp order. */
+    @Override
+    public int compareTo(AbstractMessage abstractMessage) {
+        return Long.compare(abstractMessage.mTimeStamp, this.mTimeStamp);
     }
 
 }
