@@ -42,6 +42,24 @@ public abstract class AbstractMessageViewHolder extends AbstractClickableViewHol
     protected void bindAbstractMessageData(AbstractMessage message) {
         this.senderUsernameTextView.setText(message.getSender());
         Calendar.getInstance().setTimeInMillis(message.getTimeStamp() * SECONDS_TO_MILLISECONDS);
-        timestampTextView.setText(Calendar.getInstance().toString());
+        timestampTextView.setText(calenderPrettyString(Calendar.getInstance()));
+    }
+
+    /** Creates a pretty string of the given Calendar. */
+    private static String calenderPrettyString(Calendar calendar) {
+//        String calStr = null;
+//
+//        //Get date/time info
+//        int dayOfWeek = calendar.get(Calendar.DAY_OF_MONTH);
+//        int hourOfDay = calendar.get(Calendar.HOUR_OF_DAY);
+//        int minuteOfHour = calendar.get(Calendar.MINUTE);
+//        int secondOfMinute = calendar.get(Calendar.SECOND);
+//        int amOrPM = calendar.get(Calendar.AM_PM);
+//
+//        int year = calendar.get(Calendar.YEAR);
+//        int month = calendar.get(Calendar.MONTH);
+
+        //might tweak this to display slightly differently in the future
+        return calendar.getTime().toString();
     }
 }
