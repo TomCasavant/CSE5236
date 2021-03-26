@@ -49,8 +49,11 @@ public class LoginFragment extends Fragment {
 
         final EditText usernameEditText = view.findViewById(R.id.username);
         final EditText passwordEditText = view.findViewById(R.id.password);
+        final EditText nicknameEditText = view.findViewById(R.id.nickname);
         final Button loginButton = view.findViewById(R.id.login);
         final ProgressBar loadingProgressBar = view.findViewById(R.id.loading);
+        final Button registerButton = view.findViewById(R.id.sign_up);
+
 
         loginViewModel.getLoginFormState().observe(getViewLifecycleOwner(), new Observer<LoginFormState>() {
             @Override
@@ -134,6 +137,21 @@ public class LoginFragment extends Fragment {
                 loadingProgressBar.setVisibility(View.VISIBLE);
                 loginViewModel.login(usernameEditText.getText().toString(),
                         passwordEditText.getText().toString(), getActivity());
+            }
+        });
+
+        registerButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (nicknameEditText.getVisibility() == View.VISIBLE) {
+                    loadingProgressBar.setVisibility(View.VISIBLE);
+                    loginViewModel.signUp(usernameEditText.getText().toString(),
+                            passwordEditText.getText().toString(), nicknameEditText.getText().toString(), getActivity());
+                } else {
+                    nicknameEditText.setVisibility(View.VISIBLE);
+                    Toast.makeText(getContext().getApplicationContext(), getString(R.string.nickname_required), Toast.LENGTH_LONG).show();
+                }
+
             }
         });
     }

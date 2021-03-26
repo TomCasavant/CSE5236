@@ -40,6 +40,15 @@ public class LoginViewModel extends ViewModel {
             loginResult.setValue(new LoginResult(R.string.login_failed));
         }
     }
+    public void signUp(String username, String password, String nickname, Activity activity) {
+        // can be launched in a separate asynchronous job
+        FirebaseRTDBHelper.getInstance().createAccount(username, password, nickname, activity);
+        if (FirebaseRTDBHelper.getInstance().isLoggedIn()) {
+            loginResult.setValue(new LoginResult(new LoggedInUserView("test")));
+        } else {
+            loginResult.setValue(new LoginResult(R.string.login_failed));
+        }
+    }
 
     public void loginDataChanged(String username, String password) {
         if (!isUserNameValid(username)) {

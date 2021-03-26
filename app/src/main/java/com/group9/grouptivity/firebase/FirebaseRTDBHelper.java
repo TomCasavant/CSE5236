@@ -63,7 +63,7 @@ public class FirebaseRTDBHelper {
             mCurrentUserRef = mDatabase.child(USER_ACCOUNTS_STR).child(mAuth.getCurrentUser().getUid());
             //TODO tweak to include display name
             mCurrentUser = new UserAccount(mAuth.getCurrentUser().getEmail());
-            mCurrentUser.setKey(mAuth.getCurrentUser().getUid());
+            //mCurrentUser.setKey(mAuth.getCurrentUser().getUid());
         }
     }
 
@@ -315,8 +315,8 @@ public class FirebaseRTDBHelper {
     }
 
     /** Function to create the account of a user given a username and password */
-    public void createAccount(String username, String password, Activity activity){
-        mAuth.createUserWithEmailAndPassword(username, password)
+    public void createAccount(String email, String password, String nickname, Activity activity){
+        mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(activity, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
@@ -324,7 +324,7 @@ public class FirebaseRTDBHelper {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(LOG_TAG, "createUserWithEmail:success");
                             FirebaseUser user = mAuth.getCurrentUser();
-                            addNewUser(new UserAccount(username), user.getUid());
+                            addNewUser(new UserAccount(email), user.getUid());
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(LOG_TAG, "createUserWithEmail:failure", task.getException());
