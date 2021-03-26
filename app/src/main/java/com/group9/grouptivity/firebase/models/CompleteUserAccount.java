@@ -12,14 +12,14 @@ public class CompleteUserAccount extends UserAccount {
         this.mGroupMessageInviteList = new ArrayList<>();
     } //Empty constructor needed for Firebase
 
-    public CompleteUserAccount(String username, String emailAddress) {
-        super(username, emailAddress);
+    public CompleteUserAccount(String username, String emailAddress, String displayName) {
+        super(username, emailAddress, displayName);
         this.mGroupMessageNameList = new ArrayList<>();
         this.mGroupMessageInviteList = new ArrayList<>();
     }
 
-    public CompleteUserAccount(String username, String emailAddress, List<String> groupMessages, List<GroupMessageInvite> invites) {
-        super(username, emailAddress);
+    public CompleteUserAccount(String username, String emailAddress, String displayName, List<String> groupMessages, List<GroupMessageInvite> invites) {
+        super(username, emailAddress, displayName);
         this.mGroupMessageNameList = groupMessages;
         this.mGroupMessageInviteList = invites;
     }

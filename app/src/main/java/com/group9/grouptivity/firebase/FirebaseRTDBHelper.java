@@ -11,6 +11,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuth.AuthStateListener;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -359,7 +360,8 @@ public class FirebaseRTDBHelper {
 
     /** Adds a New User with the given username to the realtime firebase database. */
     public void addNewUser(UserAccount user, String uid) {
-        mDatabase.child(USER_ACCOUNTS_STR).child(uid).setValue(user);
+        DatabaseReference account = mDatabase.child(USER_ACCOUNTS_STR).child(uid);
+        account.setValue(user);
     }
 
     /** Function to login an existing user given the username and password */
@@ -394,7 +396,10 @@ public class FirebaseRTDBHelper {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(LOG_TAG, "createUserWithEmail:success");
                             FirebaseUser user = mAuth.getCurrentUser();
-                            addNewUser(new UserAccount(email), user.getUid());
+                            UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                                    .setDisplayName(nickname).build();
+                            mAuth.getCurrentUser().updateProfile(profileUpdates);
+                            addNewUser(new UserAccount(email, nickname), user.getUid());
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(LOG_TAG, "createUserWithEmail:failure", task.getException());
