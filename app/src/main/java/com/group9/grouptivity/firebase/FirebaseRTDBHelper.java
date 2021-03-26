@@ -264,7 +264,10 @@ public class FirebaseRTDBHelper {
                         activityPollMessage.setKey(child.getKey());
                         sortedMessages.add(activityPollMessage);
                     }
-                    messagesList.addAll(sortedMessages);
+                    //Move the sorted message into the list in order
+                    while (!sortedMessages.isEmpty()) {
+                        messagesList.add(sortedMessages.remove());
+                    }
                     dataRetrievalListener.onDataRetrieval(); //Notify listener
                 }
 

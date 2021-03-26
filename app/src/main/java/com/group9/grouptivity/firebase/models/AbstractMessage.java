@@ -63,7 +63,8 @@ public abstract class AbstractMessage extends KeyedDataModel implements Comparab
     current version. So instead the natural ordering is reverse timestamp order. */
     @Override
     public int compareTo(AbstractMessage abstractMessage) {
-        return Long.compare(this.mTimeStamp, abstractMessage.mTimeStamp);
+        int comp = Long.compare(this.mTimeStamp, abstractMessage.mTimeStamp);
+        return comp;
     }
 
 }
