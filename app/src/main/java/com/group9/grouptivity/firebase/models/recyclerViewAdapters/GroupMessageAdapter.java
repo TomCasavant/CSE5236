@@ -46,13 +46,6 @@ public class GroupMessageAdapter extends RecyclerView.Adapter<GroupMessageViewHo
     @Override
     public void onBindViewHolder(@NonNull GroupMessageViewHolder holder, int position) {
         holder.bindGroupMessage(this.mGroupMessageList.get(position));
-
-        // Alternate background colors on list
-        if (position % 2 == 0){
-            holder.itemView.setBackgroundColor(Color.parseColor("#FF0000"));
-        } else {
-            holder.itemView.setBackgroundColor(Color.parseColor("#0000FF"));
-        }
     }
 
     @Override
