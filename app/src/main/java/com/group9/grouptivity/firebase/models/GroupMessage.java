@@ -13,6 +13,11 @@ public class GroupMessage extends KeyedDataModel {
         this.mName = name;
     }
 
+    public GroupMessage(GroupMessage groupMessage) {
+        this.mKey = groupMessage.mKey;
+        this.mName = groupMessage.mName;
+    }
+
     /** Returns the name of the GroupMessage. */
     public String getName() {
         return this.mName;

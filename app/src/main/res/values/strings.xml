@@ -41,6 +41,8 @@
     <!-- Strings used for group_message_fragment -->
     <string name="new_message_hint_text">Send Message</string>
     <string name="send_button_text">Send</string>
+    <string name="send_invite_button_text">Send Invite</string>
+    <string name="send_invite_hint_text">myFakeEmail@gmail.com</string>
 
     <!-- Misc -->
     <string name="back_str">Back</string>

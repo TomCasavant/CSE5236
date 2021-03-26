@@ -18,8 +18,11 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.group9.grouptivity.firebase.models.AbstractMessage;
 import com.group9.grouptivity.firebase.models.ActivityPollMessage;
+import com.group9.grouptivity.firebase.models.CompleteGroupMessage;
+import com.group9.grouptivity.firebase.models.CompleteUserAccount;
 import com.group9.grouptivity.firebase.models.GroupMessage;
 import com.group9.grouptivity.firebase.models.GroupMessageInvite;
+import com.group9.grouptivity.firebase.models.GroupMessageMember;
 import com.group9.grouptivity.firebase.models.TextMessage;
 import com.group9.grouptivity.firebase.models.UserAccount;
 
@@ -118,6 +121,48 @@ public class FirebaseRTDBHelper {
 
 
         return groupMessageList;
+    }
+
+    /** Returns a CompleteGroupMessage containing a list of users and all pending invites
+     * associated with the given GroupMessage. */
+    public CompleteGroupMessage completeGroupMessage(GroupMessage groupMessage, DataRetrievalListener dataRetrievalListener) {
+        CompleteGroupMessage completeGroupMessage = new CompleteGroupMessage(groupMessage);
+        DatabaseReference groupMessageRef = mDatabase.child(GROUP_MESSAGES_STR).child(groupMessage.retrieveKey());
+
+            ValueEventListener groupMessageListener = new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    completeGroupMessage.clear(); //Need to clear lists to prevent duplicates
+                    for (DataSnapshot child : snapshot.child(GROUP_USERS_STR).getChildren()) {
+                        GroupMessageMember member = child.getValue(GroupMessageMember.class);
+                        member.setKey(child.getKey());
+                        completeGroupMessage.addMember(member);
+                    }
+                    for (DataSnapshot child : snapshot.child(INVITES_STR).getChildren()) {
+                        completeGroupMessage.addGroupMessageInvite(child.getKey());
+                    }
+                    dataRetrievalListener.onDataRetrieval(); //Notify listener
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+                    Log.e(LOG_TAG, error.getMessage());
+                    //Toast.makeText()
+                    //need context for error to toast
+                }
+            };
+            groupMessageRef.addValueEventListener(groupMessageListener);
+
+        return completeGroupMessage;
+    }
+
+    /** Sends the given invite to the user with the given UID key.*/
+    public void sendInviteToUser(String userKey, GroupMessageInvite invite) {
+        //Need to add pending invite to the group message
+        mDatabase.child(GROUP_MESSAGES_STR).child(invite.retrieveGroupMessageId()).child(INVITES_STR).child(userKey);
+        //Need to add invite to the user
+        DatabaseReference userInviteRef = mDatabase.child(USER_ACCOUNTS_STR).child(userKey).child(INVITES_STR).child(invite.retrieveGroupMessageId());
+        userInviteRef.setValue(invite);
     }
 
     /** Adds the current user to the Group Message with the given id and name. */
@@ -285,6 +330,28 @@ public class FirebaseRTDBHelper {
 
 
         return messagesList;
+    }
+
+    /** Returns a UserAccount with the given email, or null if no userAccount with the given email
+     * is found on the firebase RTDB. */
+    public CompleteUserAccount getUserByEmail(String email, DataRetrievalListener dataRetrievalListener) {
+        final CompleteUserAccount[] userAccount = {null}; //this needs to be final to access within an inner class?
+        mDatabase.child(USER_ACCOUNTS_STR).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DataSnapshot> task) {
+                //Iterate over all the users, until one is found to match the given email
+                for (DataSnapshot user:
+                     task.getResult().getChildren()) {
+                    if (user.child(EMAIL_STR).getValue().equals(email)) {
+                        userAccount[0] = user.getValue(CompleteUserAccount.class);
+                        userAccount[0].setKey(user.getKey());
+                        break;
+                    }
+                }
+                dataRetrievalListener.onDataRetrieval();
+            }
+        });
+        return userAccount[0];
     }
 
     /** Checks if the user is logged in */

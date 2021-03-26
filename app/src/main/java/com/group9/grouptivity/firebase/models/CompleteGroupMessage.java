@@ -26,6 +26,18 @@ public class CompleteGroupMessage extends GroupMessage {
         this.mInvitedUserAccountKeysList = invitedUserAccountKeysList;
     }
 
+    public CompleteGroupMessage(GroupMessage groupMessage) {
+        super(groupMessage);
+        this.mGroupMessageMemberList = new ArrayList<>();
+        this.mInvitedUserAccountKeysList = new ArrayList<>();
+    }
+
+    public CompleteGroupMessage(GroupMessage groupMessage, List<GroupMessageMember> groupMessageMemberList, List<KeyedDataModel> invitedUserAccountKeysList) {
+        super(groupMessage);
+        this.mGroupMessageMemberList = groupMessageMemberList;
+        this.mInvitedUserAccountKeysList = invitedUserAccountKeysList;
+    }
+
     /** Returns the list of members in this GroupMessage. */
     public List<GroupMessageMember> getMembers() {
         return this.mGroupMessageMemberList;
@@ -48,5 +60,15 @@ public class CompleteGroupMessage extends GroupMessage {
 
     public void addMember(GroupMessageMember groupMessageMember) {
         mGroupMessageMemberList.add(groupMessageMember);
+    }
+
+    public void addGroupMessageInvite(String inviteKey) {
+        this.mInvitedUserAccountKeysList.add(new KeyedDataModel(inviteKey));
+    }
+
+    /** Clears the group message member and invites lists. */
+    public void clear() {
+        this.mInvitedUserAccountKeysList.clear();
+        this.mGroupMessageMemberList.clear();
     }
 }

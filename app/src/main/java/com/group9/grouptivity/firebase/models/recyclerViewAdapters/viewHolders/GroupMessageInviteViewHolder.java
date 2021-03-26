@@ -5,11 +5,9 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.group9.grouptivity.R;
 import com.group9.grouptivity.firebase.FirebaseRTDBHelper;
-import com.group9.grouptivity.firebase.ItemClickListener;
 import com.group9.grouptivity.firebase.models.GroupMessageInvite;
 
 public class GroupMessageInviteViewHolder extends AbstractClickableViewHolder {
@@ -54,9 +52,9 @@ public class GroupMessageInviteViewHolder extends AbstractClickableViewHolder {
 
     /** Binds a given groupMessageInvite to the viewholder. */
     public void bindGroupMessageInvite (GroupMessageInvite groupMessageInvite) {
-        this.mGroupMessageId = groupMessageInvite.getGroupMessageId();
-        this.senderUsernameTextView.setText(groupMessageInvite.getSenderUsername());
-        this.groupMessageNameTextView.setText(groupMessageInvite.getGroupMessageName());
+        this.mGroupMessageId = groupMessageInvite.retrieveGroupMessageId();
+        this.senderUsernameTextView.setText(groupMessageInvite.getSender());
+        this.groupMessageNameTextView.setText(groupMessageInvite.getName());
     }
 
 }

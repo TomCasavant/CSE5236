@@ -13,7 +13,7 @@ public class GroupMessageInvite {
     }
 
     /** Returns the group message name associated with this invitation. */
-    public String getGroupMessageName() {
+    public String getName() {
         return this.mGroupMessageName;
     }
 
@@ -23,7 +23,7 @@ public class GroupMessageInvite {
     }
 
     /** Returns the username of the sender of this invitation. */
-    public String getSenderUsername() {
+    public String getSender() {
         return this.mSenderUsername;
     }
 
@@ -33,7 +33,7 @@ public class GroupMessageInvite {
     }
 
     /** Returns the id of the group message associated with this group message. */
-    public String getGroupMessageId() {return this.mGroupMessageId;}
+    public String retrieveGroupMessageId() {return this.mGroupMessageId;}
 
     /** Sets the id of the group message associated with this group message. */
     public void setGroupMessageId(String id) {this.mGroupMessageId = id;}
