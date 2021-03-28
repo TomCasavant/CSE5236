@@ -51,10 +51,10 @@ public class GroupMessageFragment extends Fragment {
         groupMessageNameTextView.setText(this.mGroupMessage.getName());
 
         backButton = view.findViewById(R.id.invite_back_button);
-        backButton.setOnClickListener((View v) -> {
+        backButton.setOnClickListener((View v) ->
             NavHostFragment.findNavController(GroupMessageFragment.this)
-                    .navigate(R.id.action_GroupMessageFragment_to_GroupsFragment);
-        });
+                    .navigate(R.id.action_GroupMessageFragment_to_GroupsFragment)
+        );
 
         messageEditText = view.findViewById(R.id.message_edittext);
 
@@ -73,7 +73,9 @@ public class GroupMessageFragment extends Fragment {
     /** Builds the recycler view to display the messages in this GroupMessage. */
     public void buildGroupMessageInviteRecyclerView(View view) {
         RecyclerView recyclerView = view.findViewById(R.id.message_recyclerview);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
+        linearLayoutManager.setStackFromEnd(true);
+        recyclerView.setLayoutManager(linearLayoutManager);
         DataRetrievalListener dataRetrievalListener = () -> messageAdapter.notifyDataSetChanged();
         messageAdapter = new MessageAdapter(getActivity(), FirebaseRTDBHelper.getInstance().getMessages(mGroupMessage.retrieveKey(), dataRetrievalListener));
         recyclerView.setAdapter(messageAdapter);
