@@ -64,5 +64,9 @@
     <string name="prompt_nickname">Nickname</string>
     <string name="nickname_required">The nickname field is required</string>
 
+    <!-- Strings related to the activity view -->
+    <string name="image_description">Icon for activity</string>
+    <string name="thumbs_up">👍</string>
+    <string name="thumbs_down">👎</string>
 
 </resources>

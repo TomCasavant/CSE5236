@@ -1,7 +1,9 @@
 package com.group9.grouptivity.firebase;
 
 import android.app.Activity;
+import android.graphics.Color;
 import android.util.Log;
+import android.widget.Button;
 
 import androidx.annotation.NonNull;
 
@@ -53,6 +55,8 @@ public class FirebaseRTDBHelper {
     private static final String MESSAGE_STR = "messages";
     private static final String TEXT_STR = "texts";
     private static final String ACTIVITY_POLL_STR = "activityPolls";
+    private static final String YES_VOTE_STR = "yesVotes";
+    private static final String NO_VOTE_STR = "noVotes";
     private static final String USERNAME_STR = "username";
     private static final String INVITE_SENDER_STR = "sender";
     private static final String INVITE_GROUP_MESSAGE_STR = "groupMessageName";
@@ -192,7 +196,7 @@ public class FirebaseRTDBHelper {
             ValueEventListener groupMessageListener = new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    String groupMessageId = (String) snapshot.getKey();
+                    String groupMessageId = snapshot.getKey();
                     String groupMessageName = (String) snapshot.child(GROUP_NAME_STR).getValue();
                     for (DataSnapshot child : snapshot.child(GROUP_USERS_STR).getChildren()) {
                         DatabaseReference userRef = mDatabase.child(USER_ACCOUNTS_STR).child(child.getKey());
@@ -306,7 +310,12 @@ public class FirebaseRTDBHelper {
                         sortedMessages.add(textMessage);
                     }
                     for (DataSnapshot child : snapshot.child(ACTIVITY_POLL_STR).getChildren()) {
+                        String id = child.getKey();
                         ActivityPollMessage activityPollMessage = child.getValue(ActivityPollMessage.class);
+                        activityPollMessage.getActivity().setActivityId(id);
+                        activityPollMessage.getActivity().setGroupId(groupMessageKey);
+
+                        Log.d("Activity Poll: ", activityPollMessage.getActivity().toString());
                         activityPollMessage.setKey(child.getKey());
                         sortedMessages.add(activityPollMessage);
                     }
@@ -337,9 +346,7 @@ public class FirebaseRTDBHelper {
      * is found on the firebase RTDB. */
     public CompleteUserAccount getUserByEmail(String email, DataRetrievalListener dataRetrievalListener) {
         final CompleteUserAccount[] userAccount = {null}; //this needs to be final to access within an inner class?
-        mDatabase.child(USER_ACCOUNTS_STR).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DataSnapshot> task) {
+        mDatabase.child(USER_ACCOUNTS_STR).get().addOnCompleteListener((Task<DataSnapshot> task) -> {
                 //Iterate over all the users, until one is found to match the given email
                 for (DataSnapshot user:
                      task.getResult().getChildren()) {
@@ -350,7 +357,6 @@ public class FirebaseRTDBHelper {
                     }
                 }
                 dataRetrievalListener.onDataRetrieval();
-            }
         });
         return userAccount[0];
     }
@@ -367,9 +373,7 @@ public class FirebaseRTDBHelper {
     /** Function to login an existing user given the username and password */
     public void login(String username, String password, Activity activity){
         mAuth.signInWithEmailAndPassword(username, password)
-                .addOnCompleteListener(activity, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
+                .addOnCompleteListener(activity, (Task<AuthResult> task) -> {
                         if (task.isSuccessful()) {
                             mCurrentUserRef = mDatabase.child(USER_ACCOUNTS_STR).child(mAuth.getCurrentUser().getUid());
                             //TODO tweak to include display name
@@ -381,17 +385,13 @@ public class FirebaseRTDBHelper {
                             // If sign in fails, display a message to the user.
                             Log.w(LOG_TAG, "signInWithEmail:failure", task.getException());
                         }
-
-                    }
                 });
     }
 
     /** Function to create the account of a user given a username and password */
     public void createAccount(String email, String password, String nickname, Activity activity){
         mAuth.createUserWithEmailAndPassword(email, password)
-                .addOnCompleteListener(activity, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
+                .addOnCompleteListener(activity, (Task<AuthResult> task) ->  {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(LOG_TAG, "createUserWithEmail:success");
@@ -404,7 +404,6 @@ public class FirebaseRTDBHelper {
                             // If sign in fails, display a message to the user.
                             Log.w(LOG_TAG, "createUserWithEmail:failure", task.getException());
                         }
-                    }
                 });
     }
 
@@ -412,7 +411,57 @@ public class FirebaseRTDBHelper {
         //TODO RESET Current User
         mAuth.signOut();
     }
+    /*
+        Pushes a vote to the database at the corresponding activity, and removes the vote from the other category if necessary
+        @choice - boolean, true if voting 'yes' and false if voting 'no'
+    */
+    public void vote(boolean choice, String activity_id, String group_id){
+        DatabaseReference activity = mDatabase.child(MESSAGE_STR).child(group_id).child(ACTIVITY_POLL_STR).child(activity_id);
+        if (choice){
+            // Yes Vote
+            activity.child(YES_VOTE_STR).child(mAuth.getUid()).setValue(mAuth.getCurrentUser().getEmail());
+            // Delete No Vote if exists
+            activity.child(NO_VOTE_STR).child(mAuth.getUid()).removeValue();
+        } else {
+            // No Vote
+            activity.child(NO_VOTE_STR).child(mAuth.getUid()).setValue(mAuth.getCurrentUser().getEmail());
+            // Delete Yes Vote if exists
+            activity.child(YES_VOTE_STR).child(mAuth.getUid()).removeValue();
+        }
+    }
 
+    /*
+        Checks if a vote has been cast by the user, if it has adjust the UI to gray out the button they didn't choose
+    */
+    public void getVote(String activity_id, String group_id, Button upvote, Button downvote){
+        DatabaseReference activity = mDatabase.child(MESSAGE_STR).child(group_id).child(ACTIVITY_POLL_STR).child(activity_id);
+
+        activity.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                boolean upvoted = snapshot.child(YES_VOTE_STR).hasChild(mAuth.getCurrentUser().getUid());
+                boolean downvoted = snapshot.child(NO_VOTE_STR).hasChild(mAuth.getCurrentUser().getUid());
+                if (upvoted){
+                    // user voted yes
+                    downvote.setBackgroundColor(Color.GRAY);
+                    upvote.setBackgroundColor(Color.parseColor("#FFBB86FC"));
+                } else {
+                    if (downvoted) {
+                        // User voted no
+                        upvote.setBackgroundColor(Color.GRAY);
+                        downvote.setBackgroundColor(Color.parseColor("#FFBB86FC"));
+                    } else{
+                        // User has not voted
+                        upvote.setBackgroundColor(Color.parseColor("#FFBB86FC"));
+                        downvote.setBackgroundColor(Color.parseColor("#FFBB86FC"));
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) { }
+        });
+    }
     public void createListener(AuthStateListener listener){
         mAuth.addAuthStateListener(listener);
     }

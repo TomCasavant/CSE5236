@@ -2,24 +2,38 @@ package com.group9.grouptivity.firebase.models;
 
 public class GroupActivity extends KeyedDataModel {
     private String mActivityType;
+    private String mActivityName;
+    private String mActivityIcon;
+    private String mActivityAddress;
+    private String mActivityId;
+    private String mGroupId;
     private double mExpectedCost;
-    private String mLocation;
 
-    private GroupActivity() {} //Empty constructor needed for Firebase
+    protected GroupActivity() {} //Empty constructor needed for Firebase
 
-    public GroupActivity(String activityType, double expectedCost, String location) {
-        this.mActivityType = activityType;
-        this.mExpectedCost = expectedCost;
-        this.mLocation = location;
+    public GroupActivity(String type, String address, String icon, String name){
+        this.mActivityType = type;
+        this.mActivityAddress = address;
+        this.mActivityIcon = icon;
+        this.mActivityName = name;
     }
 
+    /** Returns the address of activity */
+    public String getActivityAddress(){ return this.mActivityAddress; }
+
+    /** Returns the icon of activity */
+    public String getActivityIcon(){ return this.mActivityIcon; }
+
+    /** Returns the name of activity */
+    public String getActivityName(){ return this.mActivityName; }
+
     /** Returns the type of activity that this is. */
-    private String getActivityType() {
+    public String getActivityType() {
         return this.mActivityType;
     }
 
     /** Sets the type of activity that this is. */
-    private void getActivityType(String activityType) {
+    public void getActivityType(String activityType) {
         this.mActivityType = activityType;
     }
 
@@ -33,14 +47,17 @@ public class GroupActivity extends KeyedDataModel {
         this.mExpectedCost = expectedCost;
     }
 
-    /** Returns the location associated with this activity. */
-    private String getLocation() {
-        return this.mLocation;
-    }
+    /** Sets the Group ID associated with this activity. */
+    public void setGroupId(String id){ this.mGroupId = id; }
 
-    /** Sets the location associated with this activity. */
-    private void setLocation(String location) {
-        this.mLocation = location;
-    }
+    /** Gets the group ID associated with this activity. */
+    public String getGroupId(){ return this.mGroupId; }
+
+    /** Sets the activity ID associated with this activity. */
+    public void setActivityId(String id){ this.mActivityId = id; }
+
+    /** Gets the activity ID associated with this activity. */
+    public String getActivityId(){ return this.mActivityId; }
+
 
 }

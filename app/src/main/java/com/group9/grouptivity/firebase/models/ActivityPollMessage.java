@@ -1,17 +1,28 @@
 package com.group9.grouptivity.firebase.models;
 
+import android.provider.ContactsContract;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.GenericTypeIndicator;
 import com.group9.grouptivity.firebase.FirebaseRTDBHelper;
 import com.group9.grouptivity.firebase.models.recyclerViewAdapters.MessageAdapter;
 import com.group9.grouptivity.firebase.models.recyclerViewAdapters.viewHolders.AbstractMessageViewHolder;
 import com.group9.grouptivity.firebase.models.recyclerViewAdapters.viewHolders.ActivityPollMessageViewHolder;
 
+import java.security.acl.Group;
 import java.util.ArrayList;
+import java.util.Dictionary;
+import java.util.HashMap;
 import java.util.List;
 
 public class ActivityPollMessage extends AbstractMessage {
     private GroupActivity mGroupActivity;
     private List<String> mYesVotesUsernameList; //May want to change these lists to UserAccounts
     private List<String> mNoVotesUsernameList;
+    private HashMap<String, Object> noVotes;
+    private HashMap<String, Object> yesVotes;
+
 
     private ActivityPollMessage() {} //Empty constructor needed for Firebase
 
@@ -22,9 +33,9 @@ public class ActivityPollMessage extends AbstractMessage {
         this.mNoVotesUsernameList = new ArrayList<>();
     }
 
-    public ActivityPollMessage(String groupMessageKey, String sender, long timeStamp, GroupActivity groupActivity, List<String> yesVotesUsernameList, List<String> noVotesUsernameList) {
+    public ActivityPollMessage(String groupMessageKey, String sender, long timeStamp, GroupActivity activity, List<String> yesVotesUsernameList, List<String> noVotesUsernameList) {
         super(groupMessageKey, sender, timeStamp);
-        this.mGroupActivity = groupActivity;
+        this.mGroupActivity = activity;
         this.mYesVotesUsernameList = yesVotesUsernameList;
         this.mNoVotesUsernameList = noVotesUsernameList;
 
@@ -47,12 +58,42 @@ public class ActivityPollMessage extends AbstractMessage {
 
     /** Returns the number of users who have voted YES on this activity poll. */
     public int yesVotesCount() {
-        return this.mYesVotesUsernameList.size();
+        return this.yesVotes.size();
     }
 
     /** Returns the number of users who have voted NO on this activity poll. */
     public int noVotesCount() {
-        return this.mNoVotesUsernameList.size();
+        return this.noVotes.size();
+    }
+
+    /* Gets the noVotes database HashMap */
+    public void setNoVotes(HashMap<String, Object> noVotes){
+        this.noVotes = noVotes;
+    }
+
+    /* Gets the yesVotes database HashMap */
+    public void setYesVotes(HashMap<String, Object> yesVotes){
+        this.yesVotes = yesVotes;
+    }
+
+    /* Gets the activity HashMap */
+    public void setActivity(HashMap<String, Object> activity){
+        this.mGroupActivity = new GroupActivity((String) activity.get("activityType"), (String) activity.get("address"), (String) activity.get("icon"), (String) activity.get("name"));
+    }
+
+    /* Gets the hashmap associated with the Yes Votes from the database */
+    public HashMap<String, Object> getYesVotes(){
+        return this.yesVotes;
+    }
+
+    /* Retrieves and returns the noVotes hashmap */
+    public HashMap<String, Object> getNoVotes(){
+        return this.noVotes;
+    }
+
+    /* Returns the GroupActivity associated with this Poll */
+    public GroupActivity getActivity(){
+        return this.mGroupActivity;
     }
 
     @Override
