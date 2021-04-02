@@ -69,9 +69,8 @@ public class FirebaseRTDBHelper {
         mDatabase = FirebaseDatabase.getInstance().getReference();
         if (mAuth.getCurrentUser() != null) {
             mCurrentUserRef = mDatabase.child(USER_ACCOUNTS_STR).child(mAuth.getCurrentUser().getUid());
-            //TODO tweak to include display name
-            mCurrentUser = new UserAccount(mAuth.getCurrentUser().getEmail());
-            //mCurrentUser.setKey(mAuth.getCurrentUser().getUid());
+            mCurrentUser = new UserAccount(mAuth.getCurrentUser().getEmail(), mAuth.getCurrentUser().getDisplayName());
+            mCurrentUser.setKey(mAuth.getCurrentUser().getUid());
         }
     }
 
@@ -164,7 +163,7 @@ public class FirebaseRTDBHelper {
     /** Sends the given invite to the user with the given UID key.*/
     public void sendInviteToUser(String userKey, GroupMessageInvite invite) {
         //Need to add pending invite to the group message
-        mDatabase.child(GROUP_MESSAGES_STR).child(invite.retrieveGroupMessageId()).child(INVITES_STR).child(userKey);
+        mDatabase.child(GROUP_MESSAGES_STR).child(invite.retrieveGroupMessageId()).child(INVITES_STR).child(userKey).setValue(false);
         //Need to add invite to the user
         DatabaseReference userInviteRef = mDatabase.child(USER_ACCOUNTS_STR).child(userKey).child(INVITES_STR).child(invite.retrieveGroupMessageId());
         userInviteRef.setValue(invite);
@@ -175,10 +174,20 @@ public class FirebaseRTDBHelper {
         if (mCurrentUserRef != null) {
             DatabaseReference groupMessageRef = mDatabase.child(GROUP_MESSAGES_STR).child(groupMessageId);
             if (groupMessageRef != null) {
+                //Add the user's info under the group message
                 DatabaseReference user = groupMessageRef.child(GROUP_USERS_STR).child(mAuth.getCurrentUser().getUid());
                 user.child(EMAIL_STR).setValue(mAuth.getCurrentUser().getEmail());
                 user.child(MUTED_STR).setValue(false);
+
+                //Add the group message to the userAccount
                 mCurrentUserRef.child(GROUP_MESSAGES_STR).child(groupMessageId).child(GROUP_NAME_STR).setValue(groupMessageName);
+
+                //Remove a pending invite should one exist
+                DatabaseReference inviteRef = groupMessageRef.child(INVITES_STR).child(mCurrentUser.retrieveKey());
+                if (inviteRef != null) {
+                    inviteRef.removeValue();
+                }
+
             } else {
                 Log.e(LOG_TAG, "Unable to retrieve Group Message with the given id.");
             }
