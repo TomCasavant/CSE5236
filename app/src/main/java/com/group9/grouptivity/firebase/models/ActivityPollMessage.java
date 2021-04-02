@@ -58,11 +58,13 @@ public class ActivityPollMessage extends AbstractMessage {
 
     /** Returns the number of users who have voted YES on this activity poll. */
     public int yesVotesCount() {
+        if (this.yesVotes == null) { return 0; }
         return this.yesVotes.size();
     }
 
     /** Returns the number of users who have voted NO on this activity poll. */
     public int noVotesCount() {
+        if (this.noVotes == null) { return 0; }
         return this.noVotes.size();
     }
 
