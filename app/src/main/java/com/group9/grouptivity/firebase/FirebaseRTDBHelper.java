@@ -273,7 +273,8 @@ public class FirebaseRTDBHelper {
      *  to the database under the group message with the given with current time as the timestamp. */
     public void addTextMessage(String messageBody, String groupMessageKey) {
         long timestamp = Calendar.getInstance().getTimeInMillis() / MILLISECONDS_TO_SECONDS;
-        addMessage(new TextMessage(groupMessageKey, mCurrentUser.getDisplayName(), timestamp, messageBody));
+        Log.d("Display", mAuth.getCurrentUser().getDisplayName());
+        addMessage(new TextMessage(groupMessageKey, mAuth.getCurrentUser().getDisplayName(), timestamp, messageBody));
     }
 
     /** Adds the given activityPollmessage to the database. */
@@ -427,7 +428,7 @@ public class FirebaseRTDBHelper {
     }
     /**
         Pushes a vote to the database at the corresponding activity, and removes the vote from the other category if necessary
-        @choice - boolean, true if voting 'yes' and false if voting 'no'
+        choice - boolean, true if voting 'yes' and false if voting 'no'
     */
     public void vote(boolean choice, String activity_id, String group_id){
         DatabaseReference activity = mDatabase.child(MESSAGE_STR).child(group_id).child(ACTIVITY_POLL_STR).child(activity_id);
