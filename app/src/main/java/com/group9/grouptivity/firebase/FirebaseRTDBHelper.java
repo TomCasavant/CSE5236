@@ -411,7 +411,9 @@ public class FirebaseRTDBHelper {
                             UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
                                     .setDisplayName(nickname).build();
                             mAuth.getCurrentUser().updateProfile(profileUpdates);
-                            addNewUser(new UserAccount(email, nickname), user.getUid());
+                            this.mCurrentUser = new UserAccount(email, nickname);
+                            this.mCurrentUser.setKey(user.getUid());
+                            addNewUser(this.mCurrentUser, this.mCurrentUser.retrieveKey());
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(LOG_TAG, "createUserWithEmail:failure", task.getException());
@@ -423,7 +425,7 @@ public class FirebaseRTDBHelper {
         //TODO RESET Current User
         mAuth.signOut();
     }
-    /*
+    /**
         Pushes a vote to the database at the corresponding activity, and removes the vote from the other category if necessary
         @choice - boolean, true if voting 'yes' and false if voting 'no'
     */
@@ -442,7 +444,7 @@ public class FirebaseRTDBHelper {
         }
     }
 
-    /*
+    /**
         Checks if a vote has been cast by the user, if it has adjust the UI to gray out the button they didn't choose
     */
     public void getVote(String activity_id, String group_id, Button upvote, Button downvote){
