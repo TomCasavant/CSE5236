@@ -7,7 +7,6 @@ import android.widget.Button;
 
 import androidx.annotation.NonNull;
 
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
@@ -60,6 +59,7 @@ public class FirebaseRTDBHelper {
     private static final String USERNAME_STR = "username";
     private static final String INVITE_SENDER_STR = "sender";
     private static final String INVITE_GROUP_MESSAGE_STR = "groupMessageName";
+    private static final String DISPLAY_NAME_STR = "displayName";
 
     private static final int MILLISECONDS_TO_SECONDS = 1000;
 
@@ -221,7 +221,7 @@ public class FirebaseRTDBHelper {
     }
 
 
-    /** Gets GroupMessageInvites for the current user. */
+     /** Gets GroupMessageInvites for the current user. */
     public List<GroupMessageInvite> getGroupMessageInvites(DataRetrievalListener dataRetrievalListener) {
         List<GroupMessageInvite> groupMessageInviteList = new ArrayList<>();
         if (mCurrentUserRef != null) {
@@ -273,7 +273,7 @@ public class FirebaseRTDBHelper {
      *  to the database under the group message with the given with current time as the timestamp. */
     public void addTextMessage(String messageBody, String groupMessageKey) {
         long timestamp = Calendar.getInstance().getTimeInMillis() / MILLISECONDS_TO_SECONDS;
-        addMessage(new TextMessage(groupMessageKey, mCurrentUser.getUsername(), timestamp, messageBody));
+        addMessage(new TextMessage(groupMessageKey, mCurrentUser.getDisplayName(), timestamp, messageBody));
     }
 
     /** Adds the given activityPollmessage to the database. */
@@ -345,20 +345,32 @@ public class FirebaseRTDBHelper {
     /** Returns a UserAccount with the given email, or null if no userAccount with the given email
      * is found on the firebase RTDB. */
     public CompleteUserAccount getUserByEmail(String email, DataRetrievalListener dataRetrievalListener) {
-        final CompleteUserAccount[] userAccount = {null}; //this needs to be final to access within an inner class?
+        CompleteUserAccount userAccount = new CompleteUserAccount();
         mDatabase.child(USER_ACCOUNTS_STR).get().addOnCompleteListener((Task<DataSnapshot> task) -> {
                 //Iterate over all the users, until one is found to match the given email
                 for (DataSnapshot user:
                      task.getResult().getChildren()) {
                     if (user.child(EMAIL_STR).getValue().equals(email)) {
-                        userAccount[0] = user.getValue(CompleteUserAccount.class);
-                        userAccount[0].setKey(user.getKey());
+                        userAccount.setDisplayName((String) user.child(DISPLAY_NAME_STR).getValue());
+                        userAccount.setEmailAddress(email);
+                        for (DataSnapshot gmSnap : user.child(GROUP_MESSAGES_STR).getChildren()) {
+                            GroupMessage gm = gmSnap.getValue(GroupMessage.class);
+                            gm.setKey(gmSnap.getKey());
+                            userAccount.getGroupMessages().add(gm);
+                        }
+
+                        for (DataSnapshot gmInvSnap : user.child(INVITES_STR).getChildren()) {
+                            GroupMessageInvite gmInv = gmInvSnap.getValue(GroupMessageInvite.class);
+                            gmInv.setGroupMessageId(gmInvSnap.getKey());
+                            userAccount.getInvites().add(gmInv);
+                        }
+                        userAccount.setKey(user.getKey());
                         break;
                     }
                 }
                 dataRetrievalListener.onDataRetrieval();
         });
-        return userAccount[0];
+        return userAccount;
     }
 
     /** Checks if the user is logged in */
@@ -466,6 +478,10 @@ public class FirebaseRTDBHelper {
         mAuth.addAuthStateListener(listener);
     }
 
+    /** Returns a UserAccount representing the current user. */
+    public UserAccount getCurrentUser() {
+        return this.mCurrentUser;
+    }
 
 
 }

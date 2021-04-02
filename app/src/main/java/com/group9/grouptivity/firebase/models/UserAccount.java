@@ -4,18 +4,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UserAccount extends KeyedDataModel {
-    private String mUsername;
     private String mEmailAddress;
     private String mDisplayName;
 
     protected UserAccount() {
-        this.mUsername = "null";
+        super();
         this.mEmailAddress = "null";
         this.mDisplayName = "null";
     } //Empty constructor needed for Firebase
 
     public UserAccount(String emailAddress) {
-        this.mUsername = emailAddress;
+        this.mDisplayName = emailAddress;
         this.mEmailAddress = emailAddress;
     }
 
@@ -23,25 +22,13 @@ public class UserAccount extends KeyedDataModel {
         this.mEmailAddress = emailAddress;
         this.mDisplayName = displayName;
     }
-    public UserAccount(String username, String emailAddress, String displayName) {
-        this.mUsername = username;
-        this.mEmailAddress = emailAddress;
-        this.mDisplayName = displayName;
-    }
 
 
     /**
      * Returns the username associated with the user account.
      */
-    public String getUsername() {
-        return this.mUsername;
-    }
-
-    /**
-     * Returns the username associated with the user account.
-     */
-    public void settUsername(String username) {
-        this.mUsername = username;
+    public String getDisplayName() {
+        return this.mDisplayName;
     }
 
     /**
@@ -56,13 +43,6 @@ public class UserAccount extends KeyedDataModel {
      */
     public void setEmailAddress(String emailAddress) {
         this.mEmailAddress = emailAddress;
-    }
-
-    /**
-     * Returns the email address associated with the user account.
-     */
-    public String getDisplayName() {
-        return this.mDisplayName;
     }
 
     /**

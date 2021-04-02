@@ -22,8 +22,8 @@ public class GroupMessageMember extends KeyedDataModel {
     }
 
     /** Sets the email of the GroupMessageMember. */
-    public String setEmailAddress() {
-        return this.mEmailAddress;
+    public void setEmailAddress(String emailAddress) {
+        this.mEmailAddress = emailAddress;
     }
 
     /** Returns whether the GroupMessage Member has the GroupMessage muted. */

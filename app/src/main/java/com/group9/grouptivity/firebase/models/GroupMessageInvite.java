@@ -12,13 +12,19 @@ public class GroupMessageInvite {
         this.mSenderUsername = senderUsername;
     }
 
+    public GroupMessageInvite(GroupMessage groupMessage, String senderUsername) {
+        this.mGroupMessageId = groupMessage.retrieveKey();
+        this.mGroupMessageName = groupMessage.getName();
+        this.mSenderUsername = senderUsername;
+    }
+
     /** Returns the group message name associated with this invitation. */
     public String getName() {
         return this.mGroupMessageName;
     }
 
     /** Sets the group message name associated with this invitation. */
-    public void setGroupMessageName(String groupMessageName){
+    public void setName(String groupMessageName){
         this.mGroupMessageName = groupMessageName;
     }
 
@@ -28,7 +34,7 @@ public class GroupMessageInvite {
     }
 
     /** Sets the username of the sender of this invitation. */
-    public void setSenderUsername(String senderUsername) {
+    public void setSender(String senderUsername) {
         this.mSenderUsername = senderUsername;
     }
 
