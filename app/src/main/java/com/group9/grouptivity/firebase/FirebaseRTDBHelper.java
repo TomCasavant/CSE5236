@@ -267,11 +267,18 @@ public class FirebaseRTDBHelper {
     /** Deletes the groupMessageInvite with the given id associated with the current user if it exists. */
     public void deleteGroupMessageInvite(String groupMessageInviteId) {
         if (mCurrentUserRef != null) {
+            //Remove invite from userAccount info
             DatabaseReference gmInviteRef = mCurrentUserRef.child(INVITES_STR).child(groupMessageInviteId);
             if (gmInviteRef != null){
                 gmInviteRef.removeValue();
             } else {
                 Log.e(LOG_TAG, "Could not fetch a groupMessageInvite with the given id.");
+            }
+
+            //Remove invite from the groupMessage info
+            DatabaseReference inviteRef = mDatabase.child(GROUP_MESSAGES_STR).child(groupMessageInviteId).child(INVITES_STR).child(mCurrentUser.retrieveKey());
+            if (inviteRef != null ) {
+                inviteRef.removeValue();
             }
         } else {
             Log.e(LOG_TAG,"Unable to retrieve user. Is one logged in?");
