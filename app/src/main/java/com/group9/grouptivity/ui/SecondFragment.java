@@ -1,6 +1,7 @@
 package com.group9.grouptivity.ui;
 
 import android.Manifest;
+import android.content.Context;
 import android.location.Location;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -26,23 +27,42 @@ import com.google.android.gms.maps.model.PointOfInterest;
 import com.group9.grouptivity.R;
 import com.group9.grouptivity.firebase.FirebaseRTDBHelper;
 
-public class SecondFragment extends Fragment{
+public class SecondFragment extends Fragment
+{
+    MapView mMapView;
     private GoogleMap googleMap;
-    private MapView mMap;
-    private static final String[] LOCATION_PERMISSIONS = new String[] {
-            Manifest.permission.ACCESS_FINE_LOCATION,
-            Manifest.permission.ACCESS_COARSE_LOCATION };
-    private Location mLocation;
-    private LatLng mDefaultLocation;
-    private static final int REQUEST_LOCATION_PERMISSIONS = 0;
-    private boolean mLocationPermissionGranted = false;
 
     @Override
     public View onCreateView(
             LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState
     ) {
-        return inflater.inflate(R.layout.fragment_second, container, false);
+        View view = inflater.inflate(R.layout.fragment_second, container, false);
+        mMapView = (MapView) view.findViewById(R.id.mapView);
+        mMapView.onCreate(savedInstanceState);
+
+        mMapView.onResume(); // needed to get the map to display immediately
+
+        try {
+            MapsInitializer.initialize(getActivity().getApplicationContext());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        mMapView.getMapAsync(new OnMapReadyCallback() {
+            @Override
+            public void onMapReady(GoogleMap mMap) {
+                googleMap = mMap;
+
+                googleMap.setOnPoiClickListener(new GoogleMap.OnPoiClickListener() {
+                    @Override
+                    public void onPoiClick(PointOfInterest poi) {
+                        //open fragment for voting
+
+                    }
+                });
+            }
+        });
+        return view;
     }
 
 
@@ -63,6 +83,31 @@ public class SecondFragment extends Fragment{
                     .navigate(R.id.loginFragment);
         }
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mMapView.onResume();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        mMapView.onPause();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mMapView.onDestroy();
+    }
+
+    @Override
+    public void onLowMemory() {
+        super.onLowMemory();
+        mMapView.onLowMemory();
+    }
+
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
