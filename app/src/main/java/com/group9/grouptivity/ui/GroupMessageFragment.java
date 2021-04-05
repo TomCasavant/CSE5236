@@ -59,12 +59,9 @@ public class GroupMessageFragment extends Fragment {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         GroupMessageViewModel gmViewModel = new ViewModelProvider(requireActivity()).get(GroupMessageViewModel.class);
-        this.mCompleteGroupMessage = FirebaseRTDBHelper.getInstance().completeGroupMessage(gmViewModel.getGroupMessage(), new DataRetrievalListener() {
-            @Override
-            public void onDataRetrieval() {
-                groupMessageMemberAdapter.notifyDataSetChanged();
-            }
-        });
+        this.mCompleteGroupMessage = FirebaseRTDBHelper.getInstance().completeGroupMessage(gmViewModel.getGroupMessage(), () ->
+                groupMessageMemberAdapter.notifyDataSetChanged()
+        );
 
         groupMessageNameTextView = view.findViewById(R.id.group_message_banner);
         groupMessageNameTextView.setText(this.mCompleteGroupMessage.getName());
@@ -123,9 +120,9 @@ public class GroupMessageFragment extends Fragment {
         EditText emailEditText = dialog.findViewById(R.id.invite_dialog_editText);
         Button sendInviteButton = dialog.findViewById(R.id.invite_dialog_send_button);
         Button cancelButton = dialog.findViewById(R.id.dialogButtonCancel);
-        sendInviteButton.setOnClickListener((View v) -> {
-            sendInvite(emailEditText.getText().toString(), emailEditText);
-        });
+        sendInviteButton.setOnClickListener((View v) ->
+            sendInvite(emailEditText.getText().toString(), emailEditText)
+        );
         cancelButton.setOnClickListener((View v) ->
                 dialog.dismiss()
         );
@@ -139,7 +136,7 @@ public class GroupMessageFragment extends Fragment {
         DataRetrievalListener drl = new DataRetrievalListener() {
             @Override
             public void onDataRetrieval() {
-                String toastText = "";
+                String toastText;
                 if (mInvitedUser.getDisplayName().equals("null")) {
                     toastText = "Unable to find user with email " + email;
                 } else if (mCompleteGroupMessage.containsMember(email)) {
