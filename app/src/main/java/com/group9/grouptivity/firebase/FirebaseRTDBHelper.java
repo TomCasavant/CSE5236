@@ -62,7 +62,7 @@ public class FirebaseRTDBHelper {
     private static final String INVITE_GROUP_MESSAGE_STR = "groupMessageName";
     private static final String DISPLAY_NAME_STR = "displayName";
     private static final String ACTIVITY_STR = "activity";
-    private static final String TIMESTAMP_STR = "timestamp";
+    private static final String TIMESTAMP_STR = "timeStamp";
 
     private static final int MILLISECONDS_TO_SECONDS = 1000;
 

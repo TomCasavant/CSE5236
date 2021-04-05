@@ -82,12 +82,12 @@
             android:id="@+id/icon"
             android:layout_width="85dp"
             android:layout_height="61dp"
-            android:layout_marginTop="5dp"
+            android:layout_marginTop="22dp"
+            android:contentDescription="@string/image_description"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:srcCompat="@tools:sample/backgrounds/scenic"
-            android:contentDescription="@string/image_description"/>
+            app:layout_constraintTop_toTopOf="@id/place_type"
+            tools:srcCompat="@tools:sample/backgrounds/scenic" />
 
         <TextView
             android:id="@+id/upvote_count"
