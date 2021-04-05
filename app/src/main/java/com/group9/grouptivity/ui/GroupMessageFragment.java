@@ -24,6 +24,7 @@ import com.group9.grouptivity.firebase.FirebaseRTDBHelper;
 import com.group9.grouptivity.firebase.models.CompleteGroupMessage;
 import com.group9.grouptivity.firebase.models.CompleteUserAccount;
 import com.group9.grouptivity.firebase.models.GroupMessageInvite;
+import com.group9.grouptivity.firebase.models.recyclerViewAdapters.GroupMessageMemberAdapter;
 import com.group9.grouptivity.firebase.models.recyclerViewAdapters.MessageAdapter;
 import com.group9.grouptivity.ui.models.GroupMessageViewModel;
 
@@ -36,6 +37,8 @@ public class GroupMessageFragment extends Fragment {
     private CompleteGroupMessage mCompleteGroupMessage;
     private TextView groupMessageNameTextView;
     private MessageAdapter messageAdapter;
+    private GroupMessageMemberAdapter groupMessageMemberAdapter;
+
 
     //Needed for inviting. Ideally would be block scope but couldn't find a simple solution
     private CompleteUserAccount mInvitedUser;
@@ -58,7 +61,7 @@ public class GroupMessageFragment extends Fragment {
         this.mCompleteGroupMessage = FirebaseRTDBHelper.getInstance().completeGroupMessage(gmViewModel.getGroupMessage(), new DataRetrievalListener() {
             @Override
             public void onDataRetrieval() {
-                //TODO will need to update users recyclerview
+                groupMessageMemberAdapter.notifyDataSetChanged();
             }
         });
 
@@ -70,7 +73,7 @@ public class GroupMessageFragment extends Fragment {
             createLeaveGroupDialog()
         );
 
-        sendInviteButton = view.findViewById(R.id.message_invite_button);
+        sendInviteButton = view.findViewById(R.id.message_member_invite_button);
         sendInviteButton.setOnClickListener((View v) -> createSendInviteDialog());
 
         messageEditText = view.findViewById(R.id.message_edittext);
@@ -84,18 +87,28 @@ public class GroupMessageFragment extends Fragment {
             }
         });
 
-        buildGroupMessageInviteRecyclerView(view);
+        buildMessageRecyclerView(view);
+        buildGroupMessageMemberRecyclerView(view);
     }
 
     /** Builds the recycler view to display the messages in this GroupMessage. */
-    private void buildGroupMessageInviteRecyclerView(View view) {
+    private void buildMessageRecyclerView(View view) {
         RecyclerView recyclerView = view.findViewById(R.id.message_recyclerview);
         final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
-        linearLayoutManager.setStackFromEnd(true);
+        linearLayoutManager.setStackFromEnd(true); //Start at the most recent message
         recyclerView.setLayoutManager(linearLayoutManager);
         DataRetrievalListener dataRetrievalListener = () -> messageAdapter.notifyDataSetChanged();
         messageAdapter = new MessageAdapter(getActivity(), FirebaseRTDBHelper.getInstance().getMessages(this.mCompleteGroupMessage.retrieveKey(), dataRetrievalListener));
         recyclerView.setAdapter(messageAdapter);
+    }
+
+    /** Builds the recycler view to display the members in this GroupMessage. */
+    private void buildGroupMessageMemberRecyclerView(View view) {
+        RecyclerView recyclerView = view.findViewById(R.id.message_member_recyclerview);
+        final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
+        recyclerView.setLayoutManager(linearLayoutManager);
+        this.groupMessageMemberAdapter = new GroupMessageMemberAdapter(this.getActivity(), this.mCompleteGroupMessage.getMembers());
+        recyclerView.setAdapter(this.groupMessageMemberAdapter);
     }
 
     /** Creates a dialog box and displays it to the user to send an invite to another user. */

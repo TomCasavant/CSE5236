@@ -177,7 +177,9 @@ public class FirebaseRTDBHelper {
                 //Add the user's info under the group message
                 DatabaseReference user = groupMessageRef.child(GROUP_USERS_STR).child(mAuth.getCurrentUser().getUid());
                 user.child(EMAIL_STR).setValue(mAuth.getCurrentUser().getEmail());
+                user.child(DISPLAY_NAME_STR).setValue(mCurrentUser.getDisplayName());
                 user.child(MUTED_STR).setValue(false);
+
 
                 //Add the group message to the userAccount
                 mCurrentUserRef.child(GROUP_MESSAGES_STR).child(groupMessageId).child(GROUP_NAME_STR).setValue(groupMessageName);

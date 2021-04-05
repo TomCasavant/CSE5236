@@ -64,7 +64,7 @@ public class ActivityPollMessageViewHolder extends AbstractMessageViewHolder {
         }
     }
 
-    /* Sets all the attributes to their corresponding text or image values */
+    /** Sets all the attributes to their corresponding text or image values */
     public void setAttributes(String placeType, String placeName, String placeAddress, int upvote_count, int downvote_count, String icon, String activityId, String groupId){
         // Set the text elements of each attribute
         this.placeType.setText(placeType);
@@ -79,7 +79,7 @@ public class ActivityPollMessageViewHolder extends AbstractMessageViewHolder {
         Picasso.get().load(icon).into(this.icon); // Load and set the image associatd with this activity
     }
 
-    /* Assigns the buttons and attaches an event listener to change the color of buttons once a vote is cast */
+    /** Assigns the buttons and attaches an event listener to change the color of buttons once a vote is cast */
     private void set_buttons(){
         Button upVoteButton = itemView.findViewById(R.id.upvote);
         Button downVoteButton = itemView.findViewById(R.id.downvote);

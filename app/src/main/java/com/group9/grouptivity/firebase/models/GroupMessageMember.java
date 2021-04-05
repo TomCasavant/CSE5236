@@ -1,29 +1,25 @@
 package com.group9.grouptivity.firebase.models;
 
-public class GroupMessageMember extends KeyedDataModel {
-    private String mEmailAddress;
+public class GroupMessageMember extends UserAccount {
     private boolean mIsMuted;
 
-    protected GroupMessageMember() {} //Empty constructor needed for Firebase
+    protected GroupMessageMember() {
+        super();
+    } //Empty constructor needed for Firebase
 
-    public GroupMessageMember(String name){
-        this.mEmailAddress = name;
+    public GroupMessageMember(String emailAddress) {
+        super(emailAddress);
         this.mIsMuted = false;
     }
 
-    public GroupMessageMember(String name, boolean isMuted){
-        this.mEmailAddress = name;
+    public GroupMessageMember(String emailAddress, String displayName){
+        super(emailAddress, displayName);
+        this.mIsMuted = false;
+    }
+
+    public GroupMessageMember(String emailAddress, String displayName, boolean isMuted) {
+        super(emailAddress, displayName);
         this.mIsMuted = isMuted;
-    }
-
-    /** Returns the email address of the GroupMessageMember. */
-    public String getEmailAddress() {
-        return this.mEmailAddress;
-    }
-
-    /** Sets the email of the GroupMessageMember. */
-    public void setEmailAddress(String emailAddress) {
-        this.mEmailAddress = emailAddress;
     }
 
     /** Returns whether the GroupMessage Member has the GroupMessage muted. */
