@@ -1,8 +1,16 @@
 package com.group9.grouptivity.ui;
 
+import android.Manifest;
 import android.app.Dialog;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.PointOfInterest;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.group9.grouptivity.R;
@@ -11,6 +19,7 @@ import com.group9.grouptivity.firebase.FirebaseRTDBHelper;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
@@ -26,6 +35,7 @@ import android.widget.Toast;
 import android.util.Log;
 
 public class MainActivity extends AppCompatActivity {
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +62,7 @@ public class MainActivity extends AppCompatActivity {
         };
         FirebaseRTDBHelper.getInstance().createListener(mAuthListener);
         setSupportActionBar(toolbar);
+
         Log.d("OnCreate()", "Successfully ran Activity OnCreate()");
     }
 
@@ -75,6 +86,17 @@ public class MainActivity extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
         }
     }
+
+
+
+    /*@Override
+    public void onPoiClick(PointOfInterest poi) {
+        Toast.makeText(this, "Clicked: " +
+                        poi.name + "\nPlace ID:" + poi.placeId +
+                        "\nLatitude:" + poi.latLng.latitude +
+                        " Longitude:" + poi.latLng.longitude,
+                Toast.LENGTH_SHORT).show();
+    }*/
 
     @Override
     protected void onStart() {

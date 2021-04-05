@@ -1,0 +1,24 @@
+<resources>
+    <!--
+    TODO: Before you run your application, you need a Google Maps API key.
+
+    To get one, follow this link, follow the directions and press "Create" at the end:
+
+    https://console.developers.google.com/flows/enableapi?apiid=maps_android_backend&keyType=CLIENT_SIDE_ANDROID&r=ED:AE:03:1C:E0:83:E7:C8:BA:DA:68:9B:54:7A:A8:76:1F:3F:22:72%3Bcom.group9.grouptivity.ui
+
+    You can also add your credentials to an existing key, using these values:
+
+    Package name:
+    com.group9.grouptivity.ui
+
+    SHA-1 certificate fingerprint:
+    ED:AE:03:1C:E0:83:E7:C8:BA:DA:68:9B:54:7A:A8:76:1F:3F:22:72
+
+    Alternatively, follow the directions here:
+    https://developers.google.com/maps/documentation/android/start#get-key
+
+    Once you have your key (it starts with "AIza"), replace the "google_maps_key"
+    string in this file.
+    -->
+    <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">AIzaSyAepdUXTrbdi5C1yUygQ1Nf0ksyYbXAO6w</string>
+</resources>

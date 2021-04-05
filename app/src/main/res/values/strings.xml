@@ -69,5 +69,7 @@
     <string name="image_description">Icon for activity</string>
     <string name="thumbs_up">👍</string>
     <string name="thumbs_down">👎</string>
+    <string name="title_activity_maps">Map</string>
+    <string name="title_activity_maps_fragment">Map</string>
 
 </resources>
