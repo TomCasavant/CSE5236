@@ -196,6 +196,35 @@ public class FirebaseRTDBHelper {
         }
     }
 
+    /** Removes the current user to the Group Message with the given id and name. */
+    public void removeCurrentUserFromGroupMessage(String groupMessageId) {
+        if (mCurrentUserRef != null) {
+            DatabaseReference groupMessageRef = mDatabase.child(GROUP_MESSAGES_STR).child(groupMessageId);
+            if (groupMessageRef != null) {
+                //Remove the user's info under the group message
+                DatabaseReference user = groupMessageRef.child(GROUP_USERS_STR).child(mAuth.getCurrentUser().getUid());
+                if (user != null) {
+                    user.removeValue();
+                } else {
+                    Log.e(LOG_TAG, "User is not a part of the given group message.");
+                }
+
+                //Remove the group message from the userAccount
+                DatabaseReference groupMessage = mCurrentUserRef.child(GROUP_MESSAGES_STR).child(groupMessageId);
+                if (groupMessage != null) {
+                    groupMessage.removeValue();
+                } else {
+                    Log.e(LOG_TAG, "Group message with given id was not defined under userAccount.");
+                }
+
+            } else {
+                Log.e(LOG_TAG, "Unable to retrieve Group Message with the given id.");
+            }
+        } else {
+            Log.e(LOG_TAG,"Unable to retrieve current user. Is one logged in?");
+        }
+    }
+
     /** Changes a the Group Message with the given id to the given name. If no such Group Message exists, nothing occurs. */
     public void changeGroupMessageName(String groupMessageId, String newGroupMessageName) {
 
