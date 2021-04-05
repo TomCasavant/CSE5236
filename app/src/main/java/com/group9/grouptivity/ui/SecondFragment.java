@@ -178,10 +178,7 @@ public class SecondFragment extends Fragment
         type.setText(type_str);
         name.setText(name_str);
         address.setText(address_str);
-        //String meta = place.getPhotoMetadatas().get(0).zza();
-        //String height = String.valueOf(place.getPhotoMetadatas().get(0).getHeight());
-        //String width = String.valueOf(place.getPhotoMetadatas().get(0).getWidth());
-        String url = "https://developers.google.com/maps/documentation/places/web-service/icons/restaurant-71.png";
+        String url = getIconUrl(type_str);
         Log.d("Mappings:", url);
         Picasso.get().load(url).into(icon);
         List<GroupMessage> groups = FirebaseRTDBHelper.getInstance().getCurrentUser().getGroups();
@@ -211,6 +208,55 @@ public class SecondFragment extends Fragment
         );
 
         dialog.show();
+    }
+
+    private String getIconUrl(String type){
+        String url;
+        switch(type){
+            case "AIRPORT":
+                url = "https://developers.google.com/maps/documentation/places/web-service/icons/airport-71.png";
+                break;
+            case "AQUARIUM":
+                url = "https://developers.google.com/maps/documentation/places/web-service/icons/v1/harbor-71.png";
+                break;
+            case "RESTAURANT":
+            case "FOOD":
+            case "BAKERY":
+                url = "https://developers.google.com/maps/documentation/places/web-service/icons/restaurant-71.png";
+                break;
+            case "ART_GALLERY":
+            case "BOOK_STORE":
+                url = "https://developers.google.com/maps/documentation/places/web-service/icons/v1/library-71.png";
+                break;
+            case "AMUSEMENT_PARK":
+            case "BOWLING_ALLEY":
+                url = "https://developers.google.com/maps/documentation/places/web-service/icons/golf-71.png";
+                break;
+            case "CAFE":
+                url = "https://developers.google.com/maps/documentation/places/web-service/icons/cafe-71.png";
+                break;
+            case "PARK":
+            case "CAMPGROUND":
+                url = "https://developers.google.com/maps/documentation/places/web-service/icons/cemetery_grave-71.png";
+                break;
+            case "BANK":
+            case "CASINO":
+                url = "https://developers.google.com/maps/documentation/places/web-service/icons/bank_dollar-71.png";
+                break;
+            case "GROCERY_OR_SUPERMARKET":
+            case "CLOTHING_STORE":
+                url = "https://developers.google.com/maps/documentation/places/web-service/icons/v1/shopping-71.png";
+                break;
+            case "MOVIE_THEATER":
+            case "MOVIE_RENTAL":
+                url = "https://developers.google.com/maps/documentation/places/web-service/icons/movies-71.png";
+                break;
+            default:
+                url = "https://developers.google.com/maps/documentation/places/web-service/icons/v1/geocode-71.png";
+                break;
+        }
+
+        return url;
     }
 
 }
