@@ -6,6 +6,7 @@ import java.util.List;
 public class UserAccount extends KeyedDataModel {
     private String mEmailAddress;
     private String mDisplayName;
+    private List<GroupMessage> mGroups;
 
     protected UserAccount() {
         super();
@@ -22,6 +23,10 @@ public class UserAccount extends KeyedDataModel {
         this.mEmailAddress = emailAddress;
         this.mDisplayName = displayName;
     }
+
+
+    public List<GroupMessage> getGroups() { return this.mGroups;}
+    public void setGroups(List<GroupMessage> groups) { this.mGroups = groups; }
 
 
     /**

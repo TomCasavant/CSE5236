@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical">
+
+    <Spinner
+        android:id="@+id/group_selector"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/place_address"/>
+
+
+
+    <Button
+        android:id="@+id/dialogButtonShare"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_below="@id/group_selector"
+        android:text="@string/share_button" />
+
+    <Button
+        android:id="@+id/dialogButtonCancel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/group_selector"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_gravity="end"
+        android:text="@string/cancel_button" />
+
+    <TextView
+        android:id="@+id/place_type"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_above="@id/icon"/>
+
+    <TextView
+        android:id="@+id/place_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/icon"
+        android:layout_centerInParent="true"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:id="@+id/place_address"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_below="@id/place_name" />
+
+    <ImageView
+        android:id="@+id/icon"
+        android:layout_width="85dp"
+        android:layout_height="61dp"
+        android:layout_marginTop="5dp"
+        android:layout_centerHorizontal="true"
+        tools:srcCompat="@tools:sample/backgrounds/scenic"
+        android:contentDescription="@string/image_description"/>
+
+
+</RelativeLayout>

@@ -80,7 +80,7 @@ public class ActivityPollMessage extends AbstractMessage {
 
     /* Gets the activity HashMap */
     public void setActivity(HashMap<String, Object> activity){
-        this.mGroupActivity = new GroupActivity((String) activity.get("activityType"), (String) activity.get("address"), (String) activity.get("icon"), (String) activity.get("name"));
+        this.mGroupActivity = new GroupActivity((String) activity.get("activityType"), (String) activity.get("activityAddress"), (String) activity.get("activityIcon"), (String) activity.get("activityName"));
     }
 
     /* Gets the hashmap associated with the Yes Votes from the database */

@@ -22,6 +22,7 @@ import com.group9.grouptivity.firebase.models.AbstractMessage;
 import com.group9.grouptivity.firebase.models.ActivityPollMessage;
 import com.group9.grouptivity.firebase.models.CompleteGroupMessage;
 import com.group9.grouptivity.firebase.models.CompleteUserAccount;
+import com.group9.grouptivity.firebase.models.GroupActivity;
 import com.group9.grouptivity.firebase.models.GroupMessage;
 import com.group9.grouptivity.firebase.models.GroupMessageInvite;
 import com.group9.grouptivity.firebase.models.GroupMessageMember;
@@ -60,6 +61,8 @@ public class FirebaseRTDBHelper {
     private static final String INVITE_SENDER_STR = "sender";
     private static final String INVITE_GROUP_MESSAGE_STR = "groupMessageName";
     private static final String DISPLAY_NAME_STR = "displayName";
+    private static final String ACTIVITY_STR = "activity";
+    private static final String TIMESTAMP_STR = "timestamp";
 
     private static final int MILLISECONDS_TO_SECONDS = 1000;
 
@@ -123,7 +126,7 @@ public class FirebaseRTDBHelper {
             Log.e(LOG_TAG,"Unable to retrieve current user. Is one logged in?");
         }
 
-
+        mCurrentUser.setGroups(groupMessageList);
         return groupMessageList;
     }
 
@@ -325,8 +328,13 @@ public class FirebaseRTDBHelper {
     }
 
     /** Adds the given activityPollmessage to the database. */
-    public void addMessage(ActivityPollMessage activityPollMessage) {
-        //TODO
+    public void addMessage(GroupActivity activity, String groupId) {
+        DatabaseReference pollsRef = mDatabase.child(MESSAGE_STR).child(groupId).child(ACTIVITY_POLL_STR);
+        DatabaseReference newPollRef = pollsRef.push();
+        newPollRef.child(ACTIVITY_STR).setValue(activity);
+        newPollRef.child(INVITE_SENDER_STR).setValue(mAuth.getCurrentUser().getDisplayName());
+        long timestamp = Calendar.getInstance().getTimeInMillis() / MILLISECONDS_TO_SECONDS;
+        newPollRef.child(TIMESTAMP_STR).setValue(timestamp);
     }
 
     /** Adds the given textmessage to the database. */
