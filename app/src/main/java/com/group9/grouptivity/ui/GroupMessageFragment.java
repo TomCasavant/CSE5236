@@ -33,6 +33,7 @@ public class GroupMessageFragment extends Fragment {
     private Button leaveGroupButton;
     private Button sendMessageButton;
     private Button sendInviteButton;
+    private Button renameGroupButton;
     private EditText messageEditText;
     private CompleteGroupMessage mCompleteGroupMessage;
     private TextView groupMessageNameTextView;
@@ -75,6 +76,9 @@ public class GroupMessageFragment extends Fragment {
 
         sendInviteButton = view.findViewById(R.id.message_member_invite_button);
         sendInviteButton.setOnClickListener((View v) -> createSendInviteDialog());
+
+        renameGroupButton = view.findViewById(R.id.rename_group_button);
+        renameGroupButton.setOnClickListener((View v) -> createRenameDialog());
 
         messageEditText = view.findViewById(R.id.message_edittext);
 
@@ -168,6 +172,25 @@ public class GroupMessageFragment extends Fragment {
             FirebaseRTDBHelper.getInstance().removeCurrentUserFromGroupMessage(this.mCompleteGroupMessage.retrieveKey());
             NavHostFragment.findNavController(GroupMessageFragment.this)
                     .navigate(R.id.action_GroupMessageFragment_to_GroupsFragment);
+            dialog.dismiss();
+        });
+        cancelButton.setOnClickListener((View v) ->
+                dialog.dismiss()
+        );
+
+        dialog.show();
+    }
+
+    private void createRenameDialog(){
+        final Dialog dialog = new Dialog(getContext());
+        dialog.setContentView(R.layout.create_group_dialog); // Assign to xml dialog layout
+        TextView titleText = dialog.findViewById(R.id.text);
+        titleText.setText("Edit Group Name");
+        EditText newName = dialog.findViewById(R.id.new_group_name);
+        Button submitButton = dialog.findViewById(R.id.dialogButtonOK);
+        Button cancelButton = dialog.findViewById(R.id.dialogButtonCancel);
+        submitButton.setOnClickListener((View v) -> {
+            FirebaseRTDBHelper.getInstance().changeGroupMessageName(this.mCompleteGroupMessage.retrieveKey(), newName.getText().toString());
             dialog.dismiss();
         });
         cancelButton.setOnClickListener((View v) ->

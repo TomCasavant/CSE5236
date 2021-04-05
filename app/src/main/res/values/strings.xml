@@ -82,5 +82,6 @@
 
     <!-- Strings related to sharing activity -->
     <string name="share_button">Share</string>
+    <string name="rename_group_button_text">RENAME GROUP</string>
 
 </resources>
