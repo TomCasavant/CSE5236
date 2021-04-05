@@ -198,9 +198,11 @@ public class SecondFragment extends Fragment
         Button cancelButton = (Button) dialog.findViewById(R.id.dialogButtonCancel);
         shareButton.setOnClickListener((View v) -> {
             // Create new Activity
-            String groupId = groupIds.get(groupNames.indexOf(String.valueOf(spinner.getSelectedItem())));
+            String selected_group = String.valueOf(spinner.getSelectedItem());
+            String groupId = groupIds.get(groupNames.indexOf(selected_group));
             GroupActivity activity = new GroupActivity(type_str, address_str, url, name_str);
             FirebaseRTDBHelper.getInstance().addMessage(activity, groupId);
+            Toast.makeText(getActivity(), String.format("Shared %s to %s", name_str, selected_group), Toast.LENGTH_SHORT).show();
             dialog.dismiss();
         });
         cancelButton.setOnClickListener((View v) ->
