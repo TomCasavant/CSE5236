@@ -38,14 +38,21 @@
     <string name="login_button">Login</string>
     <string name="create_account_button">Create Account</string>
 
-    <!-- Strings used for invite_user_dialog_fragment -->
+    <!-- Strings used for group_message_fragment -->
     <string name="new_message_hint_text">Send Message</string>
-    <string name="send_button_text">Send</string>
+    <string name="leave_group_text">Leave Group</string>
+
+    <!-- Strings used for invite_user_dialog_fragment -->
     <string name="send_invite_button_text">Send Invite</string>
     <string name="send_invite_hint_text">myFakeEmail@gmail.com</string>
     <string name="invite_dialog_title">Type the user\'s email below to send an invite</string>
 
+    <!-- Strings used for invite_user_dialog_fragment -->
+    <string name="are_you_sure_yes_text">Yes</string>
+    <string name="are_you_sure_header_text">Are you sure?</string>
+
     <!-- Misc -->
+    <string name="send_button_text">Send</string>
     <string name="back_str">Back</string>
     <string name="type_group_name">Type Your Group Name Here</string>
 

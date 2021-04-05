@@ -29,8 +29,8 @@ import com.group9.grouptivity.ui.models.GroupMessageViewModel;
 
 public class GroupMessageFragment extends Fragment {
     private View view;
-    private Button backButton;
-    private Button sendButton;
+    private Button leaveGroupButton;
+    private Button sendMessageButton;
     private Button sendInviteButton;
     private EditText messageEditText;
     private CompleteGroupMessage mCompleteGroupMessage;
@@ -65,10 +65,9 @@ public class GroupMessageFragment extends Fragment {
         groupMessageNameTextView = view.findViewById(R.id.group_message_banner);
         groupMessageNameTextView.setText(this.mCompleteGroupMessage.getName());
 
-        backButton = view.findViewById(R.id.invite_back_button);
-        backButton.setOnClickListener((View v) ->
-            NavHostFragment.findNavController(GroupMessageFragment.this)
-                    .navigate(R.id.action_GroupMessageFragment_to_GroupsFragment)
+        leaveGroupButton = view.findViewById(R.id.message_leave_group_button);
+        leaveGroupButton.setOnClickListener((View v) ->
+            createLeaveGroupDialog()
         );
 
         sendInviteButton = view.findViewById(R.id.message_invite_button);
@@ -76,8 +75,8 @@ public class GroupMessageFragment extends Fragment {
 
         messageEditText = view.findViewById(R.id.message_edittext);
 
-        sendButton = view.findViewById(R.id.message_send_button);
-        sendButton.setOnClickListener((View v) -> {
+        sendMessageButton = view.findViewById(R.id.message_send_button);
+        sendMessageButton.setOnClickListener((View v) -> {
             String messageBody = messageEditText.getText().toString();
             if (!messageBody.isEmpty()) {
                 messageEditText.setText("");
@@ -89,7 +88,7 @@ public class GroupMessageFragment extends Fragment {
     }
 
     /** Builds the recycler view to display the messages in this GroupMessage. */
-    public void buildGroupMessageInviteRecyclerView(View view) {
+    private void buildGroupMessageInviteRecyclerView(View view) {
         RecyclerView recyclerView = view.findViewById(R.id.message_recyclerview);
         final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         linearLayoutManager.setStackFromEnd(true);
@@ -100,14 +99,14 @@ public class GroupMessageFragment extends Fragment {
     }
 
     /** Creates a dialog box and displays it to the user to send an invite to another user. */
-    public void createSendInviteDialog() {
+    private void createSendInviteDialog() {
         final Dialog dialog = new Dialog(getContext());
         dialog.setContentView(R.layout.invite_user_dialog); // Assign to xml dialog layout
         TextView titleText = dialog.findViewById(R.id.invite_dialog_title);
         EditText emailEditText = dialog.findViewById(R.id.invite_dialog_editText);
-        Button sendButton = dialog.findViewById(R.id.invite_dialog_send_button);
+        Button sendInviteButton = dialog.findViewById(R.id.invite_dialog_send_button);
         Button cancelButton = dialog.findViewById(R.id.dialogButtonCancel);
-        sendButton.setOnClickListener((View v) -> {
+        sendInviteButton.setOnClickListener((View v) -> {
             sendInvite(emailEditText.getText().toString(), emailEditText);
         });
         cancelButton.setOnClickListener((View v) ->
@@ -117,12 +116,13 @@ public class GroupMessageFragment extends Fragment {
         dialog.show();
     }
 
-    public void sendInvite(String email, EditText emailEditText) {
+
+    private void sendInvite(String email, EditText emailEditText) {
 
         DataRetrievalListener drl = new DataRetrievalListener() {
             @Override
             public void onDataRetrieval() {
-                String toastText;
+                String toastText = "";
                 if (mInvitedUser.getDisplayName().equals("null")) {
                     toastText = "Unable to find user with email " + email;
                 } else if (mCompleteGroupMessage.containsMember(email)) {
@@ -141,6 +141,27 @@ public class GroupMessageFragment extends Fragment {
             }
         };
         mInvitedUser = FirebaseRTDBHelper.getInstance().getUserByEmail(email, drl);
+    }
+
+    /** Creates a dialog box and displays it to the user to confirm that they wish to leave the group message. */
+    private void createLeaveGroupDialog() {
+        final Dialog dialog = new Dialog(getContext());
+        dialog.setContentView(R.layout.are_you_sure_dialog); // Assign to xml dialog layout
+        TextView titleText = dialog.findViewById(R.id.are_you_sure_textView);
+        titleText.setText(String.format("Are you sure you wish to leave the group %s?", this.mCompleteGroupMessage.getName()));
+        Button yesButton = dialog.findViewById(R.id.are_you_sure_yes_button);
+        Button cancelButton = dialog.findViewById(R.id.are_you_sure_cancel_button);
+        yesButton.setOnClickListener((View v) -> {
+            FirebaseRTDBHelper.getInstance().removeCurrentUserFromGroupMessage(this.mCompleteGroupMessage.retrieveKey());
+            NavHostFragment.findNavController(GroupMessageFragment.this)
+                    .navigate(R.id.action_GroupMessageFragment_to_GroupsFragment);
+            dialog.dismiss();
+        });
+        cancelButton.setOnClickListener((View v) ->
+                dialog.dismiss()
+        );
+
+        dialog.show();
     }
 
     @Override
