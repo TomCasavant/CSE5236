@@ -80,23 +80,10 @@ public class MainActivity extends AppCompatActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         switch(id){
-            case R.id.action_settings:
-                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
-
-
-
-    /*@Override
-    public void onPoiClick(PointOfInterest poi) {
-        Toast.makeText(this, "Clicked: " +
-                        poi.name + "\nPlace ID:" + poi.placeId +
-                        "\nLatitude:" + poi.latLng.latitude +
-                        " Longitude:" + poi.latLng.longitude,
-                Toast.LENGTH_SHORT).show();
-    }*/
 
     @Override
     protected void onStart() {
@@ -127,29 +114,4 @@ public class MainActivity extends AppCompatActivity {
         super.onDestroy();
         Log.d("OnDestroy()", "Successfully ran Activity OnDestroy()");
     }
-
-    /*
-    /* Creates a dialog box and displays it to the user to allow them to sign in
-    public void createLoginDialog(){
-        final Dialog dialog = new Dialog(MainActivity.this);
-        dialog.setContentView(R.layout.login_page); // Assign to xml dialog layout
-
-        // Get username and password text boxes
-        TextView username = (TextView) dialog.findViewById(R.id.username);
-        TextView password = (TextView) dialog.findViewById(R.id.password);
-
-        Button loginButton = (Button) dialog.findViewById(R.id.loginButton);
-        Button createAccountButton = (Button) dialog.findViewById(R.id.createAccountButton);
-        loginButton.setOnClickListener((View v) -> {
-            FirebaseRTDBHelper.getInstance().login(username.getText().toString(), password.getText().toString(), this);
-            dialog.dismiss();
-        });
-        createAccountButton.setOnClickListener((View v) -> {
-            FirebaseRTDBHelper.getInstance().createAccount(username.getText().toString(), password.getText().toString(), this);
-            dialog.dismiss();
-        });
-
-        dialog.show();
-    }
-   */
 }

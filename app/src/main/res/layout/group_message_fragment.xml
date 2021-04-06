@@ -3,11 +3,12 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/drawer_layout"
+    android:id="@+id/group_message_drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <!-- The main content view -->
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -21,16 +22,17 @@
             android:layout_marginBottom="8dp"
             android:hint="@string/new_message_hint_text"
             android:importantForAutofill="no"
-            android:inputType="text"
+            android:inputType="textMultiLine"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/message_send_button"
             app:layout_constraintStart_toStartOf="parent"
-            tools:layout_constraintBottom_toBottomOf="parent" />
+            tools:layout_constraintBottom_toBottomOf="parent"/>
 
         <TextView
             android:id="@+id/group_message_banner"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
             android:fontFamily="sans-serif-black"
             android:gravity="center"
             android:importantForAutofill="no"
@@ -38,26 +40,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.044"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/groups_fragment_groups_button" />
-
-        <Button
-            android:id="@+id/groups_fragment_groups_button"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="@string/groups_button"
-            app:backgroundTint="#9C9C9C"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintWidth_percent=".50" />
-
-        <Button
-            android:id="@+id/groups_fragment_activities_button"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="@string/activities_button"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintWidth_percent=".50" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/message_recyclerview"
@@ -77,7 +60,6 @@
             android:text="@string/send_button_text"
             app:layout_constraintBaseline_toBaselineOf="@id/message_edittext"
             app:layout_constraintEnd_toEndOf="parent" />
-
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -108,14 +90,15 @@
                 android:id="@+id/message_member_recyclerview"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                app:layout_constraintBottom_toTopOf="@id/message_member_invite_button"
+                app:layout_constraintBottom_toTopOf="@id/message_rename_group_button"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/message_members_banner_textview">
 
             </androidx.recyclerview.widget.RecyclerView>
+
             <Button
-                android:id="@+id/rename_group_button"
+                android:id="@+id/message_rename_group_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
@@ -123,6 +106,7 @@
                 app:layout_constraintBottom_toTopOf="@id/message_member_invite_button"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />
+
             <Button
                 android:id="@+id/message_member_invite_button"
                 android:layout_width="wrap_content"

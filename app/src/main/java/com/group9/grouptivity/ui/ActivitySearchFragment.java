@@ -1,10 +1,6 @@
 package com.group9.grouptivity.ui;
 
-import android.Manifest;
-import android.app.Activity;
 import android.app.Dialog;
-import android.content.Context;
-import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -18,29 +14,22 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 
-import com.google.android.gms.common.api.ApiException;
-import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.CameraPosition;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PointOfInterest;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.api.net.FetchPlaceRequest;
 import com.google.android.libraries.places.api.net.PlacesClient;
+import com.google.android.material.navigation.NavigationView;
 import com.group9.grouptivity.R;
-import com.group9.grouptivity.firebase.DataRetrievalListener;
 import com.group9.grouptivity.firebase.FirebaseRTDBHelper;
-import com.group9.grouptivity.firebase.models.ActivityPollMessage;
 import com.group9.grouptivity.firebase.models.GroupActivity;
 import com.group9.grouptivity.firebase.models.GroupMessage;
 import com.squareup.picasso.Picasso;
@@ -49,9 +38,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class SecondFragment extends Fragment
+public class ActivitySearchFragment extends Fragment
 {
-    MapView mMapView;
+    private MapView mMapView;
+    private DrawerLayout mDrawerLayout;
     private GoogleMap googleMap;
     private static String PHOTO_URL = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=100&maxheight=100&&photoreference=%s&key=%s";
 
@@ -65,7 +55,7 @@ public class SecondFragment extends Fragment
 
         // Create a new PlacesClient instance
         PlacesClient placesClient = Places.createClient(getContext());
-        View view = inflater.inflate(R.layout.fragment_second, container, false);
+        View view = inflater.inflate(R.layout.fragment_activity_search, container, false);
         mMapView = (MapView) view.findViewById(R.id.mapView);
         mMapView.onCreate(savedInstanceState);
 
@@ -112,16 +102,16 @@ public class SecondFragment extends Fragment
         // Checks if user is logged in, if not send user to login page
         view.getRootView().findViewById(R.id.loginButton).setOnClickListener((View v) -> {
             if (!FirebaseRTDBHelper.getInstance().isLoggedIn()){
-                NavHostFragment.findNavController(SecondFragment.this)
+                NavHostFragment.findNavController(ActivitySearchFragment.this)
                         .navigate(R.id.loginFragment);
             } else {
                 FirebaseRTDBHelper.getInstance().logout();
-                NavHostFragment.findNavController(SecondFragment.this)
+                NavHostFragment.findNavController(ActivitySearchFragment.this)
                         .navigate(R.id.loginFragment);
             }
         });
         if (!FirebaseRTDBHelper.getInstance().isLoggedIn()){
-            NavHostFragment.findNavController(SecondFragment.this)
+            NavHostFragment.findNavController(ActivitySearchFragment.this)
                     .navigate(R.id.loginFragment);
         }
     }
@@ -153,15 +143,45 @@ public class SecondFragment extends Fragment
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        view.findViewById(R.id.activities_fragment_groups_button).setOnClickListener( (View v) ->
-                NavHostFragment.findNavController(SecondFragment.this)
-                        .navigate(R.id.action_SecondFragment_to_FirstFragment)
-        );
+        mDrawerLayout = view.findViewById(R.id.main_drawerLayout);
+        setupMainNavigationView(view);
         updateCurrentLoginInfo(view);
     }
 
+    /** Sets up the main navigation view for this fragment. */
+    private void setupMainNavigationView(View view) {
+        NavigationView navigationView = view.findViewById(R.id.main_navView);
+        View mainNavViewHeader = navigationView.getHeaderView(0); //Should only be one header view
+        TextView headerDisplayNameTextView = mainNavViewHeader.findViewById(R.id.main_navview_header_displayName);
+        if (FirebaseRTDBHelper.getInstance().isLoggedIn()) {
+            headerDisplayNameTextView.setText(FirebaseRTDBHelper.getInstance().getCurrentUser().getDisplayName());
+        }
+
+        //Need to find a way to use id and not int literal
+        navigationView.getMenu().getItem(1).setChecked(true); //Set activities menu item to checked
+
+        navigationView.setNavigationItemSelectedListener(item -> {
+            switch (item.getItemId()) {
+                case (R.id.main_navview_groups_item):
+                    NavHostFragment.findNavController(ActivitySearchFragment.this).navigate(R.id.action_ActivitySearchFragment_to_GroupsFragment);
+                    break;
+                case (R.id.main_navview_activities_item):
+                    //Do nothing. We are already here
+                    break;
+                case (R.id.main_navview_invites_item):
+                    NavHostFragment.findNavController(ActivitySearchFragment.this).navigate(R.id.action_ActivitySearchFragment_to_GroupInvitesFragment);
+                    break;
+                default:
+                    //error?
+                    break;
+            }
+            mDrawerLayout.closeDrawers();
+            return false; //don't change the current item in case the user comes back
+        });
+    }
+
     /** Creates a dialog box and displays it to the user to share to a group */
-    public void createShareDialog(Place place){
+    private void createShareDialog(Place place){
         final Dialog dialog = new Dialog(getContext());
         dialog.setContentView(R.layout.share_activity_dialog); // Assign to xml dialog layout
         TextView type = (TextView) dialog.findViewById(R.id.place_type);

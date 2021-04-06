@@ -74,7 +74,7 @@ public class GroupMessageFragment extends Fragment {
         sendInviteButton = view.findViewById(R.id.message_member_invite_button);
         sendInviteButton.setOnClickListener((View v) -> createSendInviteDialog());
 
-        renameGroupButton = view.findViewById(R.id.rename_group_button);
+        renameGroupButton = view.findViewById(R.id.message_rename_group_button);
         renameGroupButton.setOnClickListener((View v) -> createRenameDialog());
 
         messageEditText = view.findViewById(R.id.message_edittext);

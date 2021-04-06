@@ -10,8 +10,9 @@
     <string name="groups_fragment_label">First Fragment</string>
     <string name="second_fragment_label">Second Fragment</string>
     <string name="group_invites_fragment_label">Group Invites Fragment</string>
-    <string name="groups_button">Groups</string>
-    <string name="activities_button">Activities</string>
+    <string name="main_navview_groups_item_text">Groups</string>
+    <string name="main_navview_activities_item_text">Activities</string>
+    <string name="main_navview_invites_item_text">Pending Invites</string>
 
     <string name="groups_text">This is the Groups Fragment</string>
     <string name="activities_text">This is the Activities Fragment</string>
