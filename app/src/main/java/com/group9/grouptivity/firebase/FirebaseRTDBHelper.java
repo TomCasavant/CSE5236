@@ -122,11 +122,11 @@ public class FirebaseRTDBHelper {
                 }
             };
             userGroupMessageListRef.addValueEventListener(userGroupMessageListener);
+            mCurrentUser.setGroups(groupMessageList);
         } else {
             Log.e(LOG_TAG,"Unable to retrieve current user. Is one logged in?");
         }
 
-        mCurrentUser.setGroups(groupMessageList);
         return groupMessageList;
     }
 
