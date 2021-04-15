@@ -1,8 +1,13 @@
 package com.group9.grouptivity.ui;
 
+import android.Manifest;
+import android.app.Activity;
 import android.app.Dialog;
+import android.content.Context;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +19,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
@@ -44,24 +51,35 @@ public class ActivitySearchFragment extends Fragment
     private DrawerLayout mDrawerLayout;
     private GoogleMap googleMap;
     private static String PHOTO_URL = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=100&maxheight=100&&photoreference=%s&key=%s";
+    private boolean mLocationPermissionGranted = false;
+    private static final int PERMISSION_REQUEST_CODE = 1234;
+
 
     @Override
     public View onCreateView(
             LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState
     ) {
+
         // Initialize the SDK
         Places.initialize(getActivity().getApplicationContext(), "AIzaSyAepdUXTrbdi5C1yUygQ1Nf0ksyYbXAO6w");
 
         // Create a new PlacesClient instance
         PlacesClient placesClient = Places.createClient(getContext());
         View view = inflater.inflate(R.layout.fragment_activity_search, container, false);
+
+        if(ContextCompat.checkSelfPermission(this.getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
+            mLocationPermissionGranted = true;
+        } else {
+            ActivityCompat.requestPermissions(this.getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSION_REQUEST_CODE);
+        }
+
         mMapView = (MapView) view.findViewById(R.id.mapView);
         mMapView.onCreate(savedInstanceState);
 
         mMapView.onResume(); // needed to get the map to display immediately
 
-        try {
+        try{
             MapsInitializer.initialize(getActivity().getApplicationContext());
         } catch (Exception e) {
             e.printStackTrace();
@@ -88,7 +106,7 @@ public class ActivitySearchFragment extends Fragment
                             createShareDialog(place);
                             Log.i("MAPPING: ", "Place found: " + place.getName());
                         }).addOnFailureListener((exception) -> {
-                                Log.e("MAPPING: ", "Place not found: " + exception);
+                            Log.e("MAPPING: ", "Place not found: " + exception);
                         });
                     }
                 });
@@ -97,6 +115,23 @@ public class ActivitySearchFragment extends Fragment
         return view;
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                                           int[] grantResults) {
+        switch (requestCode) {
+            case PERMISSION_REQUEST_CODE:
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0 &&
+                        grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    mLocationPermissionGranted = true;
+                }  else {
+                    ActivityCompat.requestPermissions(this.getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSION_REQUEST_CODE);
+                }
+                return;
+        }
+        // Other 'case' lines to check for other
+        // permissions this app might request.
+    }
 
     private void updateCurrentLoginInfo(View view){
         // Checks if user is logged in, if not send user to login page
