@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.ContextThemeWrapper;
@@ -25,11 +26,17 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.PointOfInterest;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.api.net.FetchPlaceRequest;
@@ -45,14 +52,15 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class ActivitySearchFragment extends Fragment
-{
+public class ActivitySearchFragment extends Fragment {
     private MapView mMapView;
     private DrawerLayout mDrawerLayout;
     private GoogleMap googleMap;
     private static String PHOTO_URL = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=100&maxheight=100&&photoreference=%s&key=%s";
     private boolean mLocationPermissionGranted = false;
     private static final int PERMISSION_REQUEST_CODE = 1234;
+    private FusedLocationProviderClient mFusedLocationProviderClient;
+    private static final String TAG = "ActivitySearchFragment";
 
 
     @Override
@@ -68,7 +76,7 @@ public class ActivitySearchFragment extends Fragment
         PlacesClient placesClient = Places.createClient(getContext());
         View view = inflater.inflate(R.layout.fragment_activity_search, container, false);
 
-        if(ContextCompat.checkSelfPermission(this.getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
+        if (ContextCompat.checkSelfPermission(this.getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             mLocationPermissionGranted = true;
         } else {
             ActivityCompat.requestPermissions(this.getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSION_REQUEST_CODE);
@@ -79,7 +87,7 @@ public class ActivitySearchFragment extends Fragment
 
         mMapView.onResume(); // needed to get the map to display immediately
 
-        try{
+        try {
             MapsInitializer.initialize(getActivity().getApplicationContext());
         } catch (Exception e) {
             e.printStackTrace();
@@ -88,7 +96,13 @@ public class ActivitySearchFragment extends Fragment
             @Override
             public void onMapReady(GoogleMap mMap) {
                 googleMap = mMap;
-
+                if (mLocationPermissionGranted) {
+                    getDeviceLocation();
+                    if (ActivityCompat.checkSelfPermission(ActivitySearchFragment.this.getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(ActivitySearchFragment.this.getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                        return;
+                    }
+                    mMap.setMyLocationEnabled(true);
+                }
                 googleMap.setOnPoiClickListener(new GoogleMap.OnPoiClickListener() {
                     @Override
                     public void onPoiClick(PointOfInterest poi) {
@@ -181,6 +195,39 @@ public class ActivitySearchFragment extends Fragment
         mDrawerLayout = view.findViewById(R.id.main_drawerLayout);
         setupMainNavigationView(view);
         updateCurrentLoginInfo(view);
+    }
+
+    private void getDeviceLocation() {
+        Log.d(TAG,"getDeviceLocation: getting the device's current location");
+
+        mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this.getActivity());
+
+        try{
+            if(mLocationPermissionGranted){
+                Task location = mFusedLocationProviderClient.getLastLocation();
+                location.addOnCompleteListener(new OnCompleteListener() {
+                    @Override
+                    public void onComplete(@NonNull Task task) {
+                        if(task.isSuccessful()){
+                            Log.d(TAG, "onComplete: found location");
+                            Location currentLocation = (Location) task.getResult();
+                            moveCamera(new LatLng(currentLocation.getLatitude(), currentLocation.getLatitude()), 15f);
+                        } else{
+                            Log.d(TAG, "onComplete: location is null");
+                            Toast.makeText(ActivitySearchFragment.this.getContext(), "Unable to get current location.", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+            }
+        }catch (SecurityException e) {
+            Log.e(TAG, "getDeviceLocation: SecurityException: " + e.getMessage() );
+        }
+
+    }
+
+    private void moveCamera(LatLng latLng, float zoom){
+        Log.d(TAG, "moveCamera: moving camera to: lat: " + latLng.latitude + ", lng: " + latLng.longitude );
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom));
     }
 
     /** Sets up the main navigation view for this fragment. */
