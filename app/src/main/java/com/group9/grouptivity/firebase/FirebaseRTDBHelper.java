@@ -7,7 +7,6 @@ import android.widget.Button;
 
 import androidx.annotation.NonNull;
 
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuth.AuthStateListener;
@@ -33,6 +32,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.PriorityQueue;
+
+
 
 public class FirebaseRTDBHelper {
     private static FirebaseRTDBHelper instance = new FirebaseRTDBHelper();
