@@ -1,6 +1,5 @@
 package com.group9.grouptivity.firebase.models;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class UserAccount extends KeyedDataModel {

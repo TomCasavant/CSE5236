@@ -1,14 +1,11 @@
 package com.group9.grouptivity.firebase.models.recyclerViewAdapters.viewHolders;
 
 import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
 import com.group9.grouptivity.R;
-import com.group9.grouptivity.firebase.FirebaseRTDBHelper;
-import com.group9.grouptivity.firebase.models.GroupMessageMember;
 
 public class SimpleTextViewViewHolder extends AbstractClickableViewHolder {
     private TextView mTextView;

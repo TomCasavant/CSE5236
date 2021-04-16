@@ -1,18 +1,10 @@
 package com.group9.grouptivity.firebase.models;
 
-import android.provider.ContactsContract;
-
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.GenericTypeIndicator;
 import com.group9.grouptivity.firebase.FirebaseRTDBHelper;
-import com.group9.grouptivity.firebase.models.recyclerViewAdapters.MessageAdapter;
 import com.group9.grouptivity.firebase.models.recyclerViewAdapters.viewHolders.AbstractMessageViewHolder;
 import com.group9.grouptivity.firebase.models.recyclerViewAdapters.viewHolders.ActivityPollMessageViewHolder;
 
-import java.security.acl.Group;
 import java.util.ArrayList;
-import java.util.Dictionary;
 import java.util.HashMap;
 import java.util.List;
 

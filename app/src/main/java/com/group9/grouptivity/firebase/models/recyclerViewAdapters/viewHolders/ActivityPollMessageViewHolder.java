@@ -1,9 +1,5 @@
 package com.group9.grouptivity.firebase.models.recyclerViewAdapters.viewHolders;
 
-import android.content.res.Resources;
-import android.graphics.Color;
-import android.net.Uri;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -15,7 +11,6 @@ import com.group9.grouptivity.R;
 import com.group9.grouptivity.firebase.FirebaseRTDBHelper;
 import com.group9.grouptivity.firebase.models.ActivityPollMessage;
 import com.group9.grouptivity.firebase.models.GroupActivity;
-import com.group9.grouptivity.firebase.models.TextMessage;
 import com.squareup.picasso.Picasso;
 
 //TODO

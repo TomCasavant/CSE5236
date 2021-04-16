@@ -1,16 +1,14 @@
 package com.group9.grouptivity.ui.login;
 
+import android.app.Activity;
+import android.util.Patterns;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import android.app.Activity;
-import android.util.Patterns;
-
-import com.group9.grouptivity.data.LoginRepository;
-import com.group9.grouptivity.data.Result;
-import com.group9.grouptivity.data.model.LoggedInUser;
 import com.group9.grouptivity.R;
+import com.group9.grouptivity.data.LoginRepository;
 import com.group9.grouptivity.firebase.FirebaseRTDBHelper;
 
 public class LoginViewModel extends ViewModel {

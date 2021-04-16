@@ -9,7 +9,6 @@ import androidx.annotation.NonNull;
 import com.group9.grouptivity.R;
 import com.group9.grouptivity.firebase.FirebaseRTDBHelper;
 import com.group9.grouptivity.firebase.models.GroupMessageInvite;
-import com.group9.grouptivity.firebase.models.GroupMessageMember;
 
 public class GroupMessageInviteViewHolder extends AbstractClickableViewHolder {
     private String mGroupMessageId;

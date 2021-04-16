@@ -1,7 +1,6 @@
 package com.group9.grouptivity.firebase.models;
 
 import com.group9.grouptivity.firebase.FirebaseRTDBHelper;
-import com.group9.grouptivity.firebase.models.recyclerViewAdapters.MessageAdapter;
 import com.group9.grouptivity.firebase.models.recyclerViewAdapters.viewHolders.AbstractMessageViewHolder;
 import com.group9.grouptivity.firebase.models.recyclerViewAdapters.viewHolders.TextMessageViewHolder;
 

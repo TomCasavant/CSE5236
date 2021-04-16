@@ -38,12 +38,7 @@ public class GroupsFragment extends Fragment {
     private void buildGroupMessageRecyclerView(View view){
         RecyclerView recyclerView = view.findViewById(R.id.group_message_recyclerview);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        DataRetrievalListener dataRetrievalListener = new DataRetrievalListener() {
-            @Override
-            public void onDataRetrieval() {
-                mGroupMessageAdapter.notifyDataSetChanged();
-            }
-        };
+        DataRetrievalListener dataRetrievalListener = () -> mGroupMessageAdapter.notifyDataSetChanged();
         ItemClickListener itemClickListener = (view1, position) -> {
             //Store the groupMessage clicked on for retrieval by the GroupMessageFragment
             mViewModel.setGroupMessage(mGroupMessageAdapter.getItem(position));

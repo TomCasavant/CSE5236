@@ -4,10 +4,8 @@ import android.view.View;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.group9.grouptivity.R;
-import com.group9.grouptivity.firebase.ItemClickListener;
 import com.group9.grouptivity.firebase.models.GroupMessage;
 
 public class GroupMessageViewHolder extends AbstractClickableViewHolder {
