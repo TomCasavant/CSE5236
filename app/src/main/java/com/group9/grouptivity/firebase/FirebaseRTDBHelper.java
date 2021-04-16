@@ -68,6 +68,9 @@ public class FirebaseRTDBHelper {
 
     //private constructor for singleton
     private FirebaseRTDBHelper() {
+        //Enable data persistence for if user loses connection
+        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+
         mAuth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance().getReference();
         if (mAuth.getCurrentUser() != null) {
