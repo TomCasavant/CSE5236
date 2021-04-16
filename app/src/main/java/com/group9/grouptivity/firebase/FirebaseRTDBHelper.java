@@ -73,6 +73,7 @@ public class FirebaseRTDBHelper {
 
         mAuth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance().getReference();
+        mDatabase.keepSynced(true); // Cache data locally
         if (mAuth.getCurrentUser() != null) {
             mCurrentUserRef = mDatabase.child(USER_ACCOUNTS_STR).child(mAuth.getCurrentUser().getUid());
             mCurrentUser = new UserAccount(mAuth.getCurrentUser().getEmail(), mAuth.getCurrentUser().getDisplayName());
