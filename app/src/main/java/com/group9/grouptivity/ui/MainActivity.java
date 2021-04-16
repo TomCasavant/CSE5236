@@ -19,6 +19,7 @@ import com.group9.grouptivity.firebase.FirebaseRTDBHelper;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.Navigation;
@@ -36,6 +37,7 @@ import android.util.Log;
 
 public class MainActivity extends AppCompatActivity {
 
+    private static final int PERMISSION_REQUEST_CODE = 1234;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
         };
         FirebaseRTDBHelper.getInstance().createListener(mAuthListener);
         setSupportActionBar(toolbar);
-
+        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSION_REQUEST_CODE);
         Log.d("OnCreate()", "Successfully ran Activity OnCreate()");
     }
 

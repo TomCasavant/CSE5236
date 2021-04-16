@@ -4,9 +4,13 @@ import android.Manifest;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.location.LocationManager;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
@@ -196,7 +200,20 @@ public class ActivitySearchFragment extends Fragment {
         setupMainNavigationView(view);
         updateCurrentLoginInfo(view);
     }
+    public boolean isLocationEnabled()
+    {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            // This is new method provided in API 28
+            LocationManager lm = (LocationManager) this.getContext().getSystemService(Context.LOCATION_SERVICE);
+            return lm.isLocationEnabled();
+        } else {
+            // This is Deprecated in API 28
+            int mode = Settings.Secure.getInt(this.getContext().getContentResolver(), Settings.Secure.LOCATION_MODE,
+                    Settings.Secure.LOCATION_MODE_OFF);
+            return  (mode != Settings.Secure.LOCATION_MODE_OFF);
 
+        }
+    }
     private void getDeviceLocation() {
         Log.d(TAG,"getDeviceLocation: getting the device's current location");
 
@@ -204,20 +221,26 @@ public class ActivitySearchFragment extends Fragment {
 
         try{
             if(mLocationPermissionGranted){
-                Task location = mFusedLocationProviderClient.getLastLocation();
-                location.addOnCompleteListener(new OnCompleteListener() {
-                    @Override
-                    public void onComplete(@NonNull Task task) {
-                        if(task.isSuccessful()){
-                            Log.d(TAG, "onComplete: found location");
-                            Location currentLocation = (Location) task.getResult();
-                            moveCamera(new LatLng(currentLocation.getLatitude(), currentLocation.getLatitude()), 15f);
-                        } else{
-                            Log.d(TAG, "onComplete: location is null");
-                            Toast.makeText(ActivitySearchFragment.this.getContext(), "Unable to get current location.", Toast.LENGTH_SHORT).show();
+                if (isLocationEnabled()){
+                    Task location = mFusedLocationProviderClient.getLastLocation();
+                    location.addOnCompleteListener(new OnCompleteListener() {
+                        @Override
+                        public void onComplete(@NonNull Task task) {
+                            if(task.isSuccessful()){
+                                Log.d(TAG, "onComplete: found location");
+                                Location currentLocation = (Location) task.getResult();
+                                moveCamera(new LatLng(currentLocation.getLatitude(), currentLocation.getLatitude()), 15f);
+                            } else{
+                                Log.d(TAG, "onComplete: location is null");
+                                Toast.makeText(ActivitySearchFragment.this.getContext(), "Unable to get current location.", Toast.LENGTH_SHORT).show();
+                            }
                         }
-                    }
-                });
+                    });
+                } else {
+                    Log.d("Location Services: ", "Location is not enabled");
+                    Toast.makeText(this.getContext(), "Location Services are not enabled on this device", Toast.LENGTH_SHORT).show();
+                }
+
             }
         }catch (SecurityException e) {
             Log.e(TAG, "getDeviceLocation: SecurityException: " + e.getMessage() );
