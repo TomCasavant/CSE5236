@@ -25,18 +25,17 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
-import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.PointOfInterest;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.Place;
@@ -47,6 +46,8 @@ import com.group9.grouptivity.R;
 import com.group9.grouptivity.firebase.FirebaseRTDBHelper;
 import com.group9.grouptivity.firebase.models.GroupActivity;
 import com.group9.grouptivity.firebase.models.GroupMessage;
+import com.group9.grouptivity.ui.models.GroupMessageViewModel;
+import com.group9.grouptivity.ui.models.LatLngViewModel;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -60,8 +61,9 @@ public class ActivitySearchFragment extends Fragment {
     private static String PHOTO_URL = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=100&maxheight=100&&photoreference=%s&key=%s";
     private boolean mLocationPermissionGranted = false;
     private static final int PERMISSION_REQUEST_CODE = 1234;
-    private FusedLocationProviderClient mFusedLocationProviderClient;
     private static final String TAG = "ActivitySearchFragment";
+    private static final float INITIAL_ZOOM = 15f;
+    private LatLngViewModel mLatLngViewModel;
 
 
     @Override
@@ -73,8 +75,7 @@ public class ActivitySearchFragment extends Fragment {
         // Initialize the SDK
         Places.initialize(getActivity().getApplicationContext(), "AIzaSyAepdUXTrbdi5C1yUygQ1Nf0ksyYbXAO6w");
 
-        // Create a new PlacesClient instance
-        PlacesClient placesClient = Places.createClient(getContext());
+
         View view = inflater.inflate(R.layout.fragment_activity_search, container, false);
 
         if (ContextCompat.checkSelfPermission(this.getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
@@ -83,50 +84,13 @@ public class ActivitySearchFragment extends Fragment {
             ActivityCompat.requestPermissions(this.getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSION_REQUEST_CODE);
         }
 
-        mMapView = (MapView) view.findViewById(R.id.mapView);
-        mMapView.onCreate(savedInstanceState);
-
-        mMapView.onResume(); // needed to get the map to display immediately
-
         try {
             MapsInitializer.initialize(getActivity().getApplicationContext());
         } catch (Exception e) {
             e.printStackTrace();
         }
-        mMapView.getMapAsync(new OnMapReadyCallback() {
-            @Override
-            public void onMapReady(GoogleMap mMap) {
-                googleMap = mMap;
-                if (mLocationPermissionGranted) {
-                    getDeviceLocation();
-                    if (ActivityCompat.checkSelfPermission(ActivitySearchFragment.this.getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(ActivitySearchFragment.this.getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                        return;
-                    }
-                    mMap.setMyLocationEnabled(true);
-                }
-                googleMap.setOnPoiClickListener(new GoogleMap.OnPoiClickListener() {
-                    @Override
-                    public void onPoiClick(PointOfInterest poi) {
-                        // Define a Place ID.
-                        String placeId = poi.placeId;
 
-                        // Specify the fields to return.
-                        List<Place.Field> placeFields = Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.ADDRESS, Place.Field.TYPES);
 
-                        // Construct a request object, passing the place ID and fields array.
-                        FetchPlaceRequest request = FetchPlaceRequest.newInstance(placeId, placeFields);
-
-                        placesClient.fetchPlace(request).addOnSuccessListener((response) -> {
-                            Place place = response.getPlace();
-                            createShareDialog(place);
-                            Log.i("MAPPING: ", "Place found: " + place.getName());
-                        }).addOnFailureListener((exception) -> {
-                            Log.e("MAPPING: ", "Place not found: " + exception);
-                        });
-                    }
-                });
-            }
-        });
         return view;
     }
 
@@ -142,23 +106,21 @@ public class ActivitySearchFragment extends Fragment {
                 }  else {
                     ActivityCompat.requestPermissions(this.getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSION_REQUEST_CODE);
                 }
-                return;
         }
         // Other 'case' lines to check for other
         // permissions this app might request.
     }
 
+
+
     private void updateCurrentLoginInfo(View view){
         // Checks if user is logged in, if not send user to login page
         view.getRootView().findViewById(R.id.loginButton).setOnClickListener((View v) -> {
-            if (!FirebaseRTDBHelper.getInstance().isLoggedIn()){
-                NavHostFragment.findNavController(ActivitySearchFragment.this)
-                        .navigate(R.id.loginFragment);
-            } else {
+            if (FirebaseRTDBHelper.getInstance().isLoggedIn()) {
                 FirebaseRTDBHelper.getInstance().logout();
-                NavHostFragment.findNavController(ActivitySearchFragment.this)
-                        .navigate(R.id.loginFragment);
             }
+            NavHostFragment.findNavController(ActivitySearchFragment.this)
+                    .navigate(R.id.loginFragment);
         });
         if (!FirebaseRTDBHelper.getInstance().isLoggedIn()){
             NavHostFragment.findNavController(ActivitySearchFragment.this)
@@ -193,11 +155,52 @@ public class ActivitySearchFragment extends Fragment {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        mLatLngViewModel = new ViewModelProvider(requireActivity()).get(LatLngViewModel.class);
+
+        mMapView = (MapView) view.findViewById(R.id.mapView);
+        mMapView.onCreate(savedInstanceState);
+        // Create a new PlacesClient instance
+        PlacesClient placesClient = Places.createClient(getContext());
+
+        mMapView.onResume(); // needed to get the map to display immediately
+        mMapView.getMapAsync(mMap -> {
+            googleMap = mMap;
+            if (mLocationPermissionGranted) {
+                if (mLatLngViewModel.hasLatLng()) {
+                    moveCamera(mLatLngViewModel.getLatLng(), INITIAL_ZOOM);
+                } else {
+                    getDeviceLocation();
+                }
+                if (ActivityCompat.checkSelfPermission(ActivitySearchFragment.this.getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(ActivitySearchFragment.this.getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                    return;
+                }
+                mMap.setMyLocationEnabled(true);
+            }
+            googleMap.setOnPoiClickListener(poi -> {
+                // Define a Place ID.
+                String placeId = poi.placeId;
+
+                // Specify the fields to return.
+                List<Place.Field> placeFields = Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.ADDRESS, Place.Field.TYPES);
+
+                // Construct a request object, passing the place ID and fields array.
+                FetchPlaceRequest request = FetchPlaceRequest.newInstance(placeId, placeFields);
+
+                placesClient.fetchPlace(request).addOnSuccessListener((response) -> {
+                    Place place = response.getPlace();
+                    createShareDialog(place);
+                    Log.i("MAPPING: ", "Place found: " + place.getName());
+                }).addOnFailureListener((exception) -> {
+                    Log.e("MAPPING: ", "Place not found: " + exception);
+                });
+            });
+        });
+
         mDrawerLayout = view.findViewById(R.id.main_drawerLayout);
         setupMainNavigationView(view);
         updateCurrentLoginInfo(view);
     }
-    public boolean isLocationEnabled()
+    private boolean isLocationEnabled()
     {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
             // This is new method provided in API 28
@@ -214,23 +217,23 @@ public class ActivitySearchFragment extends Fragment {
     private void getDeviceLocation() {
         Log.d(TAG,"getDeviceLocation: getting the device's current location");
 
-        mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this.getActivity());
+        FusedLocationProviderClient mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this.getActivity());
+
 
         try{
             if(mLocationPermissionGranted){
                 if (isLocationEnabled()){
                     Task location = mFusedLocationProviderClient.getLastLocation();
-                    location.addOnCompleteListener(new OnCompleteListener() {
-                        @Override
-                        public void onComplete(@NonNull Task task) {
-                            if(task.isSuccessful()){
-                                Log.d(TAG, "onComplete: found location");
-                                Location currentLocation = (Location) task.getResult();
-                                moveCamera(new LatLng(currentLocation.getLatitude(), currentLocation.getLatitude()), 15f);
-                            } else{
-                                Log.d(TAG, "onComplete: location is null");
-                                Toast.makeText(ActivitySearchFragment.this.getContext(), "Unable to get current location.", Toast.LENGTH_SHORT).show();
-                            }
+                    location.addOnCompleteListener(task -> {
+                        if(task.isSuccessful()){
+                            Log.d(TAG, "onComplete: found location");
+                            Location currentLocation = (Location) task.getResult();
+                            LatLng latLng = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
+                            mLatLngViewModel.setLatLng(latLng);
+                            moveCamera(latLng, INITIAL_ZOOM);
+                        } else{
+                            Log.d(TAG, "onComplete: location is null");
+                            Toast.makeText(ActivitySearchFragment.this.getContext(), "Unable to get current location.", Toast.LENGTH_SHORT).show();
                         }
                     });
                 } else {
@@ -247,7 +250,7 @@ public class ActivitySearchFragment extends Fragment {
 
     private void moveCamera(LatLng latLng, float zoom){
         Log.d(TAG, "moveCamera: moving camera to: lat: " + latLng.latitude + ", lng: " + latLng.longitude );
-        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom));
+        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,zoom));
     }
 
     /** Sets up the main navigation view for this fragment. */
@@ -313,7 +316,7 @@ public class ActivitySearchFragment extends Fragment {
         }
 
         // Creating adapter for spinner
-        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_dropdown_item, groupNames);
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, groupNames);
         spinner.setAdapter(dataAdapter);
         // Create button handlers */
         Button shareButton = (Button) dialog.findViewById(R.id.dialogButtonShare);
