@@ -7,7 +7,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
@@ -26,22 +25,19 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
-        if (FirebaseRTDBHelper.getInstance().isLoggedIn()) {
-            ((Button) toolbar.findViewById(R.id.loginButton)).setText("Logout");
+        if (FirebaseRTDBHelper.getInstance().isLoggedIn()){
+            ((Button)toolbar.findViewById(R.id.loginButton)).setText("Logout");
         } else {
-            ((Button) toolbar.findViewById(R.id.loginButton)).setText("Login");
+            ((Button)toolbar.findViewById(R.id.loginButton)).setText("Login");
         }
-        FirebaseAuth.AuthStateListener mAuthListener = new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                FirebaseUser user = firebaseAuth.getCurrentUser();
-                if (user != null) {
-                    // User is logged in, update accordingly
-                    ((Button) toolbar.findViewById(R.id.loginButton)).setText("Logout");
-                } else {
-                    // User is not logged in update accordingly
-                    ((Button) toolbar.findViewById(R.id.loginButton)).setText("Login");
-                }
+        FirebaseAuth.AuthStateListener mAuthListener = firebaseAuth -> {
+            FirebaseUser user = firebaseAuth.getCurrentUser();
+            if (user != null){
+                // User is logged in, update accordingly
+                ((Button)toolbar.findViewById(R.id.loginButton)).setText("Logout");
+            } else {
+                // User is not logged in update accordingly
+                ((Button)toolbar.findViewById(R.id.loginButton)).setText("Login");
             }
         };
         FirebaseRTDBHelper.getInstance().createListener(mAuthListener);
@@ -63,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-        switch (id) {
+        switch(id){
             default:
                 return super.onOptionsItemSelected(item);
         }

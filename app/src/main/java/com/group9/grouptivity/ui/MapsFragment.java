@@ -12,9 +12,7 @@ import com.google.android.gms.maps.model.PointOfInterest;
 import com.group9.grouptivity.R;
 
 public class MapsFragment extends AppCompatActivity implements
-        OnMapReadyCallback, GoogleMap.OnPoiClickListener {
-
-    private GoogleMap mMap;
+    OnMapReadyCallback, GoogleMap.OnPoiClickListener{
     /**
      * Request code for location permission request.
      *

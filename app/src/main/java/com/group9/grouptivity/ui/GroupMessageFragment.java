@@ -139,26 +139,23 @@ public class GroupMessageFragment extends Fragment {
 
     private void sendInvite(String email, EditText emailEditText) {
 
-        DataRetrievalListener drl = new DataRetrievalListener() {
-            @Override
-            public void onDataRetrieval() {
-                String toastText;
-                if (mInvitedUser.getDisplayName().equals("null")) {
-                    toastText = "Unable to find user with email " + email;
-                } else if (mCompleteGroupMessage.containsMember(email)) {
-                    toastText = "User " + mInvitedUser.getDisplayName() + " is already in this group.";
-                } else if (mCompleteGroupMessage.containsInvite(mInvitedUser.retrieveKey())) {
-                    toastText = "User " + mInvitedUser.getDisplayName() + " already has a pending invite to this group.";
-                } else { //Invite is valid
-                    toastText = "Successfully sent invite to user " + mInvitedUser.getDisplayName() + " to the group.";
-                    String senderName = FirebaseRTDBHelper.getInstance().getCurrentUser().getDisplayName();
-                    GroupMessageInvite invite = new GroupMessageInvite(mCompleteGroupMessage, senderName);
-                    FirebaseRTDBHelper.getInstance().sendInviteToUser(mInvitedUser.retrieveKey(), invite);
-                    emailEditText.setText("");
-                }
-                Toast.makeText(getActivity(), toastText, Toast.LENGTH_LONG).show();
-
+        DataRetrievalListener drl = () -> {
+            String toastText;
+            if (mInvitedUser.getDisplayName().equals("null")) {
+                toastText = "Unable to find user with email " + email;
+            } else if (mCompleteGroupMessage.containsMember(email)) {
+                toastText = "User " + mInvitedUser.getDisplayName() + " is already in this group.";
+            } else if (mCompleteGroupMessage.containsInvite(mInvitedUser.retrieveKey())) {
+                toastText = "User " + mInvitedUser.getDisplayName() + " already has a pending invite to this group.";
+            } else { //Invite is valid
+                toastText = "Successfully sent invite to user " + mInvitedUser.getDisplayName() + " to the group.";
+                String senderName = FirebaseRTDBHelper.getInstance().getCurrentUser().getDisplayName();
+                GroupMessageInvite invite = new GroupMessageInvite(mCompleteGroupMessage, senderName);
+                FirebaseRTDBHelper.getInstance().sendInviteToUser(mInvitedUser.retrieveKey(), invite);
+                emailEditText.setText("");
             }
+            Toast.makeText(getActivity(), toastText, Toast.LENGTH_LONG).show();
+
         };
         mInvitedUser = FirebaseRTDBHelper.getInstance().getUserByEmail(email, drl);
     }
