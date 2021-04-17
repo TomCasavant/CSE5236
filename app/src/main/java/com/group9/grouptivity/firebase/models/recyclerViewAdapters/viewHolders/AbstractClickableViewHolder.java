@@ -22,8 +22,9 @@ public abstract class AbstractClickableViewHolder extends RecyclerView.ViewHolde
     }
 
 
-
-    /** Allows click events to be caught. */
+    /**
+     * Allows click events to be caught.
+     */
     public void setClickListener(ItemClickListener itemClickListener) {
         this.mItemClickListener = itemClickListener;
     }

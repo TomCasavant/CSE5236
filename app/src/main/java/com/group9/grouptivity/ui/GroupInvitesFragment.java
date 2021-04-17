@@ -5,7 +5,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -27,7 +26,9 @@ public class GroupInvitesFragment extends Fragment {
     private DrawerLayout mDrawerLayout;
     private GroupMessageInviteAdapter groupMessageInviteAdapter;
 
-    /** Sets up the main navigation view for this fragment. */
+    /**
+     * Sets up the main navigation view for this fragment.
+     */
     private void setupMainNavigationView(View view) {
         NavigationView navigationView = view.findViewById(R.id.main_navView);
         View mainNavViewHeader = navigationView.getHeaderView(0); //Should only be one header view
@@ -59,8 +60,10 @@ public class GroupInvitesFragment extends Fragment {
         });
     }
 
-    /** Builds the recycler view to display the list of pending Group Message Invites the user has. */
-    private void buildGroupMessageInviteRecyclerView(View view){
+    /**
+     * Builds the recycler view to display the list of pending Group Message Invites the user has.
+     */
+    private void buildGroupMessageInviteRecyclerView(View view) {
         RecyclerView recyclerView = view.findViewById(R.id.group_message_recyclerview);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         DataRetrievalListener dataRetrievalListener = () -> groupMessageInviteAdapter.notifyDataSetChanged();
@@ -87,7 +90,6 @@ public class GroupInvitesFragment extends Fragment {
         mDrawerLayout = view.findViewById(R.id.main_drawerLayout);
         setupMainNavigationView(view);
     }
-
 
 
     @Override

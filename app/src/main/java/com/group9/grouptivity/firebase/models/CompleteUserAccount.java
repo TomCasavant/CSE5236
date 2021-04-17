@@ -25,23 +25,31 @@ public class CompleteUserAccount extends UserAccount {
         this.mGroupMessageInviteList = invites;
     }
 
-    /** Sets the list of group messages that the user account is currently a member of. */
-    public void setGroupMessages(List<GroupMessage> groupMessages){
+    /**
+     * Sets the list of group messages that the user account is currently a member of.
+     */
+    public void setGroupMessages(List<GroupMessage> groupMessages) {
         this.mGroupMessageList = groupMessages;
     }
 
-    /** Sets the list of pending group message invites the user account currently has. */
+    /**
+     * Sets the list of pending group message invites the user account currently has.
+     */
     public void setInvites(List<GroupMessageInvite> invites) {
         this.mGroupMessageInviteList = invites;
     }
 
-    /** Returns the list of group messages that the user account is currently a member of. */
-    public List<GroupMessage> getGroupMessages(){
+    /**
+     * Returns the list of group messages that the user account is currently a member of.
+     */
+    public List<GroupMessage> getGroupMessages() {
         return this.mGroupMessageList;
     }
 
-    /** Returns the list of pending group message invites the user account currently has. */
-    public List<GroupMessageInvite> getInvites(){
+    /**
+     * Returns the list of pending group message invites the user account currently has.
+     */
+    public List<GroupMessageInvite> getInvites() {
         return this.mGroupMessageInviteList;
     }
 }

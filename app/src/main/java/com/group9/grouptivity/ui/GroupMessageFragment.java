@@ -68,7 +68,7 @@ public class GroupMessageFragment extends Fragment {
 
         leaveGroupButton = view.findViewById(R.id.message_leave_group_button);
         leaveGroupButton.setOnClickListener((View v) ->
-            createLeaveGroupDialog()
+                createLeaveGroupDialog()
         );
 
         sendInviteButton = view.findViewById(R.id.message_member_invite_button);
@@ -92,7 +92,9 @@ public class GroupMessageFragment extends Fragment {
         buildGroupMessageMemberRecyclerView(view);
     }
 
-    /** Builds the recycler view to display the messages in this GroupMessage. */
+    /**
+     * Builds the recycler view to display the messages in this GroupMessage.
+     */
     private void buildMessageRecyclerView(View view) {
         RecyclerView recyclerView = view.findViewById(R.id.message_recyclerview);
         final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
@@ -103,7 +105,9 @@ public class GroupMessageFragment extends Fragment {
         recyclerView.setAdapter(messageAdapter);
     }
 
-    /** Builds the recycler view to display the members in this GroupMessage. */
+    /**
+     * Builds the recycler view to display the members in this GroupMessage.
+     */
     private void buildGroupMessageMemberRecyclerView(View view) {
         RecyclerView recyclerView = view.findViewById(R.id.message_member_recyclerview);
         final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
@@ -112,7 +116,9 @@ public class GroupMessageFragment extends Fragment {
         recyclerView.setAdapter(this.groupMessageMemberAdapter);
     }
 
-    /** Creates a dialog box and displays it to the user to send an invite to another user. */
+    /**
+     * Creates a dialog box and displays it to the user to send an invite to another user.
+     */
     private void createSendInviteDialog() {
         final Dialog dialog = new Dialog(getContext());
         dialog.setContentView(R.layout.invite_user_dialog); // Assign to xml dialog layout
@@ -121,7 +127,7 @@ public class GroupMessageFragment extends Fragment {
         Button sendInviteButton = dialog.findViewById(R.id.invite_dialog_send_button);
         Button cancelButton = dialog.findViewById(R.id.dialogButtonCancel);
         sendInviteButton.setOnClickListener((View v) ->
-            sendInvite(emailEditText.getText().toString(), emailEditText)
+                sendInvite(emailEditText.getText().toString(), emailEditText)
         );
         cancelButton.setOnClickListener((View v) ->
                 dialog.dismiss()
@@ -157,7 +163,9 @@ public class GroupMessageFragment extends Fragment {
         mInvitedUser = FirebaseRTDBHelper.getInstance().getUserByEmail(email, drl);
     }
 
-    /** Creates a dialog box and displays it to the user to confirm that they wish to leave the group message. */
+    /**
+     * Creates a dialog box and displays it to the user to confirm that they wish to leave the group message.
+     */
     private void createLeaveGroupDialog() {
         final Dialog dialog = new Dialog(getContext());
         dialog.setContentView(R.layout.are_you_sure_dialog); // Assign to xml dialog layout
@@ -178,7 +186,7 @@ public class GroupMessageFragment extends Fragment {
         dialog.show();
     }
 
-    private void createRenameDialog(){
+    private void createRenameDialog() {
         final Dialog dialog = new Dialog(getContext());
         dialog.setContentView(R.layout.create_group_dialog); // Assign to xml dialog layout
         TextView titleText = dialog.findViewById(R.id.text);

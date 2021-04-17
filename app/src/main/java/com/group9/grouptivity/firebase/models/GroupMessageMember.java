@@ -12,7 +12,7 @@ public class GroupMessageMember extends UserAccount {
         this.mIsMuted = false;
     }
 
-    public GroupMessageMember(String emailAddress, String displayName){
+    public GroupMessageMember(String emailAddress, String displayName) {
         super(emailAddress, displayName);
         this.mIsMuted = false;
     }
@@ -22,12 +22,16 @@ public class GroupMessageMember extends UserAccount {
         this.mIsMuted = isMuted;
     }
 
-    /** Returns whether the GroupMessage Member has the GroupMessage muted. */
+    /**
+     * Returns whether the GroupMessage Member has the GroupMessage muted.
+     */
     public boolean getIsMuted() {
         return this.mIsMuted;
     }
 
-    /** Sets the value of isMuted to the given boolean. */
+    /**
+     * Sets the value of isMuted to the given boolean.
+     */
     public void setIsMuted(boolean isMuted) {
         this.mIsMuted = isMuted;
     }

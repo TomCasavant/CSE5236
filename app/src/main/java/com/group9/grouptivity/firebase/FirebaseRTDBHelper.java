@@ -77,14 +77,20 @@ public class FirebaseRTDBHelper {
         }
     }
 
-    public static FirebaseRTDBHelper getInstance() { return instance; }
+    public static FirebaseRTDBHelper getInstance() {
+        return instance;
+    }
 
-    /** Adds a Group Message with the given name to the realtime firebase database. */
+    /**
+     * Adds a Group Message with the given name to the realtime firebase database.
+     */
     public void addGroupMessage(String groupName) {
         addGroupMessage(new GroupMessage(groupName));
     }
 
-    /** Adds a Group Message with the given name to the realtime firebase database. */
+    /**
+     * Adds a Group Message with the given name to the realtime firebase database.
+     */
     public void addGroupMessage(GroupMessage groupMessage) {
         if (mAuth.getCurrentUser() != null) {
             DatabaseReference newGroup = mDatabase.child(GROUP_MESSAGES_STR).push();
@@ -92,11 +98,13 @@ public class FirebaseRTDBHelper {
             addCurrentUserToGroupMessage(newGroup.getKey(), groupMessage.getName());
 
         } else {
-            Log.e(LOG_TAG,"Unable to retrieve user. Is one logged in?");
+            Log.e(LOG_TAG, "Unable to retrieve user. Is one logged in?");
         }
     }
 
-    /** Returns a list group messages of which the current user is a part. */
+    /**
+     * Returns a list group messages of which the current user is a part.
+     */
     public List<GroupMessage> getGroupMessages(DataRetrievalListener dataRetrievalListener) {
         List<GroupMessage> groupMessageList = new ArrayList<>();
         if (mCurrentUserRef != null) {
@@ -124,46 +132,50 @@ public class FirebaseRTDBHelper {
             userGroupMessageListRef.addValueEventListener(userGroupMessageListener);
             mCurrentUser.setGroups(groupMessageList);
         } else {
-            Log.e(LOG_TAG,"Unable to retrieve current user. Is one logged in?");
+            Log.e(LOG_TAG, "Unable to retrieve current user. Is one logged in?");
         }
 
         return groupMessageList;
     }
 
-    /** Returns a CompleteGroupMessage containing a list of users and all pending invites
-     * associated with the given GroupMessage. */
+    /**
+     * Returns a CompleteGroupMessage containing a list of users and all pending invites
+     * associated with the given GroupMessage.
+     */
     public CompleteGroupMessage completeGroupMessage(GroupMessage groupMessage, DataRetrievalListener dataRetrievalListener) {
         CompleteGroupMessage completeGroupMessage = new CompleteGroupMessage(groupMessage);
         DatabaseReference groupMessageRef = mDatabase.child(GROUP_MESSAGES_STR).child(groupMessage.retrieveKey());
 
-            ValueEventListener groupMessageListener = new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    completeGroupMessage.clear(); //Need to clear lists to prevent duplicates
-                    for (DataSnapshot child : snapshot.child(GROUP_USERS_STR).getChildren()) {
-                        GroupMessageMember member = child.getValue(GroupMessageMember.class);
-                        member.setKey(child.getKey());
-                        completeGroupMessage.addMember(member);
-                    }
-                    for (DataSnapshot child : snapshot.child(INVITES_STR).getChildren()) {
-                        completeGroupMessage.addGroupMessageInvite(child.getKey());
-                    }
-                    dataRetrievalListener.onDataRetrieval(); //Notify listener
+        ValueEventListener groupMessageListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                completeGroupMessage.clear(); //Need to clear lists to prevent duplicates
+                for (DataSnapshot child : snapshot.child(GROUP_USERS_STR).getChildren()) {
+                    GroupMessageMember member = child.getValue(GroupMessageMember.class);
+                    member.setKey(child.getKey());
+                    completeGroupMessage.addMember(member);
                 }
+                for (DataSnapshot child : snapshot.child(INVITES_STR).getChildren()) {
+                    completeGroupMessage.addGroupMessageInvite(child.getKey());
+                }
+                dataRetrievalListener.onDataRetrieval(); //Notify listener
+            }
 
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
-                    Log.e(LOG_TAG, error.getMessage());
-                    //Toast.makeText()
-                    //need context for error to toast
-                }
-            };
-            groupMessageRef.addValueEventListener(groupMessageListener);
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.e(LOG_TAG, error.getMessage());
+                //Toast.makeText()
+                //need context for error to toast
+            }
+        };
+        groupMessageRef.addValueEventListener(groupMessageListener);
 
         return completeGroupMessage;
     }
 
-    /** Sends the given invite to the user with the given UID key.*/
+    /**
+     * Sends the given invite to the user with the given UID key.
+     */
     public void sendInviteToUser(String userKey, GroupMessageInvite invite) {
         //Need to add pending invite to the group message
         mDatabase.child(GROUP_MESSAGES_STR).child(invite.retrieveGroupMessageId()).child(INVITES_STR).child(userKey).setValue(false);
@@ -172,7 +184,9 @@ public class FirebaseRTDBHelper {
         userInviteRef.setValue(invite);
     }
 
-    /** Adds the current user to the Group Message with the given id and name. */
+    /**
+     * Adds the current user to the Group Message with the given id and name.
+     */
     public void addCurrentUserToGroupMessage(String groupMessageId, String groupMessageName) {
         if (mCurrentUserRef != null) {
             DatabaseReference groupMessageRef = mDatabase.child(GROUP_MESSAGES_STR).child(groupMessageId);
@@ -197,11 +211,13 @@ public class FirebaseRTDBHelper {
                 Log.e(LOG_TAG, "Unable to retrieve Group Message with the given id.");
             }
         } else {
-            Log.e(LOG_TAG,"Unable to retrieve current user. Is one logged in?");
+            Log.e(LOG_TAG, "Unable to retrieve current user. Is one logged in?");
         }
     }
 
-    /** Removes the current user to the Group Message with the given id and name. */
+    /**
+     * Removes the current user to the Group Message with the given id and name.
+     */
     public void removeCurrentUserFromGroupMessage(String groupMessageId) {
         if (mCurrentUserRef != null) {
             DatabaseReference groupMessageRef = mDatabase.child(GROUP_MESSAGES_STR).child(groupMessageId);
@@ -226,11 +242,13 @@ public class FirebaseRTDBHelper {
                 Log.e(LOG_TAG, "Unable to retrieve Group Message with the given id.");
             }
         } else {
-            Log.e(LOG_TAG,"Unable to retrieve current user. Is one logged in?");
+            Log.e(LOG_TAG, "Unable to retrieve current user. Is one logged in?");
         }
     }
 
-    /** Changes a the Group Message with the given id to the given name. If no such Group Message exists, nothing occurs. */
+    /**
+     * Changes a the Group Message with the given id to the given name. If no such Group Message exists, nothing occurs.
+     */
     public void changeGroupMessageName(String groupMessageId, String newGroupMessageName) {
 
         DatabaseReference groupMessageRef = mDatabase.child(GROUP_MESSAGES_STR).child(groupMessageId);
@@ -264,7 +282,9 @@ public class FirebaseRTDBHelper {
     }
 
 
-     /** Gets GroupMessageInvites for the current user. */
+    /**
+     * Gets GroupMessageInvites for the current user.
+     */
     public List<GroupMessageInvite> getGroupMessageInvites(DataRetrievalListener dataRetrievalListener) {
         List<GroupMessageInvite> groupMessageInviteList = new ArrayList<>();
         if (mCurrentUserRef != null) {
@@ -291,19 +311,21 @@ public class FirebaseRTDBHelper {
             };
             userGroupMessageInvitesListRef.addValueEventListener(userGroupMessageInvitesListener);
         } else {
-            Log.e(LOG_TAG,"Unable to retrieve current user. Is one logged in?");
+            Log.e(LOG_TAG, "Unable to retrieve current user. Is one logged in?");
         }
 
 
         return groupMessageInviteList;
     }
 
-    /** Deletes the groupMessageInvite with the given id associated with the current user if it exists. */
+    /**
+     * Deletes the groupMessageInvite with the given id associated with the current user if it exists.
+     */
     public void deleteGroupMessageInvite(String groupMessageInviteId) {
         if (mCurrentUserRef != null) {
             //Remove invite from userAccount info
             DatabaseReference gmInviteRef = mCurrentUserRef.child(INVITES_STR).child(groupMessageInviteId);
-            if (gmInviteRef != null){
+            if (gmInviteRef != null) {
                 gmInviteRef.removeValue();
             } else {
                 Log.e(LOG_TAG, "Could not fetch a groupMessageInvite with the given id.");
@@ -311,23 +333,27 @@ public class FirebaseRTDBHelper {
 
             //Remove invite from the groupMessage info
             DatabaseReference inviteRef = mDatabase.child(GROUP_MESSAGES_STR).child(groupMessageInviteId).child(INVITES_STR).child(mCurrentUser.retrieveKey());
-            if (inviteRef != null ) {
+            if (inviteRef != null) {
                 inviteRef.removeValue();
             }
         } else {
-            Log.e(LOG_TAG,"Unable to retrieve user. Is one logged in?");
+            Log.e(LOG_TAG, "Unable to retrieve user. Is one logged in?");
         }
     }
 
-    /** Adds a text message with the given string as a message body with the cureent user as the sender
-     *  to the database under the group message with the given with current time as the timestamp. */
+    /**
+     * Adds a text message with the given string as a message body with the cureent user as the sender
+     * to the database under the group message with the given with current time as the timestamp.
+     */
     public void addTextMessage(String messageBody, String groupMessageKey) {
         long timestamp = Calendar.getInstance().getTimeInMillis() / MILLISECONDS_TO_SECONDS;
         Log.d("Display", mAuth.getCurrentUser().getDisplayName());
         addMessage(new TextMessage(groupMessageKey, mAuth.getCurrentUser().getDisplayName(), timestamp, messageBody));
     }
 
-    /** Adds the given activityPollmessage to the database. */
+    /**
+     * Adds the given activityPollmessage to the database.
+     */
     public void addMessage(GroupActivity activity, String groupId) {
         DatabaseReference pollsRef = mDatabase.child(MESSAGE_STR).child(groupId).child(ACTIVITY_POLL_STR);
         DatabaseReference newPollRef = pollsRef.push();
@@ -337,24 +363,30 @@ public class FirebaseRTDBHelper {
         newPollRef.child(TIMESTAMP_STR).setValue(timestamp);
     }
 
-    /** Adds the given textmessage to the database. */
+    /**
+     * Adds the given textmessage to the database.
+     */
     public void addMessage(TextMessage textMessage) {
         DatabaseReference gmTextRef = mDatabase.child(MESSAGE_STR).child(textMessage.retrieveGroupMessageKey()).child(TEXT_STR);
         DatabaseReference textMessageRef = gmTextRef.push();
         textMessageRef.setValue(textMessage);
     }
 
-    /** Adds the given message to the Firebase database. */
+    /**
+     * Adds the given message to the Firebase database.
+     */
     public void addMessage(AbstractMessage message) {
         message.addMessageToRTDB();
     }
 
-    /** Gets the messages corresponding to the given GroupMessageKey sorted in reverse order by timestamp. */
+    /**
+     * Gets the messages corresponding to the given GroupMessageKey sorted in reverse order by timestamp.
+     */
     public List<AbstractMessage> getMessages(String groupMessageKey, DataRetrievalListener dataRetrievalListener) {
         ArrayList<AbstractMessage> messagesList = new ArrayList<>();
 
         DatabaseReference groupMessageRef = mDatabase.child(MESSAGE_STR).child(groupMessageKey);
-        if(groupMessageRef != null) {
+        if (groupMessageRef != null) {
             ValueEventListener valueEventListener = new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -398,96 +430,109 @@ public class FirebaseRTDBHelper {
         return messagesList;
     }
 
-    /** Returns a UserAccount with the given email, or null if no userAccount with the given email
-     * is found on the firebase RTDB. */
+    /**
+     * Returns a UserAccount with the given email, or null if no userAccount with the given email
+     * is found on the firebase RTDB.
+     */
     public CompleteUserAccount getUserByEmail(String email, DataRetrievalListener dataRetrievalListener) {
         CompleteUserAccount userAccount = new CompleteUserAccount();
         mDatabase.child(USER_ACCOUNTS_STR).get().addOnCompleteListener((Task<DataSnapshot> task) -> {
-                //Iterate over all the users, until one is found to match the given email
-                for (DataSnapshot user:
-                     task.getResult().getChildren()) {
-                    if (user.child(EMAIL_STR).getValue().equals(email)) {
-                        userAccount.setDisplayName((String) user.child(DISPLAY_NAME_STR).getValue());
-                        userAccount.setEmailAddress(email);
-                        for (DataSnapshot gmSnap : user.child(GROUP_MESSAGES_STR).getChildren()) {
-                            GroupMessage gm = gmSnap.getValue(GroupMessage.class);
-                            gm.setKey(gmSnap.getKey());
-                            userAccount.getGroupMessages().add(gm);
-                        }
-
-                        for (DataSnapshot gmInvSnap : user.child(INVITES_STR).getChildren()) {
-                            GroupMessageInvite gmInv = gmInvSnap.getValue(GroupMessageInvite.class);
-                            gmInv.setGroupMessageId(gmInvSnap.getKey());
-                            userAccount.getInvites().add(gmInv);
-                        }
-                        userAccount.setKey(user.getKey());
-                        break;
+            //Iterate over all the users, until one is found to match the given email
+            for (DataSnapshot user :
+                    task.getResult().getChildren()) {
+                if (user.child(EMAIL_STR).getValue().equals(email)) {
+                    userAccount.setDisplayName((String) user.child(DISPLAY_NAME_STR).getValue());
+                    userAccount.setEmailAddress(email);
+                    for (DataSnapshot gmSnap : user.child(GROUP_MESSAGES_STR).getChildren()) {
+                        GroupMessage gm = gmSnap.getValue(GroupMessage.class);
+                        gm.setKey(gmSnap.getKey());
+                        userAccount.getGroupMessages().add(gm);
                     }
+
+                    for (DataSnapshot gmInvSnap : user.child(INVITES_STR).getChildren()) {
+                        GroupMessageInvite gmInv = gmInvSnap.getValue(GroupMessageInvite.class);
+                        gmInv.setGroupMessageId(gmInvSnap.getKey());
+                        userAccount.getInvites().add(gmInv);
+                    }
+                    userAccount.setKey(user.getKey());
+                    break;
                 }
-                dataRetrievalListener.onDataRetrieval();
+            }
+            dataRetrievalListener.onDataRetrieval();
         });
         return userAccount;
     }
 
-    /** Checks if the user is logged in */
-    public boolean isLoggedIn(){  return mAuth.getCurrentUser() != null;  }
+    /**
+     * Checks if the user is logged in
+     */
+    public boolean isLoggedIn() {
+        return mAuth.getCurrentUser() != null;
+    }
 
-    /** Adds a New User with the given username to the realtime firebase database. */
+    /**
+     * Adds a New User with the given username to the realtime firebase database.
+     */
     public void addNewUser(UserAccount user, String uid) {
         DatabaseReference account = mDatabase.child(USER_ACCOUNTS_STR).child(uid);
         account.setValue(user);
     }
 
-    /** Function to login an existing user given the username and password */
-    public void login(String username, String password, Activity activity){
+    /**
+     * Function to login an existing user given the username and password
+     */
+    public void login(String username, String password, Activity activity) {
         mAuth.signInWithEmailAndPassword(username, password)
                 .addOnCompleteListener(activity, (Task<AuthResult> task) -> {
-                        if (task.isSuccessful()) {
-                            mCurrentUserRef = mDatabase.child(USER_ACCOUNTS_STR).child(mAuth.getCurrentUser().getUid());
-                            //TODO tweak to include display name
-                            mCurrentUser = new UserAccount(mAuth.getCurrentUser().getEmail());
-                            mCurrentUser.setKey(mAuth.getCurrentUser().getUid());
-                            // Sign in success, update UI with the signed-in user's information
-                            Log.d(LOG_TAG, "signInWithEmail:success");
-                        } else {
-                            // If sign in fails, display a message to the user.
-                            Log.w(LOG_TAG, "signInWithEmail:failure", task.getException());
-                        }
+                    if (task.isSuccessful()) {
+                        mCurrentUserRef = mDatabase.child(USER_ACCOUNTS_STR).child(mAuth.getCurrentUser().getUid());
+                        //TODO tweak to include display name
+                        mCurrentUser = new UserAccount(mAuth.getCurrentUser().getEmail());
+                        mCurrentUser.setKey(mAuth.getCurrentUser().getUid());
+                        // Sign in success, update UI with the signed-in user's information
+                        Log.d(LOG_TAG, "signInWithEmail:success");
+                    } else {
+                        // If sign in fails, display a message to the user.
+                        Log.w(LOG_TAG, "signInWithEmail:failure", task.getException());
+                    }
                 });
     }
 
-    /** Function to create the account of a user given a username and password */
-    public void createAccount(String email, String password, String nickname, Activity activity){
+    /**
+     * Function to create the account of a user given a username and password
+     */
+    public void createAccount(String email, String password, String nickname, Activity activity) {
         mAuth.createUserWithEmailAndPassword(email, password)
-                .addOnCompleteListener(activity, (Task<AuthResult> task) ->  {
-                        if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-                            Log.d(LOG_TAG, "createUserWithEmail:success");
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
-                                    .setDisplayName(nickname).build();
-                            mAuth.getCurrentUser().updateProfile(profileUpdates);
-                            this.mCurrentUser = new UserAccount(email, nickname);
-                            this.mCurrentUser.setKey(user.getUid());
-                            addNewUser(this.mCurrentUser, this.mCurrentUser.retrieveKey());
-                        } else {
-                            // If sign in fails, display a message to the user.
-                            Log.w(LOG_TAG, "createUserWithEmail:failure", task.getException());
-                        }
+                .addOnCompleteListener(activity, (Task<AuthResult> task) -> {
+                    if (task.isSuccessful()) {
+                        // Sign in success, update UI with the signed-in user's information
+                        Log.d(LOG_TAG, "createUserWithEmail:success");
+                        FirebaseUser user = mAuth.getCurrentUser();
+                        UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                                .setDisplayName(nickname).build();
+                        mAuth.getCurrentUser().updateProfile(profileUpdates);
+                        this.mCurrentUser = new UserAccount(email, nickname);
+                        this.mCurrentUser.setKey(user.getUid());
+                        addNewUser(this.mCurrentUser, this.mCurrentUser.retrieveKey());
+                    } else {
+                        // If sign in fails, display a message to the user.
+                        Log.w(LOG_TAG, "createUserWithEmail:failure", task.getException());
+                    }
                 });
     }
 
-    public void logout(){
+    public void logout() {
         //TODO RESET Current User
         mAuth.signOut();
     }
+
     /**
-        Pushes a vote to the database at the corresponding activity, and removes the vote from the other category if necessary
-        choice - boolean, true if voting 'yes' and false if voting 'no'
-    */
-    public void vote(boolean choice, String activity_id, String group_id){
+     * Pushes a vote to the database at the corresponding activity, and removes the vote from the other category if necessary
+     * choice - boolean, true if voting 'yes' and false if voting 'no'
+     */
+    public void vote(boolean choice, String activity_id, String group_id) {
         DatabaseReference activity = mDatabase.child(MESSAGE_STR).child(group_id).child(ACTIVITY_POLL_STR).child(activity_id);
-        if (choice){
+        if (choice) {
             // Yes Vote
             activity.child(YES_VOTE_STR).child(mAuth.getUid()).setValue(mAuth.getCurrentUser().getEmail());
             // Delete No Vote if exists
@@ -501,9 +546,9 @@ public class FirebaseRTDBHelper {
     }
 
     /**
-        Checks if a vote has been cast by the user, if it has adjust the UI to gray out the button they didn't choose
-    */
-    public void getVote(String activity_id, String group_id, Button upvote, Button downvote){
+     * Checks if a vote has been cast by the user, if it has adjust the UI to gray out the button they didn't choose
+     */
+    public void getVote(String activity_id, String group_id, Button upvote, Button downvote) {
         DatabaseReference activity = mDatabase.child(MESSAGE_STR).child(group_id).child(ACTIVITY_POLL_STR).child(activity_id);
 
         activity.addValueEventListener(new ValueEventListener() {
@@ -511,7 +556,7 @@ public class FirebaseRTDBHelper {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 boolean upvoted = snapshot.child(YES_VOTE_STR).hasChild(mAuth.getCurrentUser().getUid());
                 boolean downvoted = snapshot.child(NO_VOTE_STR).hasChild(mAuth.getCurrentUser().getUid());
-                if (upvoted){
+                if (upvoted) {
                     // user voted yes
                     downvote.setBackgroundColor(Color.GRAY);
                     upvote.setBackgroundColor(Color.parseColor("#FFBB86FC"));
@@ -520,7 +565,7 @@ public class FirebaseRTDBHelper {
                         // User voted no
                         upvote.setBackgroundColor(Color.GRAY);
                         downvote.setBackgroundColor(Color.parseColor("#FFBB86FC"));
-                    } else{
+                    } else {
                         // User has not voted
                         upvote.setBackgroundColor(Color.parseColor("#FFBB86FC"));
                         downvote.setBackgroundColor(Color.parseColor("#FFBB86FC"));
@@ -529,14 +574,18 @@ public class FirebaseRTDBHelper {
             }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError error) { }
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
         });
     }
-    public void createListener(AuthStateListener listener){
+
+    public void createListener(AuthStateListener listener) {
         mAuth.addAuthStateListener(listener);
     }
 
-    /** Returns a UserAccount representing the current user. */
+    /**
+     * Returns a UserAccount representing the current user.
+     */
     public UserAccount getCurrentUser() {
         return this.mCurrentUser;
     }

@@ -18,7 +18,7 @@
         android:layout_below="@id/text"
         android:hint="@string/temp_group_text"
         android:inputType="text"
-        android:importantForAutofill="no"/>
+        android:importantForAutofill="no" />
 
     <Button
         android:id="@+id/dialogButtonOK"

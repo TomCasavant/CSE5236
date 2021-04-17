@@ -51,9 +51,11 @@ public class GroupMessageMemberAdapter extends RecyclerView.Adapter<SimpleTextVi
         return mGroupMessageMemberList.size();
     }
 
-    /** Returns the group message at a given position in the RecyclerView. */
-   public GroupMessageMember getItem(int position) {
+    /**
+     * Returns the group message at a given position in the RecyclerView.
+     */
+    public GroupMessageMember getItem(int position) {
         return mGroupMessageMemberList.get(position);
-   }
+    }
 
 }

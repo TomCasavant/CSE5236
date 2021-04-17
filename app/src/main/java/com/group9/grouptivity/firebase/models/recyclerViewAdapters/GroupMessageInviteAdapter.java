@@ -4,18 +4,14 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.group9.grouptivity.R;
-import com.group9.grouptivity.firebase.FirebaseRTDBHelper;
 import com.group9.grouptivity.firebase.ItemClickListener;
 import com.group9.grouptivity.firebase.models.GroupMessageInvite;
 import com.group9.grouptivity.firebase.models.recyclerViewAdapters.viewHolders.GroupMessageInviteViewHolder;
-import com.group9.grouptivity.firebase.models.recyclerViewAdapters.viewHolders.GroupMessageViewHolder;
 
 import java.util.List;
 
@@ -56,10 +52,11 @@ public class GroupMessageInviteAdapter extends RecyclerView.Adapter<GroupMessage
     }
 
 
-
-    /** Returns the group message at a given position in the RecyclerView. */
-   public GroupMessageInvite getItem(int position) {
+    /**
+     * Returns the group message at a given position in the RecyclerView.
+     */
+    public GroupMessageInvite getItem(int position) {
         return mGroupMessageInviteList.get(position);
-   }
+    }
 
 }

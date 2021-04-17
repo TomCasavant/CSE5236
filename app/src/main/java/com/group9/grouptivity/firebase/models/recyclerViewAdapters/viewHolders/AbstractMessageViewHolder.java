@@ -24,23 +24,31 @@ public abstract class AbstractMessageViewHolder extends AbstractClickableViewHol
         itemView.setOnClickListener(this);
     }
 
-    /** Sets text of the name of the sender. */
+    /**
+     * Sets text of the name of the sender.
+     */
     public void setSenderUsernameText(String senderUsername) {
         this.senderUsernameTextView.setText(senderUsername);
     }
 
-    /** Sets the timestamp text to the given seconds since Epoch. */
+    /**
+     * Sets the timestamp text to the given seconds since Epoch.
+     */
     public void setTimestampText(long timestampSeconds) {
         calendar.setTimeInMillis(timestampSeconds * SECONDS_TO_MILLISECONDS);
         timestampTextView.setText(calenderPrettyString(calendar));
     }
 
-    /** Binds an abstract message to the viewholder. */
+    /**
+     * Binds an abstract message to the viewholder.
+     */
     public void bindMessage(AbstractMessage message) {
         message.bindMessage(this);
     }
 
-    /** Binds the data part of all abstract messages. */
+    /**
+     * Binds the data part of all abstract messages.
+     */
     protected void bindAbstractMessageData(AbstractMessage message) {
         this.senderUsernameTextView.setText(message.getSender());
         calendar.setTimeInMillis(message.getTimeStamp() * SECONDS_TO_MILLISECONDS);
@@ -48,7 +56,9 @@ public abstract class AbstractMessageViewHolder extends AbstractClickableViewHol
         timestampTextView.setText(calenderPrettyString(calendar));
     }
 
-    /** Creates a pretty string of the given Calendar. */
+    /**
+     * Creates a pretty string of the given Calendar.
+     */
     private static String calenderPrettyString(Calendar calendar) {
 //        String calStr = null;
 //

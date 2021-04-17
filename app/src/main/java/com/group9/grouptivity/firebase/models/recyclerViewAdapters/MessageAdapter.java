@@ -53,7 +53,7 @@ public class MessageAdapter extends RecyclerView.Adapter<AbstractMessageViewHold
         }
 
         messageViewHolder.setClickListener(mItemClickListener);
-        return  messageViewHolder;
+        return messageViewHolder;
     }
 
     @Override
@@ -71,9 +71,11 @@ public class MessageAdapter extends RecyclerView.Adapter<AbstractMessageViewHold
         return this.mMessageList.get(position).retrieveType().ordinal();
     }
 
-    /** Returns the group message at a given position in the RecyclerView. */
-   public AbstractMessage getItem(int position) {
+    /**
+     * Returns the group message at a given position in the RecyclerView.
+     */
+    public AbstractMessage getItem(int position) {
         return mMessageList.get(position);
-   }
+    }
 
 }

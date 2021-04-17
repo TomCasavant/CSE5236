@@ -1,14 +1,5 @@
 package com.group9.grouptivity.ui.login;
 
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.annotation.StringRes;
-import androidx.fragment.app.Fragment;
-import androidx.navigation.NavController;
-import androidx.navigation.fragment.NavHostFragment;
-
 import android.content.Context;
 import android.os.Bundle;
 import android.text.Editable;
@@ -25,11 +16,19 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.StringRes;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
+import androidx.navigation.fragment.NavHostFragment;
+
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.group9.grouptivity.R;
 import com.group9.grouptivity.firebase.FirebaseRTDBHelper;
-import com.group9.grouptivity.ui.GroupsFragment;
 
 public class LoginFragment extends Fragment {
 
@@ -75,9 +74,9 @@ public class LoginFragment extends Fragment {
 
         FirebaseAuth.AuthStateListener mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth){
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
-                if (user != null){
+                if (user != null) {
                     updateUiWithUser(user);
                     loadingProgressBar.setVisibility(View.GONE);
                 }
@@ -159,13 +158,13 @@ public class LoginFragment extends Fragment {
     }
 
     private void updateUiWithUser(FirebaseUser user) {
-        String welcome =  getString(R.string.welcome) + user.getEmail();
+        String welcome = getString(R.string.welcome) + user.getEmail();
         // TODO : initiate successful logged in experience
         if (getContext() != null && getContext().getApplicationContext() != null) {
             Toast.makeText(getContext().getApplicationContext(), welcome, Toast.LENGTH_LONG).show();
         }
         InputMethodManager inputManager = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-        inputManager.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(),InputMethodManager.HIDE_NOT_ALWAYS);
+        inputManager.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
         NavController navController = NavHostFragment.findNavController(LoginFragment.this);
         if (navController.getCurrentDestination().getId() == R.id.loginFragment) {
             navController.navigate(R.id.action_loginFragment_to_GroupsFragment);

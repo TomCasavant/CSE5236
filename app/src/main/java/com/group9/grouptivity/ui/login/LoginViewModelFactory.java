@@ -1,8 +1,8 @@
 package com.group9.grouptivity.ui.login;
 
+import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.annotation.NonNull;
 
 import com.group9.grouptivity.data.LoginDataSource;
 import com.group9.grouptivity.data.LoginRepository;

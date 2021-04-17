@@ -1,9 +1,5 @@
 package com.group9.grouptivity.firebase.models.recyclerViewAdapters.viewHolders;
 
-import android.content.res.Resources;
-import android.graphics.Color;
-import android.net.Uri;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -15,7 +11,6 @@ import com.group9.grouptivity.R;
 import com.group9.grouptivity.firebase.FirebaseRTDBHelper;
 import com.group9.grouptivity.firebase.models.ActivityPollMessage;
 import com.group9.grouptivity.firebase.models.GroupActivity;
-import com.group9.grouptivity.firebase.models.TextMessage;
 import com.squareup.picasso.Picasso;
 
 //TODO
@@ -52,20 +47,22 @@ public class ActivityPollMessageViewHolder extends AbstractMessageViewHolder {
         itemView.findViewById(R.id.downvote).setOnClickListener(this);
     }
 
-    public void onClick(View v){
+    public void onClick(View v) {
         // Handle vote presses
         int id = v.getId();
-        if (id == R.id.upvote){
+        if (id == R.id.upvote) {
             // Cast vote for 'Yes'
             FirebaseRTDBHelper.getInstance().vote(true, this.activityId, this.groupId);
-        } else if (id == R.id.downvote){
+        } else if (id == R.id.downvote) {
             // Cast vote for 'No'
             FirebaseRTDBHelper.getInstance().vote(false, this.activityId, this.groupId);
         }
     }
 
-    /** Sets all the attributes to their corresponding text or image values */
-    public void setAttributes(String placeType, String placeName, String placeAddress, int upvote_count, int downvote_count, String icon, String activityId, String groupId){
+    /**
+     * Sets all the attributes to their corresponding text or image values
+     */
+    public void setAttributes(String placeType, String placeName, String placeAddress, int upvote_count, int downvote_count, String icon, String activityId, String groupId) {
         // Set the text elements of each attribute
         this.placeType.setText(placeType);
         this.placeName.setText(placeName);
@@ -79,14 +76,18 @@ public class ActivityPollMessageViewHolder extends AbstractMessageViewHolder {
         Picasso.get().load(icon).into(this.icon); // Load and set the image associatd with this activity
     }
 
-    /** Assigns the buttons and attaches an event listener to change the color of buttons once a vote is cast */
-    private void set_buttons(){
+    /**
+     * Assigns the buttons and attaches an event listener to change the color of buttons once a vote is cast
+     */
+    private void set_buttons() {
         Button upVoteButton = itemView.findViewById(R.id.upvote);
         Button downVoteButton = itemView.findViewById(R.id.downvote);
         FirebaseRTDBHelper.getInstance().getVote(this.activityId, this.groupId, upVoteButton, downVoteButton);
     }
 
-    /** Binds an activityPollMessage to the viewholder. */
+    /**
+     * Binds an activityPollMessage to the viewholder.
+     */
     public void bindMessage(ActivityPollMessage activityPollMessage) {
         super.bindAbstractMessageData(activityPollMessage);
         GroupActivity activity = activityPollMessage.getActivity();

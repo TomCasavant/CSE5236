@@ -6,7 +6,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 
 import com.group9.grouptivity.R;
-import com.group9.grouptivity.firebase.models.ActivityPollMessage;
 import com.group9.grouptivity.firebase.models.TextMessage;
 
 public class TextMessageViewHolder extends AbstractMessageViewHolder {
@@ -18,12 +17,16 @@ public class TextMessageViewHolder extends AbstractMessageViewHolder {
         itemView.setOnClickListener(this);
     }
 
-    /** Sets the body text of this message. */
+    /**
+     * Sets the body text of this message.
+     */
     public void setMessageBodyText(String messageBody) {
         this.messageBodyTextView.setText(messageBody);
     }
 
-    /** Binds a textMessage to the viewholder. */
+    /**
+     * Binds a textMessage to the viewholder.
+     */
     public void bindMessage(TextMessage textMessage) {
         super.bindAbstractMessageData(textMessage);
         this.messageBodyTextView.setText(textMessage.getMessage());

@@ -12,7 +12,9 @@ public class GroupMessageViewModel extends ViewModel {
         return mGroupMessage;
     }
 
-    /** Sets the GroupMessage to store in this ViewModel. */
+    /**
+     * Sets the GroupMessage to store in this ViewModel.
+     */
     public void setGroupMessage(GroupMessage groupMessage) {
         this.mGroupMessage = groupMessage;
     }

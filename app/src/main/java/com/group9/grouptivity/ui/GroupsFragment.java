@@ -19,11 +19,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.navigation.NavigationView;
+import com.group9.grouptivity.R;
 import com.group9.grouptivity.firebase.DataRetrievalListener;
+import com.group9.grouptivity.firebase.FirebaseRTDBHelper;
 import com.group9.grouptivity.firebase.ItemClickListener;
 import com.group9.grouptivity.firebase.models.recyclerViewAdapters.GroupMessageAdapter;
-import com.group9.grouptivity.R;
-import com.group9.grouptivity.firebase.FirebaseRTDBHelper;
 import com.group9.grouptivity.ui.models.GroupMessageViewModel;
 
 public class GroupsFragment extends Fragment {
@@ -34,8 +34,10 @@ public class GroupsFragment extends Fragment {
     private GroupMessageAdapter mGroupMessageAdapter;
     private GroupMessageViewModel mViewModel;
 
-    /** Builds the recycler view to display the list of Group Messages the user is a part of. */
-    private void buildGroupMessageRecyclerView(View view){
+    /**
+     * Builds the recycler view to display the list of Group Messages the user is a part of.
+     */
+    private void buildGroupMessageRecyclerView(View view) {
         RecyclerView recyclerView = view.findViewById(R.id.group_message_recyclerview);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         DataRetrievalListener dataRetrievalListener = new DataRetrievalListener() {
@@ -55,7 +57,9 @@ public class GroupsFragment extends Fragment {
         recyclerView.setAdapter(mGroupMessageAdapter);
     }
 
-    /** Sets up the main navigation view for this fragment. */
+    /**
+     * Sets up the main navigation view for this fragment.
+     */
     private void setupMainNavigationView(View view) {
         NavigationView navigationView = view.findViewById(R.id.main_navView);
         View mainNavViewHeader = navigationView.getHeaderView(0); //Should only be one header view
@@ -86,8 +90,10 @@ public class GroupsFragment extends Fragment {
         });
     }
 
-    /** Creates a dialog box and displays it to the user to get new group name */
-    private void createGroupDialog(){
+    /**
+     * Creates a dialog box and displays it to the user to get new group name
+     */
+    private void createGroupDialog() {
         final Dialog dialog = new Dialog(getContext());
         dialog.setContentView(R.layout.create_group_dialog); // Assign to xml dialog layout
         TextView text = (TextView) dialog.findViewById(R.id.new_group_name);
@@ -104,10 +110,10 @@ public class GroupsFragment extends Fragment {
         dialog.show();
     }
 
-    private void updateCurrentLoginInfo(View view){
+    private void updateCurrentLoginInfo(View view) {
         // Checks if user is logged in, if not send to login page
         view.getRootView().findViewById(R.id.loginButton).setOnClickListener((View v) -> {
-            if (!FirebaseRTDBHelper.getInstance().isLoggedIn()){
+            if (!FirebaseRTDBHelper.getInstance().isLoggedIn()) {
                 NavHostFragment.findNavController(GroupsFragment.this)
                         .navigate(R.id.loginFragment);
             } else {
@@ -116,14 +122,16 @@ public class GroupsFragment extends Fragment {
                         .navigate(R.id.loginFragment);
             }
         });
-        if (!FirebaseRTDBHelper.getInstance().isLoggedIn()){
+        if (!FirebaseRTDBHelper.getInstance().isLoggedIn()) {
             NavHostFragment.findNavController(GroupsFragment.this)
                     .navigate(R.id.loginFragment);
         }
     }
 
-    /** Creates a group and sends the data to the firebase database */
-    private void createGroup(String groupName){
+    /**
+     * Creates a group and sends the data to the firebase database
+     */
+    private void createGroup(String groupName) {
         // Send new group to database
         FirebaseRTDBHelper.getInstance().addGroupMessage(groupName);
         Toast.makeText(getActivity(), groupName + " created!", Toast.LENGTH_LONG).show();

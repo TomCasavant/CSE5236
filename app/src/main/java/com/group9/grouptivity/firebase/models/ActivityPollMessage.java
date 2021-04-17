@@ -1,18 +1,10 @@
 package com.group9.grouptivity.firebase.models;
 
-import android.provider.ContactsContract;
-
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.GenericTypeIndicator;
 import com.group9.grouptivity.firebase.FirebaseRTDBHelper;
-import com.group9.grouptivity.firebase.models.recyclerViewAdapters.MessageAdapter;
 import com.group9.grouptivity.firebase.models.recyclerViewAdapters.viewHolders.AbstractMessageViewHolder;
 import com.group9.grouptivity.firebase.models.recyclerViewAdapters.viewHolders.ActivityPollMessageViewHolder;
 
-import java.security.acl.Group;
 import java.util.ArrayList;
-import java.util.Dictionary;
 import java.util.HashMap;
 import java.util.List;
 
@@ -24,7 +16,8 @@ public class ActivityPollMessage extends AbstractMessage {
     private HashMap<String, Object> yesVotes;
 
 
-    private ActivityPollMessage() {} //Empty constructor needed for Firebase
+    private ActivityPollMessage() {
+    } //Empty constructor needed for Firebase
 
     public ActivityPollMessage(String groupMessageKey, String sender, long timeStamp, GroupActivity groupActivity) {
         super(groupMessageKey, sender, timeStamp);
@@ -41,60 +34,74 @@ public class ActivityPollMessage extends AbstractMessage {
 
     }
 
-    /** Returns the group activity associated with this activity poll. */
+    /**
+     * Returns the group activity associated with this activity poll.
+     */
     public GroupActivity getGroupActivity() {
         return mGroupActivity;
     }
 
-    /** Returns the list of users who have voted YES on this activity poll. */
+    /**
+     * Returns the list of users who have voted YES on this activity poll.
+     */
     public List<String> getYesVotesUsernameList() {
         return this.mYesVotesUsernameList;
     }
 
-    /** Returns the list of users who have voted NO on this activity poll. */
+    /**
+     * Returns the list of users who have voted NO on this activity poll.
+     */
     public List<String> getNoVotesUsernameList() {
         return this.mNoVotesUsernameList;
     }
 
-    /** Returns the number of users who have voted YES on this activity poll. */
+    /**
+     * Returns the number of users who have voted YES on this activity poll.
+     */
     public int yesVotesCount() {
-        if (this.yesVotes == null) { return 0; }
+        if (this.yesVotes == null) {
+            return 0;
+        }
         return this.yesVotes.size();
     }
 
-    /** Returns the number of users who have voted NO on this activity poll. */
+    /**
+     * Returns the number of users who have voted NO on this activity poll.
+     */
     public int noVotesCount() {
-        if (this.noVotes == null) { return 0; }
+        if (this.noVotes == null) {
+            return 0;
+        }
         return this.noVotes.size();
     }
 
     /* Gets the noVotes database HashMap */
-    public void setNoVotes(HashMap<String, Object> noVotes){
+    public void setNoVotes(HashMap<String, Object> noVotes) {
         this.noVotes = noVotes;
     }
 
     /* Gets the yesVotes database HashMap */
-    public void setYesVotes(HashMap<String, Object> yesVotes){
+    public void setYesVotes(HashMap<String, Object> yesVotes) {
         this.yesVotes = yesVotes;
     }
 
     /* Gets the activity HashMap */
-    public void setActivity(HashMap<String, Object> activity){
+    public void setActivity(HashMap<String, Object> activity) {
         this.mGroupActivity = new GroupActivity((String) activity.get("activityType"), (String) activity.get("activityAddress"), (String) activity.get("activityIcon"), (String) activity.get("activityName"));
     }
 
     /* Gets the hashmap associated with the Yes Votes from the database */
-    public HashMap<String, Object> getYesVotes(){
+    public HashMap<String, Object> getYesVotes() {
         return this.yesVotes;
     }
 
     /* Retrieves and returns the noVotes hashmap */
-    public HashMap<String, Object> getNoVotes(){
+    public HashMap<String, Object> getNoVotes() {
         return this.noVotes;
     }
 
     /* Returns the GroupActivity associated with this Poll */
-    public GroupActivity getActivity(){
+    public GroupActivity getActivity() {
         return this.mGroupActivity;
     }
 

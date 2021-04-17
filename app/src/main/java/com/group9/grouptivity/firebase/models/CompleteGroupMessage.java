@@ -4,7 +4,9 @@ package com.group9.grouptivity.firebase.models;
 import java.util.ArrayList;
 import java.util.List;
 
-/** A Group Message model consisting of a key, name, list of members, and a list of invites. */
+/**
+ * A Group Message model consisting of a key, name, list of members, and a list of invites.
+ */
 public class CompleteGroupMessage extends GroupMessage {
     private List<GroupMessageMember> mGroupMessageMemberList;
     private List<String> mInvitedUserAccountKeysList;
@@ -38,22 +40,30 @@ public class CompleteGroupMessage extends GroupMessage {
         this.mInvitedUserAccountKeysList = invitedUserAccountKeysList;
     }
 
-    /** Returns the list of members in this GroupMessage. */
+    /**
+     * Returns the list of members in this GroupMessage.
+     */
     public List<GroupMessageMember> getMembers() {
         return this.mGroupMessageMemberList;
     }
 
-    /** Sets the list of members in this GroupMessage. */
+    /**
+     * Sets the list of members in this GroupMessage.
+     */
     public void setMembers(List<GroupMessageMember> groupMessageMemberList) {
         this.mGroupMessageMemberList = groupMessageMemberList;
     }
 
-    /** Returns the list of keys to users with pending invites to the GroupMessage. */
+    /**
+     * Returns the list of keys to users with pending invites to the GroupMessage.
+     */
     public List<String> getInvites() {
         return this.mInvitedUserAccountKeysList;
     }
 
-    /** Sets the list of keys to users with pending invites to the GroupMessage. */
+    /**
+     * Sets the list of keys to users with pending invites to the GroupMessage.
+     */
     public void setInvites(List<String> invitedUserAccountKeysList) {
         this.mInvitedUserAccountKeysList = invitedUserAccountKeysList;
     }
@@ -66,13 +76,17 @@ public class CompleteGroupMessage extends GroupMessage {
         this.mInvitedUserAccountKeysList.add(inviteKey);
     }
 
-    /** Clears the group message member and invites lists. */
+    /**
+     * Clears the group message member and invites lists.
+     */
     public void clear() {
         this.mInvitedUserAccountKeysList.clear();
         this.mGroupMessageMemberList.clear();
     }
 
-    /** Reports whether this groupMessage contains a member with the given email */
+    /**
+     * Reports whether this groupMessage contains a member with the given email
+     */
     public boolean containsMember(String email) {
         boolean containsMember = false;
 
@@ -85,7 +99,9 @@ public class CompleteGroupMessage extends GroupMessage {
         return containsMember;
     }
 
-    /** Reports whether this groupMessage contains an invite to the userAccount with th given key. */
+    /**
+     * Reports whether this groupMessage contains an invite to the userAccount with th given key.
+     */
     public boolean containsInvite(String userKey) {
         boolean containsInvite = false;
 

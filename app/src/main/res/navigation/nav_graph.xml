@@ -37,7 +37,7 @@
         android:id="@+id/loginFragment"
         android:name="com.group9.grouptivity.ui.login.LoginFragment"
         android:label="fragment_login"
-        tools:layout="@layout/fragment_login" >
+        tools:layout="@layout/fragment_login">
         <action
             android:id="@+id/action_loginFragment_to_GroupsFragment"
             app:destination="@id/GroupsFragment" />
@@ -47,7 +47,7 @@
         android:id="@+id/GroupInvitesFragment"
         android:name="com.group9.grouptivity.ui.GroupInvitesFragment"
         android:label="@string/group_invites_fragment_label"
-        tools:layout="@layout/group_invites_fragment" >
+        tools:layout="@layout/group_invites_fragment">
         <action
             android:id="@+id/action_GroupInvitesFragment_to_GroupsFragment"
             app:destination="@id/GroupsFragment" />
@@ -72,7 +72,7 @@
         android:id="@+id/google_map"
         android:name="com.group9.grouptivity.ui.MapsFragment"
         android:label="Maps Fragment"
-        tools:layout="@layout/maps_fragment" >
+        tools:layout="@layout/maps_fragment">
         <action
             android:id="@+id/action_MapsFragment_to_GroupsFragment"
             app:destination="@id/GroupsFragment" />

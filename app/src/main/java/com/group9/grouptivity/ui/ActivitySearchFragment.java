@@ -1,10 +1,8 @@
 package com.group9.grouptivity.ui;
 
 import android.Manifest;
-import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
@@ -12,7 +10,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
-import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -142,7 +139,7 @@ public class ActivitySearchFragment extends Fragment {
                 if (grantResults.length > 0 &&
                         grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     mLocationPermissionGranted = true;
-                }  else {
+                } else {
                     ActivityCompat.requestPermissions(this.getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSION_REQUEST_CODE);
                 }
                 return;
@@ -151,10 +148,10 @@ public class ActivitySearchFragment extends Fragment {
         // permissions this app might request.
     }
 
-    private void updateCurrentLoginInfo(View view){
+    private void updateCurrentLoginInfo(View view) {
         // Checks if user is logged in, if not send user to login page
         view.getRootView().findViewById(R.id.loginButton).setOnClickListener((View v) -> {
-            if (!FirebaseRTDBHelper.getInstance().isLoggedIn()){
+            if (!FirebaseRTDBHelper.getInstance().isLoggedIn()) {
                 NavHostFragment.findNavController(ActivitySearchFragment.this)
                         .navigate(R.id.loginFragment);
             } else {
@@ -163,7 +160,7 @@ public class ActivitySearchFragment extends Fragment {
                         .navigate(R.id.loginFragment);
             }
         });
-        if (!FirebaseRTDBHelper.getInstance().isLoggedIn()){
+        if (!FirebaseRTDBHelper.getInstance().isLoggedIn()) {
             NavHostFragment.findNavController(ActivitySearchFragment.this)
                     .navigate(R.id.loginFragment);
         }
@@ -200,8 +197,8 @@ public class ActivitySearchFragment extends Fragment {
         setupMainNavigationView(view);
         updateCurrentLoginInfo(view);
     }
-    public boolean isLocationEnabled()
-    {
+
+    public boolean isLocationEnabled() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
             // This is new method provided in API 28
             LocationManager lm = (LocationManager) this.getContext().getSystemService(Context.LOCATION_SERVICE);
@@ -210,27 +207,28 @@ public class ActivitySearchFragment extends Fragment {
             // This is Deprecated in API 28
             int mode = Settings.Secure.getInt(this.getContext().getContentResolver(), Settings.Secure.LOCATION_MODE,
                     Settings.Secure.LOCATION_MODE_OFF);
-            return  (mode != Settings.Secure.LOCATION_MODE_OFF);
+            return (mode != Settings.Secure.LOCATION_MODE_OFF);
 
         }
     }
+
     private void getDeviceLocation() {
-        Log.d(TAG,"getDeviceLocation: getting the device's current location");
+        Log.d(TAG, "getDeviceLocation: getting the device's current location");
 
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this.getActivity());
 
-        try{
-            if(mLocationPermissionGranted){
-                if (isLocationEnabled()){
+        try {
+            if (mLocationPermissionGranted) {
+                if (isLocationEnabled()) {
                     Task location = mFusedLocationProviderClient.getLastLocation();
                     location.addOnCompleteListener(new OnCompleteListener() {
                         @Override
                         public void onComplete(@NonNull Task task) {
-                            if(task.isSuccessful()){
+                            if (task.isSuccessful()) {
                                 Log.d(TAG, "onComplete: found location");
                                 Location currentLocation = (Location) task.getResult();
                                 moveCamera(new LatLng(currentLocation.getLatitude(), currentLocation.getLatitude()), 15f);
-                            } else{
+                            } else {
                                 Log.d(TAG, "onComplete: location is null");
                                 Toast.makeText(ActivitySearchFragment.this.getContext(), "Unable to get current location.", Toast.LENGTH_SHORT).show();
                             }
@@ -242,18 +240,20 @@ public class ActivitySearchFragment extends Fragment {
                 }
 
             }
-        }catch (SecurityException e) {
-            Log.e(TAG, "getDeviceLocation: SecurityException: " + e.getMessage() );
+        } catch (SecurityException e) {
+            Log.e(TAG, "getDeviceLocation: SecurityException: " + e.getMessage());
         }
 
     }
 
-    private void moveCamera(LatLng latLng, float zoom){
-        Log.d(TAG, "moveCamera: moving camera to: lat: " + latLng.latitude + ", lng: " + latLng.longitude );
+    private void moveCamera(LatLng latLng, float zoom) {
+        Log.d(TAG, "moveCamera: moving camera to: lat: " + latLng.latitude + ", lng: " + latLng.longitude);
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom));
     }
 
-    /** Sets up the main navigation view for this fragment. */
+    /**
+     * Sets up the main navigation view for this fragment.
+     */
     private void setupMainNavigationView(View view) {
         NavigationView navigationView = view.findViewById(R.id.main_navView);
         View mainNavViewHeader = navigationView.getHeaderView(0); //Should only be one header view
@@ -285,8 +285,10 @@ public class ActivitySearchFragment extends Fragment {
         });
     }
 
-    /** Creates a dialog box and displays it to the user to share to a group */
-    private void createShareDialog(Place place){
+    /**
+     * Creates a dialog box and displays it to the user to share to a group
+     */
+    private void createShareDialog(Place place) {
         final Dialog dialog = new Dialog(getContext());
         dialog.setContentView(R.layout.share_activity_dialog); // Assign to xml dialog layout
         TextView type = (TextView) dialog.findViewById(R.id.place_type);
@@ -309,7 +311,7 @@ public class ActivitySearchFragment extends Fragment {
         List<GroupMessage> groups = FirebaseRTDBHelper.getInstance().getCurrentUser().getGroups();
         List<String> groupNames = new ArrayList<>();
         List<String> groupIds = new ArrayList<>();
-        for (GroupMessage group : groups){
+        for (GroupMessage group : groups) {
             Log.d("Groups:", group.getName());
             groupNames.add(group.getName());
             groupIds.add(group.retrieveKey());
@@ -337,9 +339,9 @@ public class ActivitySearchFragment extends Fragment {
         dialog.show();
     }
 
-    private String getIconUrl(String type){
+    private String getIconUrl(String type) {
         String url;
-        switch(type){
+        switch (type) {
             case "AIRPORT":
                 url = "https://developers.google.com/maps/documentation/places/web-service/icons/airport-71.png";
                 break;

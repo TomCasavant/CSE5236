@@ -9,7 +9,6 @@ import androidx.annotation.NonNull;
 import com.group9.grouptivity.R;
 import com.group9.grouptivity.firebase.FirebaseRTDBHelper;
 import com.group9.grouptivity.firebase.models.GroupMessageInvite;
-import com.group9.grouptivity.firebase.models.GroupMessageMember;
 
 public class GroupMessageInviteViewHolder extends AbstractClickableViewHolder {
     private String mGroupMessageId;
@@ -36,23 +35,31 @@ public class GroupMessageInviteViewHolder extends AbstractClickableViewHolder {
         });
     }
 
-    /** Sets the id of the associated groupMessage. */
+    /**
+     * Sets the id of the associated groupMessage.
+     */
     public void setGroupMessageId(String groupMessageId) {
         this.mGroupMessageId = groupMessageId;
     }
 
-    /** Sets the text of the sender username. */
+    /**
+     * Sets the text of the sender username.
+     */
     public void setSenderUsernameText(String senderUsername) {
         this.senderUsernameTextView.setText(senderUsername);
     }
 
-    /** Sets the text of the Group Message Name. */
+    /**
+     * Sets the text of the Group Message Name.
+     */
     public void setGroupMessageNameText(String groupMessageName) {
         this.groupMessageNameTextView.setText(groupMessageName);
     }
 
-    /** Binds a given groupMessageInvite to the viewholder. */
-    public void bindGroupMessageInvite (GroupMessageInvite groupMessageInvite) {
+    /**
+     * Binds a given groupMessageInvite to the viewholder.
+     */
+    public void bindGroupMessageInvite(GroupMessageInvite groupMessageInvite) {
         this.mGroupMessageId = groupMessageInvite.retrieveGroupMessageId();
         this.senderUsernameTextView.setText(groupMessageInvite.getSender());
         this.groupMessageNameTextView.setText(groupMessageInvite.getName());

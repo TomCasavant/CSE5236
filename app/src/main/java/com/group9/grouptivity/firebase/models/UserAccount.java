@@ -1,6 +1,5 @@
 package com.group9.grouptivity.firebase.models;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class UserAccount extends KeyedDataModel {
@@ -19,14 +18,19 @@ public class UserAccount extends KeyedDataModel {
         this.mEmailAddress = emailAddress;
     }
 
-    public UserAccount(String emailAddress, String displayName){
+    public UserAccount(String emailAddress, String displayName) {
         this.mEmailAddress = emailAddress;
         this.mDisplayName = displayName;
     }
 
 
-    public List<GroupMessage> getGroups() { return this.mGroups;}
-    public void setGroups(List<GroupMessage> groups) { this.mGroups = groups; }
+    public List<GroupMessage> getGroups() {
+        return this.mGroups;
+    }
+
+    public void setGroups(List<GroupMessage> groups) {
+        this.mGroups = groups;
+    }
 
 
     /**
